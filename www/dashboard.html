@@ -1,0 +1,83 @@
+<div class="row">
+    <main class="col-md-12">
+        <div class="page-header">
+            <h1>Dashboard</h1>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Quick Entry</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form name="quickEntryForm" data-ng-submit="submitQuickEntryForm(quickEntryForm)" novalidate>
+                            <div class="form-group">
+                                <label for="gig_description">Description</label>
+                                <input type="text" name="gig_description" id="gig_description" class="form-control" data-ng-model="gigForm.description" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="gig_contractor">Contractor</label>
+                                <div><select kendo-dropdownlist="contractorDropdown" options="gigForm.contractorDropdownOptions" id="gig_contractor" name="gig_contractor" data-ng-model="gigForm.contractorId" required></select></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="gig_location">Location</label>
+                                <input type="text" id="gig_location" name="gig_location" class="form-control" g-places-autocomplete data-ng-model="gigForm.location" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="gig_startDate">Start</label>
+                                <input name="gig_startDate" id="gig_startDate" style="width: 100%" kendo-date-time-picker data-ng-model="gigForm.startDate" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="gig_endDate">End</label>
+                                <input name="gig_endDate" id="gig_endDate" style="width: 100%" kendo-date-time-picker data-ng-model="gigForm.endDate" required />
+                            </div>
+                            <div class="text-center">
+                                <button class="btn btn-primary btn-lg btn-block" type="submit" data-ng-disabled="quickEntryForm.$invalid">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Upcoming Gigs</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table st-table="" st-pipe="getGigs" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Location</th>
+                                    <th>Contractor</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="5" class="text-center">
+                                        <div st-pagination="" st-items-by-page="5" st-displayed-pages="7"></div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                <tr data-ng-repeat="row in gigData">
+                                    <td>{{row.name}}</td>
+                                    <td>{{row.address}}</td>
+                                    <td>{{row.contractor.name}}</td>
+                                    <td>{{row.startDate|date:'short'}}</td>
+                                    <td>{{row.endDate|date:'short'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>

@@ -1,0 +1,10 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">{{ dialogSettings.title }}</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    {{ dialogSettings.message }}
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" id="ok_button" type="button" data-ng-click="ok()">{{ dialogSettings.okText }}</button>
+    <button class="btn btn-warning" id="cancel_button" type="button" data-ng-click="cancel()">{{ dialogSettings.cancelText }}</button>
+</div>

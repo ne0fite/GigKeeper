@@ -1,0 +1,55 @@
+<form name="contractorForm" data-ng-submit="submit(contractorForm)" novalidate>
+    <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Edit Contractor</h3>
+    </div>
+    <div class="modal-body" id="modal-body">
+
+        <div class="alert alert-danger" data-ng-if="errorMessage">{{ errorMessage }}</div>
+
+        <div class="form-group" data-ng-class="{ 'has-error': contractorForm.name.$invalid }">
+            <label for="contractor_name">Name</label>
+            <input type="text" name="name" data-ng-model="form.name" id="contractor_name" class="form-control" data-ng-required="true" />
+            <p data-ng-show="contractorForm.name.$error.required && !contractorForm.name.$pristine" class="help-block">Name is required.</p>
+        </div>
+
+        <div class="form-group" data-ng-class="{ 'has-error': contractorForm.address1.$invalid }">
+            <label for="contractor_address1">Address 1</label>
+            <input type="text" name="address1" data-ng-model="form.address1" id="contractor_address1" class="form-control" />
+        </div>
+        <div class="form-group" data-ng-class="{ 'has-error': contractorForm.address2.$invalid }">
+            <label for="contractor_address2">Address 2</label>
+            <input type="text" name="address2" data-ng-model="form.address2" id="contractor_address2" class="form-control" />
+        </div>
+        <div class="form-group" data-ng-class="{ 'has-error': contractorForm.city.$invalid }">
+            <label for="contractor_city">City</label>
+            <input type="text" name="city" data-ng-model="form.city" id="contractor_city" class="form-control" />
+        </div>
+        <div class="form-group" data-ng-class="{ 'has-error': contractorForm.region.$invalid }">
+            <label for="contractor_region">State</label>
+            <input type="text" name="region" data-ng-model="form.region" id="contractor_region" class="form-control" />
+        </div>
+        <div class="form-group" data-ng-class="{ 'has-error': contractorForm.postalCode.$invalid }">
+            <label for="contractor_postalCode">Zip</label>
+            <input type="text" name="postalCode" data-ng-model="form.postalCode" id="contractor_postalCode" class="form-control" />
+        </div>
+        <div class="form-group" data-ng-class="{ 'has-error': contractorForm.phone.$invalid }">
+            <label for="contractor_phone">Phone</label>
+            <input type="text" name="phone" data-ng-model="form.phone" id="contractor_phone" class="form-control" />
+        </div>
+        <div class="form-group" data-ng-class="{ 'has-error': contractorForm.email.$invalid }">
+            <label for="contractor_email">Email</label>
+            <input type="email" name="email" data-ng-model="form.email" id="contractor_email" class="form-control" />
+            <p data-ng-show="contractorForm.name.$error.email && !contractorForm.name.$pristine" class="help-block">Email is invalid.</p>
+        </div>
+        <div class="form-group" data-ng-class="{ 'has-error': contractorForm.web.$invalid }">
+            <label for="contractor_web">Web</label>
+            <input type="url" name="web" data-ng-model="form.web" id="contractor_web" class="form-control" />
+            <p data-ng-show="contractorForm.name.$error.url && !contractorForm.name.$pristine" class="help-block">Web URL is invalid.</p>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" id="save_button" type="submit" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving...">Save</button>
+        <button class="btn btn-warning" id="cancel_button" type="button" data-ng-click="cancel()">Cancel</button>
+    </div>
+</form>

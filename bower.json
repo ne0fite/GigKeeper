@@ -1,0 +1,25 @@
+{
+  "name": "gigkeeper",
+  "version": "0.0.1",
+  "ignore": [
+    ".jshintrc",
+    "**/*.txt"
+  ],
+  "dependencies": {
+    "angular": "^1.5.8",
+    "angular-bootstrap": "^2.5.0",
+    "angular-google-places-autocomplete": "^0.2.7",
+    "angular-resource": "^1.6.3",
+    "angular-ui-grid": "^4.0.2",
+    "angular-ui-router": "^1.0.0",
+    "bootstrap": "^3.3.7",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.1.1",
+    "kendo-ui": "kendo-ui-core#^2017.1.307"
+  },
+  "devDependencies": {},
+  "resolutions": {
+    "angular": "1.6.3",
+    "jquery": "1.9.1 - 3"
+  }
+}
