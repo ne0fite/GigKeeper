@@ -3,6 +3,10 @@
 
     angular.module('GigKeeper').controller('settings', [ '$scope', 'Settings', 'settings', function($scope, Settings, settings) {
 
+        $scope.homeBaseOptions = {
+            placeIdOnly: true
+        };
+
         $scope.form = {
             homeBasePlace: settings.homeBasePlace
         };

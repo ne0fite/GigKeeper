@@ -2,8 +2,10 @@
     'use strict';
 
     angular.module('GigKeeper', [
+        'ng',
         'ngResource',
         'ui.router',
+        'ui.router.title',
         'kendo.directives',
         'google.places',
         'ui.bootstrap',
@@ -13,19 +15,31 @@
     ]).config([
         '$stateProvider',
         '$urlRouterProvider',
-        function($stateProvider, $urlRouterProvider) {
+        '$titleProvider',
+        function($stateProvider, $urlRouterProvider, $titleProvider) {
 
             $urlRouterProvider.otherwise('/');
 
             $stateProvider.state({
                 name: 'home',
                 url: '/',
-                component: 'home',
-                public: true
+                controller: 'home',
+                templateUrl: 'home.html',
+                public: true,
+                resolve: {
+                    $title: function() {
+                        return 'Home';
+                    }
+                }
             }).state({
                 name: 'my',
                 url: '/my',
-                component: 'my'
+                templateUrl: 'my.html',
+                resolve: {
+                    $title: function() {
+                        return 'My Stuff';
+                    }
+                }
             }).state({
                 name: 'my.gigs',
                 url: '/gigs',
@@ -34,16 +48,31 @@
                 resolve: {
                     contractors: function(Contractor) {
                         return Contractor.data.index().$promise;
+                    },
+                    $title: function() {
+                        return 'My Gigs';
                     }
                 }
             }).state({
                 name: 'my.contractors',
                 url: '/contractors',
-                component: 'contractors'
+                controller: 'contractors',
+                templateUrl: 'contractors.html',
+                resolve: {
+                    $title: function() {
+                        return 'My Contractors';
+                    }
+                }
             }).state({
                 name: 'my.tags',
                 url: '/tags',
-                component: 'tags'
+                controller: 'tags',
+                templateUrl: 'tags.html',
+                resolve: {
+                    $title: function() {
+                        return 'My Tags';
+                    }
+                }
             }).state({
                 name: 'my.settings',
                 url: '/settings',
@@ -52,26 +81,49 @@
                 resolve: {
                     settings: function(Settings) {
                         return Settings.data.index().$promise;
+                    }, 
+                    $title: function() {
+                        return 'Settings';
                     }
                 }
             }).state({
                 name: 'about',
                 url: '/about',
-                component: 'about',
+                templateUrl: 'about.html',
+                resolve: {
+                    $title: function() {
+                        return 'About';
+                    }
+                },
                 public: true
             }).state('contact', {
                 name: 'contact',
                 url: '/contact',
-                component: 'contact',
+                templateUrl: 'contact.html',
+                resolve: {
+                    $title: function() {
+                        return 'Contact';
+                    }
+                },
                 public: true
-            }).state({
-                name: 'contractor',
-                url: '/contractor',
-                component: 'contractor'
             }).state({
                 name: 'profile',
                 url: '/profile',
-                component: 'profile'
+                controller: 'profile',
+                templateUrl: 'profile.html',
+                resolve: {
+                    $title: function() {
+                        return 'My Profile';
+                    }
+                }
+            });
+
+            $titleProvider.documentTitle(function($rootScope) {
+                var title = 'GigKeeper';
+                if ($rootScope.$title) {
+                    title = $rootScope.$title + ' - ' + title;
+                }
+                return title;
             });
         }
     ]).run(['$rootScope', '$state', '$http', function($rootScope, $state, $http) {
@@ -104,7 +156,7 @@
             }).catch(function(error) {
                 // TODO: flash error message
                 console.log(error);
-            })
+            });
         };
     }]);
 
