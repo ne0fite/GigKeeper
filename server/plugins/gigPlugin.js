@@ -1,6 +1,6 @@
 var Boom = require("boom");
 var Joi = require("Joi");
-var GoogleMaps = require("../lib/googlemaps.js");
+var GoogleMaps = require("@google/maps");
 var Promise = require("bluebird");
 
 var gigPlugin = {
@@ -251,10 +251,17 @@ var gigPlugin = {
                         throw new Error("Gig does not have a location");
                     }
 
-                    var maps = new GoogleMaps(options.googleApiKey);
-                    return maps.getDistance(request.auth.credentials.profile.homeBasePlace, gig.place);
+                    var maps = new GoogleMaps.createClient({
+                        key: options.googleApiKey,
+                        Promise: Promise
+                    });
+                    
+                    return maps.distanceMatrix({
+                        origins: "place_id:" + request.auth.credentials.profile.homeBasePlace.place_id,
+                        destinations: "place_id:" + gig.place.place_id
+                    }).asPromise();
                 }).then(function(result) {
-                    reply(result);
+                    reply(result.json);
                 }).catch(function(err) {
                     return reply(Boom.badRequest(err));
                 });
@@ -277,9 +284,16 @@ var gigPlugin = {
                     return reply(Boom.badRequest("Home Base Location not setup"));
                 }
 
-                var maps = new GoogleMaps(options.googleApiKey);
-                maps.getDistanceTo(request.auth.credentials.profile.homeBasePlace, request.params.placeId).then(function(result) {
-                    reply(result);
+                var maps = new GoogleMaps.createClient({
+                    key: options.googleApiKey,
+                    Promise: Promise
+                });
+                
+                maps.distanceMatrix({
+                    origins: "place_id:" + request.auth.credentials.profile.homeBasePlace.place_id,
+                    destinations: "place_id:" + request.params.placeId
+                }).asPromise().then(function(result) {
+                    reply(result.json);
                 }).catch(function(err) {
                     return reply(Boom.badRequest(err));
                 });
