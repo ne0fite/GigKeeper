@@ -137,12 +137,24 @@
         }
     });
 
-
     angular.module('GigKeeper').controller('GigEditController', [
         '$scope', '$uibModalInstance', 'Contractor', 'Tag', 'Gig', 'gig',
         function($scope, $uibModalInstance, Contractor, Tag, Gig, gig) {
 
             $scope.contractorDropdownOptions = Contractor.getDropdownOptions();
+
+            $scope.descriptionsComboOptions = {
+                autoBind: false,
+                dataSource: new kendo.data.DataSource({
+                    transport: {
+                        read: {
+                            url: '/api/v1/gig/descriptions'
+                        }
+                    }
+                }),
+                dataTextField: 'name',
+                dataValueField: 'name'
+            };
 
             $scope.distanceOptions = {
                 decimals: 1,

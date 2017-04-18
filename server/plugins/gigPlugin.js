@@ -229,6 +229,32 @@ var gigPlugin = {
 
         server.route({
             method: "GET",
+            path: "/api/v1/gig/descriptions",
+            handler: function(request, reply) {
+
+                var db = server.plugins["hapi-sequelize"].gigkeeperdb;
+                var models = db.sequelize.models;
+
+                var queryOptions = {
+                    raw: true,
+                    attributes: [ "name" ],
+                    where: {
+                        profileId: request.auth.credentials.profileId
+                    },
+                    group: [ "name" ],
+                    order: [ "name" ]
+                };
+
+                models.gig.findAll(queryOptions).then(function(results) {
+                    reply(results);
+                }).catch(function(error) {
+                    reply(Boom.badRequest(error));
+                });
+            }
+        });
+
+        server.route({
+            method: "GET",
             path: "/api/v1/gig/{id}/distance",
             config: {
                 validate: {

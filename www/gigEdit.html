@@ -24,7 +24,14 @@
 
         <div class="form-group" data-ng-class="{ 'has-error': gigForm.name.$invalid && !gigForm.name.$pristine }">
             <label for="gig_name">Description</label>
-            <input type="text" name="name" data-ng-model="form.name" id="gig_name" class="form-control" data-ng-required="true" />
+            <input type="text" 
+                   name="name" 
+                   kendo-combo-box
+                   options="descriptionsComboOptions"
+                   data-ng-model="form.name" 
+                   id="gig_name" 
+                   style="width: 100%;"
+                   data-ng-required="true" />
             <p data-ng-show="gigForm.name.$error.required && !gigForm.name.$pristine" class="help-block">Description is required.</p>
         </div>
 
