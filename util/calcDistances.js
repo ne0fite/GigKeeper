@@ -7,21 +7,10 @@ var GoogleMaps = require("../server/lib/googlemaps.js");
 
 var modelPath = __dirname + "/../server/models/*.js";
 
-var config = {
-    db: {
-        host: "localhost",
-        port: 3306,
-        name: "gigkeeper",
-        user: "root",
-        pass: "root"
-    },
-    google: {
-        apiKey: "AIzaSyBNbgD_hQFLD93gpL9dQcrz7-s91vxl-H8"
-    }
-};
+var config = require("../config/config.json");
 
 var sequelizeOptions = {
-    dialect: "mysql",
+    dialect: config.db.dialect,
     host: config.db.host,
     port: config.db.port,
     benchmark: true

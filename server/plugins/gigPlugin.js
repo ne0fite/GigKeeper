@@ -1,5 +1,5 @@
 var Boom = require("boom");
-var Joi = require("Joi");
+var Joi = require("joi");
 var GoogleMaps = require("@google/maps");
 var Promise = require("bluebird");
 
@@ -239,7 +239,7 @@ var gigPlugin = {
                 };
 
                 if (!request.auth.credentials.profile.homeBasePlace) {
-                    return reply(Boom.badRequest("Home Base Location not setup"));
+                    return reply(Boom.badRequest("Home Base Location not set up"));
                 }
 
                 models.gig.findOne(queryOptions).then(function(gig) {
@@ -281,7 +281,7 @@ var gigPlugin = {
             handler: function(request, reply) {
 
                 if (!request.auth.credentials.profile.homeBasePlace) {
-                    return reply(Boom.badRequest("Home Base Location not setup"));
+                    return reply(Boom.badRequest("Home Base Location not set up"));
                 }
 
                 var maps = new GoogleMaps.createClient({

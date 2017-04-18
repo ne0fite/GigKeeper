@@ -6,18 +6,7 @@ var Sequelize = require("sequelize");
 var HapiCookie = require("hapi-auth-cookie");
 
 // server settings
-// TODO: export to env, overwritten by config JSON
-var webHost = "localhost";
-var webPort = 8000;
-var dbHost = "localhost";
-var dbPort = 3306;
-var dbDialect = "mysql";
-var dbUser = "root";
-var dbPass = "root";
-var dbName = "gigkeeper";
-var cookieName = "gigkeeper-session";
-var cookieSecret = "dd3ac595261591d8a855fd13a5d511fb";
-var googleApiKey = "AIzaSyBNbgD_hQFLD93gpL9dQcrz7-s91vxl-H8";
+var config = require("./config/config.json");
 
 // var bcrypt = require("bcrypt");
 // var salt = bcrypt.genSaltSync(10);
@@ -27,14 +16,14 @@ var googleApiKey = "AIzaSyBNbgD_hQFLD93gpL9dQcrz7-s91vxl-H8";
 // Create a server with a host and port
 var server = new Hapi.Server();
 server.connection({
-    host: webHost,
-    port: webPort
+    host: config.app.host,
+    port: config.app.port
 });
 
-var sequelize = new Sequelize(dbName, dbUser, dbPass, {
-    dialect: dbDialect,
-    host: dbHost,
-    port: dbPort
+var sequelize = new Sequelize(config.db.name, config.db.user, config.db.pass, {
+    dialect: config.db.dialect,
+    host: config.db.host,
+    port: config.db.port
 });
 
 server.register([
@@ -54,7 +43,7 @@ server.register([
     {
         register: require("./server/plugins/gigPlugin"),
         options: {
-            googleApiKey: googleApiKey
+            googleApiKey: config.google.apiKey
         }
     },
     require("./server/plugins/profilePlugin"),
@@ -70,8 +59,8 @@ server.register([
     }
 
     server.auth.strategy("base", "cookie", {
-        cookie: cookieName,
-        password: cookieSecret,
+        cookie: config.app.cookie.name,
+        password: config.app.cookie.secret,
         ttl: 24 * 60 * 60 * 1000,
         isSecure: false
     });
