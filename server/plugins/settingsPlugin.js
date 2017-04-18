@@ -52,6 +52,7 @@ var settingsPlugin = {
 
                 var db = server.plugins["hapi-sequelize"].gigkeeperdb;
                 var models = db.sequelize.models;
+                var credentials = Object.assign({}, request.auth.credentials);
 
                 var options = {
                     where: {
@@ -60,7 +61,12 @@ var settingsPlugin = {
                 };
 
                 models.profile.findOne(options).then(function(profile) {
+                    var result;
+
                     if (profile) {
+                        credentials.profile = request.payload;
+                        request.cookieAuth.set(credentials);
+
                         return profile.update(request.payload);
                     } else {
                         throw new Error("Invalid Session");
