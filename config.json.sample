@@ -1,0 +1,21 @@
+{
+    "app": {
+        "host": "localhost",
+        "port": 8000,
+        "cookie": {
+            "name": "gigkeeper-session",
+            "secret": "your_secret_string"
+        }
+    },
+    "db": {
+        "host": "localhost",
+        "port": "3306",
+        "dialect": "mysql",
+        "name": "gigkeeper",
+        "user": "gigkeeper",
+        "pass": "your_gigkeeper_password"
+    },
+    "googleApi": {
+        "key": "your_api_key"
+    }
+}
