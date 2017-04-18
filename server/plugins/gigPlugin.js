@@ -95,21 +95,25 @@ var gigPlugin = {
                 request.payload.profileId = request.auth.credentials.profileId;
 
                 var gig;
-                models.gig.create(request.payload).then(function(result) {
-                    gig = result;
 
-                    if (request.payload.tags) {
-                        return Promise.each(request.payload.tags, function(tag) {
-                            var gigTagPayload = {
-                                profileId: request.auth.credentials.profileId,
-                                gigId: gig.id,
-                                tagId: tag.id
-                            };
-                            return models.gig_tag.create(gigTagPayload);
-                        });
-                    }
+                db.sequelize.transaction(function (t) {
+
+                    return models.gig.create(request.payload, { transaction: t }).then(function(result) {
+                        gig = result;
+
+                        if (request.payload.tags) {
+                            return Promise.each(request.payload.tags, function(tag) {
+                                var gigTagPayload = {
+                                    profileId: request.auth.credentials.profileId,
+                                    gigId: gig.id,
+                                    tagId: tag.id
+                                };
+                                return models.gig_tag.create(gigTagPayload, { transaction: t });
+                            });
+                        }
+                    });
                 }).then(function() {
-                    reply(gig.get({plain: true}));
+                    reply(gig);
                 }).catch(function(err) {
                     return reply(Boom.badRequest(err));
                 });
@@ -154,26 +158,30 @@ var gigPlugin = {
                         throw new Error("Gig not found");
                     }
                     gig = result;
-                    return gig.update(request.payload);
-                }).then(function() {
 
-                    var clearGigTagOptions = {
-                        where: {
-                            gigId: gig.id
-                        }
-                    };
-                    return models.gig_tag.destroy(clearGigTagOptions);
-                }).then(function() {
-                    if (request.payload.tags) {
-                        return Promise.each(request.payload.tags, function(tag) {
-                            var gigTagPayload = {
-                                profileId: request.auth.credentials.profileId,
-                                gigId: gig.id,
-                                tagId: tag.id
+                    return db.sequelize.transaction(function (t) {
+
+                        return gig.update(request.payload, { transaction: t }).then(function() {
+
+                            var clearGigTagOptions = {
+                                where: {
+                                    gigId: gig.id
+                                }
                             };
-                            return models.gig_tag.create(gigTagPayload);
+                            return models.gig_tag.destroy(clearGigTagOptions, { transaction: t });
+                        }).then(function() {
+                            if (request.payload.tags) {
+                                return Promise.each(request.payload.tags, function(tag) {
+                                    var gigTagPayload = {
+                                        profileId: request.auth.credentials.profileId,
+                                        gigId: gig.id,
+                                        tagId: tag.id
+                                    };
+                                    return models.gig_tag.create(gigTagPayload, { transaction: t });
+                                });
+                            }
                         });
-                    }
+                    });
                 }).then(function() {
                     reply(gig);
                 }).catch(function(err) {
