@@ -43,7 +43,7 @@ server.register([
     {
         register: require("./server/plugins/gigPlugin"),
         options: {
-            googleApiKey: config.googleApi.key
+            googleApiKey: config.google.apiKey
         }
     },
     require("./server/plugins/profilePlugin"),

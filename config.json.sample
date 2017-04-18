@@ -9,13 +9,13 @@
     },
     "db": {
         "host": "localhost",
-        "port": "3306",
+        "port": 3306,
         "dialect": "mysql",
         "name": "gigkeeper",
         "user": "gigkeeper",
         "pass": "your_gigkeeper_password"
     },
-    "googleApi": {
-        "key": "your_api_key"
+    "google": {
+        "apiKey": "your_api_key"
     }
 }
