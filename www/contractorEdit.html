@@ -12,6 +12,10 @@
             <p data-ng-show="contractorForm.name.$error.required && !contractorForm.name.$pristine" class="help-block">Name is required.</p>
         </div>
 
+        <div class="form-group" data-ng-class="{ 'has-error': contractorForm.contact.$invalid }">
+            <label for="contractor_contact">Contact</label>
+            <input type="text" name="contact" data-ng-model="form.contact" id="contractor_contact" class="form-control" />
+        </div>
         <div class="form-group" data-ng-class="{ 'has-error': contractorForm.address1.$invalid }">
             <label for="contractor_address1">Address 1</label>
             <input type="text" name="address1" data-ng-model="form.address1" id="contractor_address1" class="form-control" />

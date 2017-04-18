@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 5.6.28)
 # Database: gigkeeper
-# Generation Time: 2017-04-17 18:16:26 +0000
+# Generation Time: 2017-04-18 21:42:30 +0000
 # ************************************************************
 
 
@@ -29,6 +29,7 @@ CREATE TABLE `contractors` (
   `id` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `profileId` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `name` varchar(255) NOT NULL,
+  `contact` varchar(255) DEFAULT NULL,
   `address1` varchar(255) DEFAULT NULL,
   `address2` varchar(255) DEFAULT NULL,
   `city` varchar(255) DEFAULT NULL,
@@ -84,6 +85,7 @@ CREATE TABLE `gigs` (
   `duration` decimal(8,2) DEFAULT NULL,
   `startDate` datetime NOT NULL,
   `endDate` datetime NOT NULL,
+  `notes` text,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`),

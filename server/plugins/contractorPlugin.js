@@ -36,6 +36,7 @@ var contractorPlugin = {
                 validate: {
                     payload: {
                         name: Joi.string().required(),
+                        contact: Joi.string().optional().allow(null, ""),
                         address1: Joi.string().allow(null, ""),
                         address2: Joi.string().allow(null, ""),
                         city: Joi.string().allow(null, ""),
@@ -72,6 +73,7 @@ var contractorPlugin = {
                     },
                     payload: {
                         name: Joi.string().required(),
+                        contact: Joi.string().optional().allow(null, ""),
                         address1: Joi.string().allow(null, ""),
                         address2: Joi.string().allow(null, ""),
                         city: Joi.string().allow(null, ""),

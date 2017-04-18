@@ -4,6 +4,7 @@ module.exports = function(sequelize, DataTypes) {
     return sequelize.define("contractor", {
         id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV1, primaryKey: true, allowNull: false },
         name: { type: DataTypes.STRING, allowNull: false },
+        contact: { type: DataTypes.STRING, allowNull: true },
         address1: { type: DataTypes.STRING, allowNull: true },
         address2: { type: DataTypes.STRING, allowNull: true },
         city: { type: DataTypes.STRING, allowNull: true },

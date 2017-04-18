@@ -16,6 +16,10 @@
                 field: 'name',
                 type: 'string'
             }, {
+                name: 'Contact',
+                field: 'contact',
+                type: 'string'
+            }, {
                 name: 'Phone',
                 field: 'phone',
                 type: 'string'
@@ -78,9 +82,6 @@
                 ariaDescribedBy: 'modal-body',
                 templateUrl: '/contractorEdit.html',
                 controller: 'ContractorEditController',
-                //controllerAs: '$ctrl',
-                //size: size,
-                //appendTo: parentElem,
                 resolve: {
                     contractor: function() {
                         return contractor;
@@ -103,6 +104,7 @@
             $scope.form = {
                 id: contractor.id,
                 name: contractor.name,
+                contact: contractor.contact,
                 address1: contractor.address1,
                 address2: contractor.address2,
                 city: contractor.city,
@@ -122,6 +124,7 @@
 
                     var payload = {
                         name: $scope.form.name,
+                        contact: $scope.form.contact,
                         address1: $scope.form.address1,
                         address2: $scope.form.address2,
                         city: $scope.form.city,
