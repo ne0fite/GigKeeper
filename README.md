@@ -11,7 +11,7 @@
 
 ## Environment Variable Alternative
 
-Alternatively, you can provide environment-specific configuration in system environment varialbes. Environment variables take precedence over the `config.json` variables.
+Alternatively, you can provide environment-specific configuration in system environment variables. Environment variables take precedence over the `config.json` variables.
 
 The `config.json` file works well with local development. However, environment variables are the preferred approach to a hosted solution.
 
@@ -62,6 +62,8 @@ insert into users set
     createdAt=now(),
     updatedAt=now();
 ```
+
+Use the [Online UUID Generator](https://www.uuidgenerator.net/) to generate your own UUID's if you desire.
 
 This will create a new profile and user with the password `password`.
 
