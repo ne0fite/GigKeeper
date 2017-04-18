@@ -7,7 +7,7 @@ var GoogleMaps = require("../server/lib/googlemaps.js");
 
 var modelPath = __dirname + "/../server/models/*.js";
 
-var config = require("../config.json");
+var config = require("../config/config.json");
 
 var sequelizeOptions = {
     dialect: config.db.dialect,
