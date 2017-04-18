@@ -6,7 +6,7 @@ var Sequelize = require("sequelize");
 var HapiCookie = require("hapi-auth-cookie");
 
 // server settings
-var config = require("./config/config.json");
+var config = require("./config/config.js");
 
 // var bcrypt = require("bcrypt");
 // var salt = bcrypt.genSaltSync(10);
