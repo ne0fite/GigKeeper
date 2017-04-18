@@ -83,7 +83,8 @@ var gigPlugin = {
                         startDate: Joi.date().required(),
                         endDate: Joi.date().required(),
                         contractorId: Joi.string().required(),
-                        tags: Joi.any().optional()
+                        tags: Joi.any().optional(),
+                        notes: Joi.string().optional().allow(null)
                     }
                 }
             },
@@ -136,7 +137,8 @@ var gigPlugin = {
                         startDate: Joi.date().required(),
                         endDate: Joi.date().required(),
                         contractorId: Joi.string().required(),
-                        tags: Joi.any().optional()
+                        tags: Joi.any().optional(),
+                        notes: Joi.string().optional().allow(null)
                     }
                 }
             },

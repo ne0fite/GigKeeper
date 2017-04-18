@@ -96,6 +96,11 @@
                     kendo-multi-select 
                     options="tagDropdownOptions" 
                     k-ng-model="form.tags"></select>
+
+        <div class="form-group">
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes" class="form-control" data-ng-model="form.notes"></textarea>
+        </div>
     </div>
 
     <div class="modal-footer">
@@ -120,7 +125,7 @@
                 id="cancel_button" 
                 type="button" 
                 data-ng-click="cancel()">
-                <i class="fa fa-times"></i> Close
+                <i class="fa fa-times"></i> Cancel
         </button>
     </div>
 </form>

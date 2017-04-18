@@ -166,7 +166,8 @@
                 startDate: new Date(gig.startDate),
                 endDate: new Date(gig.endDate),
                 contractorId: gig.contractorId,
-                tags: gig.tags
+                tags: gig.tags,
+                notes: gig.notes
             };
 
             $scope.estimateDistance = function() {
@@ -221,7 +222,8 @@
                         startDate: $scope.form.startDate,
                         endDate: $scope.form.endDate,
                         contractorId: $scope.form.contractorId,
-                        tags: $scope.form.tags
+                        tags: $scope.form.tags,
+                        notes: $scope.form.notes
                     };
 
                     var promise;

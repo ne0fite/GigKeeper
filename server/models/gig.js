@@ -22,7 +22,8 @@ module.exports = function(sequelize, DataTypes) {
         distance: { type: DataTypes.DECIMAL(8, 2), allowNull: true },
         duration: { type: DataTypes.DECIMAL(8, 2), allowNull: true },
         startDate: { type: DataTypes.DATE, allowNull: false },
-        endDate: { type: DataTypes.DATE, allowNull: false }
+        endDate: { type: DataTypes.DATE, allowNull: false },
+        notes: { type: DataTypes.TEXT, allowNull: true }
     }, {
         classMethods: {
             associate: function(models) {
