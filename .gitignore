@@ -1,4 +1,4 @@
 node_modules
 www/bower_components
 .vscode
-./config/config.json
+config/config.json
