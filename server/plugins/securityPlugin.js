@@ -1,5 +1,5 @@
 var Boom = require("boom");
-var Joi = require("Joi");
+var Joi = require("joi");
 var bcrypt = require("bcrypt");
 var Promise = require("bluebird");
 

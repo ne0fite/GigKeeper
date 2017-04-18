@@ -1,5 +1,5 @@
 var Boom = require("boom");
-var Joi = require("Joi");
+var Joi = require("joi");
 var GoogleMaps = require("@google/maps");
 var Promise = require("bluebird");
 
