@@ -281,7 +281,7 @@ var gigPlugin = {
             handler: function(request, reply) {
 
                 if (!request.auth.credentials.profile.homeBasePlace) {
-                    return reply(Boom.badRequest("Home Base Location not setup"));
+                    return reply(Boom.badRequest("Home Base Location not set up"));
                 }
 
                 var maps = new GoogleMaps.createClient({
