@@ -10,7 +10,7 @@ var modelPath = __dirname + "/../server/models/*.js";
 var config = require('../config.json');
 
 var sequelizeOptions = {
-    dialect: "mysql",
+    dialect: config.db.dialect,
     host: config.db.host,
     port: config.db.port,
     benchmark: true
