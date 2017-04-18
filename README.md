@@ -63,7 +63,7 @@ insert into users set
     updatedAt=now();
 ```
 
-Use the [Online UUID Generator](https://www.uuidgenerator.net/) to generate your own UUID's if you desire.
+Use the [Online UUID Generator](https://www.uuidgenerator.net/) to generate your own UUID's or the [Online Bcrypt Hash Generator](http://bcrypthashgenerator.apphb.com/) to generate your own password if you desire.
 
 This will create a new profile and user with the password `password`.
 
