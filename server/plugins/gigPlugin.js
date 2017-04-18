@@ -239,7 +239,7 @@ var gigPlugin = {
                 };
 
                 if (!request.auth.credentials.profile.homeBasePlace) {
-                    return reply(Boom.badRequest("Home Base Location not setup"));
+                    return reply(Boom.badRequest("Home Base Location not set up"));
                 }
 
                 models.gig.findOne(queryOptions).then(function(gig) {
