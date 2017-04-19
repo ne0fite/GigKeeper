@@ -33,9 +33,12 @@
                 controller: 'gigs',
                 templateUrl: '/template/gigs.html',
                 resolve: {
-                    contractors: function(Contractor) {
-                        return Contractor.data.index().$promise;
-                    },
+                    contractors: [
+                        'Contractor',
+                        function(Contractor) {
+                            return Contractor.data.index().$promise;
+                        }
+                    ],
                     $title: function() {
                         return 'My Gigs';
                     }
@@ -66,9 +69,12 @@
                 controller: 'settings',
                 templateUrl: '/template/settings.html',
                 resolve: {
-                    settings: function(Settings) {
-                        return Settings.data.index().$promise;
-                    }, 
+                    settings: [
+                        'Settings',
+                        function(Settings) {
+                            return Settings.data.index().$promise;
+                        }
+                    ], 
                     $title: function() {
                         return 'Settings';
                     }
