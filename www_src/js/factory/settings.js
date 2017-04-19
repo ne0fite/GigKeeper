@@ -2,10 +2,10 @@
     'use strict';
 
     angular.module('GigKeeper').factory('Settings', [
-        '$resource',
-        function($resource) {
+        '$resource', 'UrlBuilder',
+        function($resource, UrlBuilder) {
             return {
-                data: $resource('/api/v1/settings', {}, {
+                data: $resource(UrlBuilder.build('/api/v1/settings'), {}, {
                     index: {
                         action: 'index',
                         method: 'GET'
@@ -13,7 +13,7 @@
                     update: {
                         action: 'update',
                         method: 'POST',
-                        url: '/api/v1/settings'
+                        url: UrlBuilder.build('/api/v1/settings')
                     }
                 })
             };
