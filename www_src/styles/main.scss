@@ -57,6 +57,13 @@ code {
     z-index: 10000;
 }
 
+.alerts {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 20000;
+}
 
 
 @import 'includes/sidebar';

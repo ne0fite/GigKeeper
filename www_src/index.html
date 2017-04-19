@@ -68,6 +68,18 @@
         </div>
     </footer>
 
+    <div class="alerts container" ng-controller="alert" ng-if="alerts.length">
+        <div class="row"
+                ng-repeat="alert in alerts"
+                ng-class="'alert-' + (alert.type || 'warning')"
+                close="closeAlert($index)"
+                uib-alert>
+            <div class="col-xs-11">
+                {{alert.msg}}
+            </div>
+        </div>
+    </div>
+
     <!--=include template/*.html -->
 
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3a1NJK6odYtl6bXINT7hOt7MtgNuTfLs&libraries=places"></script>

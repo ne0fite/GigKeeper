@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('GigKeeper').config([
-        '$stateProvider', '$urlRouterProvider', '$titleProvider',
-        function($stateProvider, $urlRouterProvider, $titleProvider) {
+        '$stateProvider', '$urlRouterProvider', '$titleProvider', '$httpProvider',
+        function($stateProvider, $urlRouterProvider, $titleProvider, $httpProvider) {
 
             $urlRouterProvider.otherwise('/');
 
@@ -121,6 +121,8 @@
                     return title;
                 }
             ]);
+
+            $httpProvider.interceptors.push('SoftErrorInterceptor');
         }
     ]);
 
