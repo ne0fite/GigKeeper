@@ -8,6 +8,7 @@ var gulp = require("gulp");
 var eslint = require("gulp-eslint");
 var shell = require("gulp-shell");
 var minimist = require("minimist");
+var gkutil = require("./util/gulp-gk.js");
 
 var options = minimist(process.argv.slice(2), {
     default: {
@@ -36,4 +37,8 @@ gulp.task("lint", function() {
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());
+});
+
+gulp.task("profile:create", function() {
+    return gkutil.createProfile(options.email, options.password);
 });

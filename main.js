@@ -8,11 +8,6 @@ var HapiCookie = require("hapi-auth-cookie");
 // server settings
 var config = require("./config/config.js");
 
-// var bcrypt = require("bcrypt");
-// var salt = bcrypt.genSaltSync(10);
-// console.log(salt);
-// console.log(bcrypt.hashSync("password", salt));
-
 // Create a server with a host and port
 var server = new Hapi.Server();
 server.connection({
