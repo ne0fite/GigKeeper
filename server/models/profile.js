@@ -1,6 +1,6 @@
 "use strict";
 
-var place = require("./place")();
+var place = require("../lib/place")();
 
 module.exports = function(sequelize, DataTypes) {
     return sequelize.define("profile", {

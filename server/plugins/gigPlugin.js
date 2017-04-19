@@ -2,7 +2,7 @@ var Boom = require("boom");
 var Joi = require("joi");
 var Promise = require("bluebird");
 
-var place = require('../models/place')();
+var place = require('../lib/place')();
 
 var gigPlugin = {
 
