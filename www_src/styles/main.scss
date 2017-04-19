@@ -48,6 +48,15 @@ code {
     }
 }
 
+.bg-faded {
+    background-color: #f7f7f7;
+}
+
+//google places drawer
+.pac-container {
+    z-index: 10000;
+}
+
 
 
 @import 'includes/sidebar';
