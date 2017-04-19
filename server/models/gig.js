@@ -1,6 +1,6 @@
 "use strict";
 
-var place = require("../models/place")();
+var place = require("./place")();
 
 module.exports = function(sequelize, DataTypes) {
     return sequelize.define("gig", {
