@@ -9,6 +9,7 @@ var eslint = require("gulp-eslint");
 var shell = require("gulp-shell");
 var minimist = require("minimist");
 var gkutil = require("./util/gulp-gk.js");
+var config = require("./config/config.js");
 
 var options = minimist(process.argv.slice(2), {
     default: {
@@ -21,6 +22,14 @@ console.log("Environment: " + options.env);
 gulp.task("default", function () {
     // place code for your default task here
 });
+
+gulp.task("db:dump", shell.task(
+    "mysqldump -u " + config.db.user + 
+    " --password=" + config.db.pass + 
+    " --host=" + config.db.host + 
+    " --port=" + config.db.port + 
+    " --add-drop-table --no-data " + config.db.name + 
+    " > ./sql/GigKeeper-schema.sql"));
 
 /**
  * Process sequelize migration.
