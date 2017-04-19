@@ -21,7 +21,7 @@ module.exports = function(sequelize, DataTypes) {
         defaultDuration: { type: DataTypes.INTEGER, allowNull: true }
     }, {
         classMethods: {
-
+            
         }
     });
 };

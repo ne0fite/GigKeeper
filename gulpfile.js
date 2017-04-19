@@ -20,6 +20,7 @@ var gulp = require('gulp'),
 	eslint = require("gulp-eslint"),
 	shell = require("gulp-shell"),
 	minimist = require("minimist"),
+	gkutil = require("./util/gulp-gk.js"),
 	fs = require('fs');
 
 var globs = {
@@ -39,7 +40,6 @@ var globs = {
 		img: 'www/images',
 		src: 'www_src'
 	};
-
 
 var options = minimist(process.argv.slice(2), {
     default: {
@@ -167,4 +167,8 @@ gulp.task("lint", function() {
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());
+});
+
+gulp.task("profile:create", function() {
+    return gkutil.createProfile(options.email, options.password);
 });
