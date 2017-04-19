@@ -47,8 +47,6 @@ var options = minimist(process.argv.slice(2), {
     }
 });
 
-var server = gls.static(dirs.html, 8001);
-
 function onError(err) {
 	console.log(err.toString());
 }
@@ -137,6 +135,8 @@ gulp.task('watch', ['build'], function() {
 });
 
 gulp.task('serve', ['watch'], function() {
+	var server = gls.static(dirs.html, 8001);
+	
 	server.start();
 
 	gulp.watch(globs.staticAssets, function(file) {
