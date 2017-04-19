@@ -1,5 +1,10 @@
 "use strict";
 
+var GoogleMaps = require("@google/maps");
+var Promise = require("bluebird");
+
+var config = require("../../config/config.js");
+
 /**
  * This model encapsulates Google Places functionality.
  * 
@@ -48,6 +53,26 @@ module.exports = function() {
         }
 
         return cleanPlace;
+    };
+
+    /**
+     * Generate a request for the distance between two Google Places IDs.
+     * 
+     * @param  {string} placeId1    A valid Google Places ID
+     * @param  {string} placeId2    A valid Google Places ID
+     * 
+     * @return {object}  The distance request object
+     */
+    model.distance = (placeId1, placeId2) => {
+        var maps = new GoogleMaps.createClient({
+            key: config.google.apiKey,
+            Promise: Promise
+        });
+        
+        return maps.distanceMatrix({
+            origins: "place_id:" + placeId1,
+            destinations: "place_id:" + placeId2
+        });
     };
 
     /**
