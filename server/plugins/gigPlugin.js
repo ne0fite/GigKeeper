@@ -1,7 +1,8 @@
 var Boom = require("boom");
 var Joi = require("joi");
-var GoogleMaps = require("@google/maps");
 var Promise = require("bluebird");
+
+var place = require('../lib/place')();
 
 var gigPlugin = {
 
@@ -303,6 +304,8 @@ var gigPlugin = {
                 }
 
                 models.gig.findOne(queryOptions).then(function(gig) {
+                    var placeId1, placeId2, distance;
+
                     if (!gig) {
                         throw new Error("Gig not found");
                     }
@@ -311,15 +314,11 @@ var gigPlugin = {
                         throw new Error("Gig does not have a location");
                     }
 
-                    var maps = new GoogleMaps.createClient({
-                        key: options.googleApiKey,
-                        Promise: Promise
-                    });
+                    placeId1 = request.auth.credentials.profile.homeBasePlace.place_id;
+                    placeId2 = gig.place.place_id;
+                    distance = place.distance(placeId1, placeId2);
                     
-                    return maps.distanceMatrix({
-                        origins: "place_id:" + request.auth.credentials.profile.homeBasePlace.place_id,
-                        destinations: "place_id:" + gig.place.place_id
-                    }).asPromise();
+                    return distance.asPromise();
                 }).then(function(result) {
                     reply(result.json);
                 }).catch(function(err) {
@@ -342,20 +341,16 @@ var gigPlugin = {
                 }
             },
             handler: function(request, reply) {
+                var placeId1, placeId2;
 
                 if (!request.auth.credentials.profile.homeBasePlace) {
                     return reply(Boom.badRequest("Home Base Location not set up"));
                 }
 
-                var maps = new GoogleMaps.createClient({
-                    key: options.googleApiKey,
-                    Promise: Promise
-                });
-                
-                maps.distanceMatrix({
-                    origins: "place_id:" + request.auth.credentials.profile.homeBasePlace.place_id,
-                    destinations: "place_id:" + request.params.placeId
-                }).asPromise().then(function(result) {
+                placeId1 = request.auth.credentials.profile.homeBasePlace.place_id;
+                placeId2 = request.params.placeId;
+
+                place.distance(placeId1, placeId2).asPromise().then(function(result) {
                     reply(result.json);
                 }).catch(function(err) {
                     return reply(Boom.badRequest(err));

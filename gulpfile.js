@@ -17,6 +17,9 @@ var gulp = require('gulp'),
 	jshint = require('gulp-jshint'),
 	stylish = require('jshint-stylish'),
 	plumber = require('gulp-plumber'),
+	eslint = require("gulp-eslint"),
+	shell = require("gulp-shell"),
+	minimist = require("minimist"),
 	fs = require('fs');
 
 var globs = {
@@ -36,6 +39,13 @@ var globs = {
 		img: 'www/images',
 		src: 'www_src'
 	};
+
+
+var options = minimist(process.argv.slice(2), {
+    default: {
+        env: "development"
+    }
+});
 
 var server = gls.static(dirs.html, 8001);
 
@@ -136,3 +146,24 @@ gulp.task('serve', ['watch'], function() {
 gulp.task('build', ['config', 'html', 'sass', 'scripts', 'images']);
 
 gulp.task('default', ['serve']);
+
+
+
+/*** Server tasks ***/
+
+/**
+ * Process sequelize migration.
+ */
+gulp.task("db:migrate", shell.task("sequelize db:migrate --env " + options.env + " --migrations-path server/migrations --models-path server/models --config config/dbconfig.js"));
+
+/**
+ * Undo most recent sequelize migration.
+ */
+gulp.task("db:migrate:undo", shell.task("sequelize db:migrate:undo --env " + options.env + " --migrations-path server/migrations --models-path server/models --config config/dbconfig.js"));
+
+gulp.task("lint", function() {
+    return gulp.src([ "main.js", "server/**/*.js", "www/**/*.js", "!node_modules/**", "!www/bower_components/**" ])
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
+});

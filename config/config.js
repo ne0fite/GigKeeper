@@ -1,6 +1,7 @@
 "use strict";
 
 var fs = require("fs");
+var dbconfig = require("./dbconfig.js");
 
 // if provided, load the local config JSON
 var configJson;
@@ -16,13 +17,15 @@ configJson.app.cookie = configJson.app.cookie || {};
 configJson.db = configJson.db || {};
 configJson.google = configJson.google || {};
 
+var env = process.env.NODE_ENV || configJson.app.env || "development";
+
 // export the config, prefering in order:
 // - environment variables
 // - config JSON
 // - dev defaults
 module.exports = {
     app: {
-        env: process.env.NODE_ENV || configJson.app.env || "development",
+        env: env,
         host: process.env.SERVER_HOST || configJson.app.host || "localhost",
         port: process.env.SERVER_PORT || configJson.app.port || 8000,
         cookie: {
@@ -31,12 +34,12 @@ module.exports = {
         }
     },
     db: {
-        host: process.env.DB_HOST || configJson.db.host || "localhost",
-        port: process.env.DB_PORT || configJson.db.port || 3306,
-        dialect: process.env.DB_DIALECT || configJson.db.dialect || "mysql",
-        name: process.env.DB_NAME || configJson.db.name || "gigkeeper",
-        user: process.env.DB_USER || configJson.db.user || "gigkeeper",
-        pass: process.env.DB_PASS || configJson.db.pass || "gigkeeper"
+        host: dbconfig[env].host,
+        port: dbconfig[env].port,
+        dialect: dbconfig[env].dialect,
+        name: dbconfig[env].database,
+        user: dbconfig[env].username,
+        pass: dbconfig[env].password
     },
     google: {
         // no default for google API key!

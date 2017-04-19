@@ -68,7 +68,6 @@ var settingsPlugin = {
                 };
 
                 models.profile.findOne(options).then(function(profile) {
-                    var result;
 
                     if (profile) {
                         credentials.profile = request.payload;

@@ -37,6 +37,26 @@ The cookie secret is a 32-character hash. Go to the [Online Random Hash Generato
 
 Go to [Google Maps API](https://developers.google.com/maps/documentation/javascript/get-api-key) to generate an API key.
 
+## Schema Migration
+
+Future updates may have a different schema than what you have installed. To prevent losing data, migrate the schema:
+
+```
+gulp db:migrate
+```
+
+If you are migrating anything other than the development environmnet, pass an `env` argument:
+
+```
+gulp db:migrate --env production
+```
+
+Note you will need to install [Sequelize](https://www.npmjs.com/package/sequelize) globally for this to work:
+
+```
+npm install sequelize -g
+```
+
 ## Usage
 
 ```./start.sh```

@@ -1,5 +1,7 @@
 "use strict";
 
+var place = require("../lib/place")();
+
 module.exports = function(sequelize, DataTypes) {
     return sequelize.define("gig", {
         id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV1, primaryKey: true, allowNull: false },
@@ -12,11 +14,9 @@ module.exports = function(sequelize, DataTypes) {
             },
             set: function(val) {
                 if (val) {
-                    delete val.opening_hours;
-                    delete val.photos;
-                    delete val.reviews;
+                    place.set(val);
                 }
-                this.setDataValue("place", JSON.stringify(val));
+                this.setDataValue("place", place.toString());
             }
         },
         distance: { type: DataTypes.DECIMAL(8, 2), allowNull: true },
