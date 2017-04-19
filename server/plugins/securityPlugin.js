@@ -12,7 +12,7 @@ var securityPlugin = {
             path: "/api/v1/login",
             config: {
                 cors: {
-                    origin: ['*']
+                    origin: ["*"]
                 },
                 validate: {
                     payload: {
@@ -45,7 +45,7 @@ var securityPlugin = {
             path: "/api/v1/logout",
             config: {
                 cors: {
-                    origin: ['*']
+                    origin: ["*"]
                 },
                 auth: false
             },

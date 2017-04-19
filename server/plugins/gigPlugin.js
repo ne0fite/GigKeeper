@@ -2,7 +2,7 @@ var Boom = require("boom");
 var Joi = require("joi");
 var Promise = require("bluebird");
 
-var place = require('../lib/place')();
+var place = require("../lib/place")();
 
 var gigPlugin = {
 
@@ -13,7 +13,7 @@ var gigPlugin = {
             path: "/api/v1/gig",
             config: {
                 cors: {
-                    origin: ['*']
+                    origin: ["*"]
                 }
             },
             handler: function(request, reply) {
@@ -47,7 +47,7 @@ var gigPlugin = {
             path: "/api/v1/gig/{id}",
             config: {
                 cors: {
-                    origin: ['*']
+                    origin: ["*"]
                 },
                 validate: {
                     params: {
@@ -83,7 +83,7 @@ var gigPlugin = {
             path: "/api/v1/gig",
             config: {
                 cors: {
-                    origin: ['*']
+                    origin: ["*"]
                 },
                 validate: {
                     payload: {
@@ -137,7 +137,7 @@ var gigPlugin = {
             path: "/api/v1/gig/{id}",
             config: {
                 cors: {
-                    origin: ['*']
+                    origin: ["*"]
                 },
                 validate: {
                     params: {
@@ -211,7 +211,7 @@ var gigPlugin = {
             path: "/api/v1/gig/{id}",
             config: {
                 cors: {
-                    origin: ['*']
+                    origin: ["*"]
                 },
                 validate: {
                     params: {
@@ -249,7 +249,7 @@ var gigPlugin = {
             path: "/api/v1/gig/descriptions",
             config: {
                 cors: {
-                    origin: ['*']
+                    origin: ["*"]
                 }
             },
             handler: function(request, reply) {
@@ -280,7 +280,7 @@ var gigPlugin = {
             path: "/api/v1/gig/{id}/distance",
             config: {
                 cors: {
-                    origin: ['*']
+                    origin: ["*"]
                 },
                 validate: {
                     params: {
@@ -332,7 +332,7 @@ var gigPlugin = {
             path: "/api/v1/gig/distance/{placeId}",
             config: {
                 cors: {
-                    origin: ['*']
+                    origin: ["*"]
                 },
                 validate: {
                     params: {

@@ -11,7 +11,7 @@ var userPlugin = {
             path: "/api/v1/user/profile",
             config: {
                 cors: {
-                    origin: ['*']
+                    origin: ["*"]
                 }
             },
             handler: function(request, reply) {

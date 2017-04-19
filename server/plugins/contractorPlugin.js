@@ -10,7 +10,7 @@ var contractorPlugin = {
             path: "/api/v1/contractor",
             config: {
                 cors: {
-                    origin: ['*']
+                    origin: ["*"]
                 }
             },
             handler: function(request, reply) {
@@ -38,7 +38,7 @@ var contractorPlugin = {
             path: "/api/v1/contractor",
             config: {
                 cors: {
-                    origin: ['*']
+                    origin: ["*"]
                 },
                 validate: {
                     payload: {
@@ -75,7 +75,7 @@ var contractorPlugin = {
             path: "/api/v1/contractor/{id}",
             config: {
                 cors: {
-                    origin: ['*']
+                    origin: ["*"]
                 },
                 validate: {
                     params: {
@@ -127,7 +127,7 @@ var contractorPlugin = {
             path: "/api/v1/contractor/{id}",
             config: {
                 cors: {
-                    origin: ['*']
+                    origin: ["*"]
                 },
                 validate: {
                     params: {

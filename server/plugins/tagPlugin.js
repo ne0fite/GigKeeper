@@ -10,7 +10,7 @@ var tagPlugin = {
             path: "/api/v1/tag",
             config: {
                 cors: {
-                    origin: ['*']
+                    origin: ["*"]
                 }
             },
             handler: function(request, reply) {
@@ -38,7 +38,7 @@ var tagPlugin = {
             path: "/api/v1/tag",
             config: {
                 cors: {
-                    origin: ['*']
+                    origin: ["*"]
                 },
                 validate: {
                     payload: {
@@ -67,7 +67,7 @@ var tagPlugin = {
             path: "/api/v1/tag/{id}",
             config: {
                 cors: {
-                    origin: ['*']
+                    origin: ["*"]
                 },
                 validate: {
                     params: {
@@ -111,7 +111,7 @@ var tagPlugin = {
             path: "/api/v1/tag/{id}",
             config: {
                 cors: {
-                    origin: ['*']
+                    origin: ["*"]
                 },
                 validate: {
                     params: {

@@ -12,7 +12,7 @@ var settingsPlugin = {
             path: "/api/v1/settings",
             config: {
                 cors: {
-                    origin: ['*']
+                    origin: ["*"]
                 }
             },
             handler: function(request, reply) {
@@ -47,11 +47,12 @@ var settingsPlugin = {
             path: "/api/v1/settings",
             config: {
                 cors: {
-                    origin: ['*']
+                    origin: ["*"]
                 },
                 validate: {
                     payload: {
-                        homeBasePlace: Joi.object().optional().allow(null).default(null)
+                        homeBasePlace: Joi.object().optional().allow(null).default(null),
+                        defaultDuration: Joi.number().integer().optional().allow(null)
                     }
                 }
             },

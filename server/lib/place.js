@@ -11,7 +11,7 @@ var config = require("../../config/config.js");
  * @return {function}
  */
 module.exports = function() {
-    const whitelistedElements = ['place_id', 'formatted_address', 'name'];
+    const whitelistedElements = ["place_id", "formatted_address", "name"];
 
     var model = {};
     var place = null;
@@ -49,7 +49,7 @@ module.exports = function() {
 
         for(i = 0; i < whitelistedElements.length; ++i) {
             elementName = whitelistedElements[i];
-            cleanPlace[elementName] = typeof dirtyPlace[elementName] == 'undefined' ? null : dirtyPlace[elementName];
+            cleanPlace[elementName] = typeof dirtyPlace[elementName] == "undefined" ? null : dirtyPlace[elementName];
         }
 
         return cleanPlace;

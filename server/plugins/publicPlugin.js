@@ -6,7 +6,7 @@ var publicPlugin = {
             path: "/{param*}",
             config: {
                 cors: {
-                    origin: ['*']
+                    origin: ["*"]
                 },
                 auth: false
             },
