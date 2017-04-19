@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('GigKeeper').run([
-        '$rootScope', '$state', '$http',
-        function($rootScope, $state, $http) {
+        '$rootScope', '$state', '$http', 'UrlBuilder',
+        function($rootScope, $state, $http, UrlBuilder) {
 
         $rootScope.profile = false;
 
@@ -11,7 +11,7 @@
             // TODO: how do we prevent checking auth on public pages, but still
             // check auth status on first load of any page??
             if (!toState.public) {
-                $http.get('/api/v1/user/profile').then(function(response) {
+                $http.get(UrlBuilder.build('/api/v1/user/profile')).then(function(response) {
                     if (response.data.active) {
                         $rootScope.profile = response.data;
                     } else {
@@ -27,7 +27,7 @@
         });
 
         $rootScope.logout = function() {
-            $http.post('/api/v1/logout').then(function(response) {
+            $http.post(UrlBuilder.build('/api/v1/logout')).then(function(response) {
                 $rootScope.profile = null;
                 $state.go('home');
             }).catch(function(error) {

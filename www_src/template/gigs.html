@@ -1,0 +1,13 @@
+<script type="text/ng-template" id="/template/gigs.html">
+    <div class="page-header">
+        <h1>Gigs</h1>
+    </div>
+
+    <div class="action-buttons">
+        <button class="btn btn-default pull-left" data-ng-click="add()"><i class="fa fa-plus"></i> Add New</button>
+        <button class="btn btn-default pull-left" data-ng-click="editSelected()" data-ng-disabled="!selected"><i class="fa fa-edit"></i> Edit Selected</button>
+        <button class="btn btn-danger pull-right" data-ng-click="deleteSelected()" data-ng-disabled="!selected"><i class="fa fa-times"></i> Delete Selected</button>
+        <div class="clearfix"></div>
+    </div>
+    <div ui-grid="gridOptions" ui-grid-selection></div>
+</script>

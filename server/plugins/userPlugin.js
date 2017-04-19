@@ -10,7 +10,11 @@ var userPlugin = {
         server.route({
             method: "GET",
             path: "/api/v1/user/profile",
-            config: {},
+            config: {
+                cors: {
+                    origin: ['*']
+                }
+            },
             handler: function(request, reply) {
 
                 var db = server.plugins["hapi-sequelize"].gigkeeperdb;

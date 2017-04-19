@@ -2,11 +2,9 @@
 
 ## Setup
 
-1. Run `npm install`
-1. Run `bower install`
+1. Run `./install.sh`
 1. Create a database and user for the application using phpMyAdmin or whatever you prefer
 1. Run **./sql/GigKeeper-schema.sql** on the new database
-1. Copy **config/config.json.sample** to **config/config.json**
 1. Customize the values in **config/config.json**
 
 ## Environment Variable Alternative
@@ -41,7 +39,7 @@ Go to [Google Maps API](https://developers.google.com/maps/documentation/javascr
 
 ## Usage
 
-```node main.js```
+```./start.sh```
 
 ## Getting Started
 

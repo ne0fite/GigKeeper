@@ -11,7 +11,7 @@
                 name: 'home',
                 url: '/',
                 controller: 'home',
-                templateUrl: 'home.html',
+                templateUrl: '/template/home.html',
                 public: true,
                 resolve: {
                     $title: function() {
@@ -21,7 +21,7 @@
             }).state({
                 name: 'my',
                 url: '/my',
-                templateUrl: 'my.html',
+                templateUrl: '/template/my.html',
                 resolve: {
                     $title: function() {
                         return 'My Stuff';
@@ -31,7 +31,7 @@
                 name: 'my.gigs',
                 url: '/gigs',
                 controller: 'gigs',
-                templateUrl: 'gigs.html',
+                templateUrl: '/template/gigs.html',
                 resolve: {
                     contractors: function(Contractor) {
                         return Contractor.data.index().$promise;
@@ -44,7 +44,7 @@
                 name: 'my.contractors',
                 url: '/contractors',
                 controller: 'contractors',
-                templateUrl: 'contractors.html',
+                templateUrl: '/template/contractors.html',
                 resolve: {
                     $title: function() {
                         return 'My Contractors';
@@ -54,7 +54,7 @@
                 name: 'my.tags',
                 url: '/tags',
                 controller: 'tags',
-                templateUrl: 'tags.html',
+                templateUrl: '/template/tags.html',
                 resolve: {
                     $title: function() {
                         return 'My Tags';
@@ -64,7 +64,7 @@
                 name: 'my.settings',
                 url: '/settings',
                 controller: 'settings',
-                templateUrl: 'settings.html',
+                templateUrl: '/template/settings.html',
                 resolve: {
                     settings: function(Settings) {
                         return Settings.data.index().$promise;
@@ -76,7 +76,7 @@
             }).state({
                 name: 'about',
                 url: '/about',
-                templateUrl: 'about.html',
+                templateUrl: '/template/about.html',
                 resolve: {
                     $title: function() {
                         return 'About';
@@ -86,7 +86,7 @@
             }).state('contact', {
                 name: 'contact',
                 url: '/contact',
-                templateUrl: 'contact.html',
+                templateUrl: '/template/contact.html',
                 resolve: {
                     $title: function() {
                         return 'Contact';
@@ -97,7 +97,7 @@
                 name: 'profile',
                 url: '/profile',
                 controller: 'profile',
-                templateUrl: 'profile.html',
+                templateUrl: '/template/profile.html',
                 resolve: {
                     $title: function() {
                         return 'My Profile';
@@ -105,13 +105,16 @@
                 }
             });
 
-            $titleProvider.documentTitle(function($rootScope) {
-                var title = 'GigKeeper';
-                if ($rootScope.$title) {
-                    title = $rootScope.$title + ' - ' + title;
+            $titleProvider.documentTitle([
+                '$rootScope',
+                function($rootScope) {
+                    var title = 'GigKeeper';
+                    if ($rootScope.$title) {
+                        title = $rootScope.$title + ' - ' + title;
+                    }
+                    return title;
                 }
-                return title;
-            });
+            ]);
         }
     ]);
 

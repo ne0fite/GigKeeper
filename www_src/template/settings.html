@@ -1,0 +1,38 @@
+<script type="text/ng-template" id="/template/settings.html">
+    <div class="page-header">
+        <h1>Settings</h1>
+    </div>
+
+    <form name="settingsForm" data-ng-submit="submit(settingsForm)" novalidate>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Location Settings</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="profile_homeBase">Home Base</label>
+                            <input type="text" 
+                                   id="profile_homeBase" 
+                                   name="homeBasePlace" 
+                                   class="form-control"
+                                   g-places-autocomplete 
+                                   options="homeBaseOptions"
+                                   data-force-selection="true"
+                                   data-ng-model="form.homeBasePlace"
+                                   autocomplete="off" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <button type="submit" id="save_button" class="btn btn-primary">Update</button>
+            </div>
+        </div>
+    </form>
+</script>

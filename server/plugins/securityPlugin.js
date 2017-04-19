@@ -11,6 +11,9 @@ var securityPlugin = {
             method: "POST",
             path: "/api/v1/login",
             config: {
+                cors: {
+                    origin: ['*']
+                },
                 validate: {
                     payload: {
                         email: Joi.string().email().required(),
@@ -41,6 +44,9 @@ var securityPlugin = {
             method: "POST",
             path: "/api/v1/logout",
             config: {
+                cors: {
+                    origin: ['*']
+                },
                 auth: false
             },
             handler: function(request, reply) {
