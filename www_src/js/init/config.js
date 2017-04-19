@@ -80,26 +80,6 @@
                     }
                 }
             }).state({
-                name: 'about',
-                url: '/about',
-                templateUrl: '/template/about.html',
-                resolve: {
-                    $title: function() {
-                        return 'About';
-                    }
-                },
-                public: true
-            }).state('contact', {
-                name: 'contact',
-                url: '/contact',
-                templateUrl: '/template/contact.html',
-                resolve: {
-                    $title: function() {
-                        return 'Contact';
-                    }
-                },
-                public: true
-            }).state({
                 name: 'profile',
                 url: '/profile',
                 controller: 'profile',

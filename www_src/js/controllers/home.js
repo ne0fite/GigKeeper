@@ -16,7 +16,7 @@
                     $http.post(UrlBuilder.build('/api/v1/login'), postData).then(function(response) {
                         if (response.status === 200) {
                             $rootScope.profile = response.data;
-                            $state.go('my');
+                            $state.go('my.gigs');
                         } else {
                             alert('Bad username or password');
                         }
