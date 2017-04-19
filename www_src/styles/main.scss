@@ -6,6 +6,10 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
+
+    > .container {
+        padding: 60px 15px 0;
+    }
 }
 
 .footer {
@@ -17,15 +21,11 @@ body {
     background-color: #f5f5f5;
 }
 
-body>.container {
-    padding: 60px 15px 0;
-}
-
 .container .text-muted {
     margin: 20px 0;
 }
 
-.footer>.container {
+.footer > .container {
     padding-right: 15px;
     padding-left: 15px;
 }
@@ -36,57 +36,18 @@ code {
 
 .action-buttons {
     padding: 0 0 10px 0;
-}
 
-.action-buttons button {
-    margin-left: 0;
-    margin-right: 10px;
-}
+    button {
+        margin-left: 0;
+        margin-right: 10px;
 
-.action-buttons button.pull-right {
-    margin-right: 0;
-    margin-left: 10px;
-}
-
-
-/* Sidebar */
-
-.sidebar {
-    padding: 20px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    /* Scrollable contents if viewport is shorter than content. */
-    border-right: 1px solid #eee;
+        &.pull-right {
+            margin-right: 0;
+            margin-left: 10px;
+        }
+    }
 }
 
 
-/* Sidebar navigation */
 
-.sidebar {
-    padding-left: 0;
-    padding-right: 0;
-}
-
-.sidebar .nav {
-    margin-bottom: 20px;
-}
-
-.sidebar .nav-item {
-    width: 100%;
-}
-
-.sidebar .nav-item+.nav-item {
-    margin-left: 0;
-}
-
-.sidebar .nav-link {
-    border-radius: 0;
-}
-
-.bg-faded {
-    background-color: #f7f7f7;
-}
-
-.pac-container {
-    z-index: 10000;
-}
+@import 'includes/sidebar';
