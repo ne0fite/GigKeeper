@@ -1,6 +1,3 @@
-var Boom = require("boom");
-var Joi = require("joi");
-
 var profilePlugin = {
 
     register: function(server, options, next) {

@@ -32,7 +32,7 @@ var securityPlugin = {
                         return reply(Boom.unauthorized("Bad email or password"));
                     }
                 }).catch(function(err) {
-                    return reply(Boom.badRequest(err));
+                    return reply(Boom.badImplementation("Failed to authenticate user due to internal error", err.message));
                 });
             }
         });
@@ -67,23 +67,23 @@ var securityPlugin = {
                 models.user.findOne(options).then(function(user) {
                     if (user) {
 
-                        // bcrypt.genSalt(10, function(err, salt) {
-                        //     bcrypt.hash(password, salt, function(err, hash) {
-                        //         console.log(hash);
-                        //     });
-                        // });
+                        bcrypt.compare(password, user.password, function(err, result) {
+                            if (err) {
+                                reject(new Error(err));
+                            }
 
-                        if (bcrypt.compareSync(password, user.password)) {
-                            var clean = user.get({ plain: true });
-                            //clean.profile = user.profile.get({ plain: true });
-                            delete clean.password;
-                            resolve(clean);
-                        } else {
-                            console.log("Invalid password user email " + email);
-                            resolve(null);
-                        }
+                            if (result) {
+                                var clean = user.get({ plain: true });
+                                //clean.profile = user.profile.get({ plain: true });
+                                delete clean.password;
+                                resolve(clean);
+                            } else {
+                                // TODO: log invalid password attempt
+                                resolve(null);
+                            }
+                        });
                     } else {
-                        console.log("User not found by email " + email);
+                        // TODO: log invalid username
                         resolve(null);
                     }
                 }).catch(function(error) {

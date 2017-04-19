@@ -17,7 +17,8 @@ module.exports = function(sequelize, DataTypes) {
                 }
                 this.setDataValue("homeBasePlace", JSON.stringify(val));
             }
-        }
+        },
+        defaultDuration: { type: DataTypes.INTEGER, allowNull: true }
     }, {
         classMethods: {
 

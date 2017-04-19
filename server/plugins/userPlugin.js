@@ -1,7 +1,6 @@
 "use strict";
 
 var Boom = require("boom");
-var Joi = require("joi");
 
 var userPlugin = {
 
@@ -39,8 +38,7 @@ var userPlugin = {
                         return reply(Boom.unauthorized("Invalid Session"));
                     }
                 }).catch(function(err) {
-                    console.log(err);
-                    return reply(Boom.badImplementation());
+                    return reply(Boom.badImplementation("Failed to get user profile due to internal error: " + err.message));
                 });
             }
         });
