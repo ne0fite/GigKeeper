@@ -54,11 +54,12 @@ function onError(err) {
 }
 
 function makeDirs() {
-	var i;
+	var keys = Object.keys(dirs),
+		i;
 
-	for(i = 0; i < dirs.length; ++i) {
-		if(!fs.existsSync(dirs[i])) {
-			fs.mkdirSync(dirs[i]);
+	for(i = 0; i < keys.length; ++i) {
+		if(!fs.existsSync(dirs[keys[i]])) {
+			fs.mkdirSync(dirs[keys[i]]);
 		}
 	}
 }
