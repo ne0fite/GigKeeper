@@ -17,7 +17,7 @@
                     var modalInstance = $uibModal.open({
                         ariaLabelledBy: 'modal-title',
                         ariaDescribedBy: 'modal-body',
-                        templateUrl: '/dialogs/confirm.html',
+                        templateUrl: '/template/dialogs/confirm.html',
                         resolve: {
                             dialogSettings: function() {
                                 return dialogSettings;
