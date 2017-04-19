@@ -1,15 +1,46 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+"use strict";
 
-var gulp = require("gulp");
-var eslint = require("gulp-eslint");
-var shell = require("gulp-shell");
-var minimist = require("minimist");
-var gkutil = require("./util/gulp-gk.js");
-var config = require("./config/config.js");
+require('es6-promise').polyfill();
+
+var gulp = require('gulp'),
+	sass = require('gulp-sass'),
+	autoprefixer = require('gulp-autoprefixer'),
+	sourcemaps = require('gulp-sourcemaps'),
+	gls = require('gulp-live-server'),
+	imagemin = require('gulp-imagemin'),
+	uglify = require('gulp-uglify'),
+	changed = require('gulp-changed'),
+	minifyCss = require('gulp-minify-css'),
+	concat = require('gulp-concat'),
+	htmlify = require('gulp-angular-htmlify'),
+	include = require('gulp-include-2'),
+	jshint = require('gulp-jshint'),
+	stylish = require('jshint-stylish'),
+	plumber = require('gulp-plumber'),
+	eslint = require("gulp-eslint"),
+	shell = require("gulp-shell"),
+	minimist = require("minimist"),
+	gkutil = require("./util/gulp-gk.js"),
+	config = require("./config/config.js"),
+	fs = require('fs');
+
+var globs = {
+		config: 'config/config.json',
+		staticAssets: 'www/**/*',
+		indexHtml: 'www_src/index.html',
+		html: ['www_src/index.html', 'www_src/template/**/*.html'],
+		styles: 'www_src/styles/**/*.scss',
+		scripts: ['www_src/app.js', 'www_src/js/**/*.js'],
+		img: 'www_src/images/**/*'
+	},
+	dirs = {
+		html: 'www',
+		css: 'www/css',
+		js: 'www/js',
+		vendor: 'www/bower_components',
+		img: 'www/images',
+		src: 'www_src'
+	};
 
 var options = minimist(process.argv.slice(2), {
     default: {
@@ -17,11 +48,110 @@ var options = minimist(process.argv.slice(2), {
     }
 });
 
-console.log("Environment: " + options.env);
+function onError(err) {
+	console.log(err.toString());
+}
 
-gulp.task("default", function () {
-    // place code for your default task here
+function makeDirs() {
+	var keys = Object.keys(dirs),
+		i;
+
+	for(i = 0; i < keys.length; ++i) {
+		if(!fs.existsSync(dirs[keys[i]])) {
+			fs.mkdirSync(dirs[keys[i]]);
+		}
+	}
+}
+
+makeDirs();
+
+gulp.task('config', function() {
+	var config = require('./config/config.json'),
+		appConfig = {},
+		appConfigString = 'var appConfig = ';
+
+	appConfig.api = {
+		host: config.app.host,
+		port: config.app.port
+	};
+
+	appConfigString += JSON.stringify(appConfig) + ";";
+
+	fs.writeFileSync('www/js/appConfig.js', appConfigString);
 });
+
+gulp.task('sass', function() {
+	return gulp.src(globs.styles)
+		.pipe(plumber({ errorHandler: onError }))
+		.pipe(sourcemaps.init())
+		.pipe(sass())
+		.pipe(autoprefixer())
+		.pipe(minifyCss())
+		.pipe(sourcemaps.write())
+		.pipe(gulp.dest(dirs.css));
+});
+
+gulp.task('html', function() {
+	return gulp.src(globs.indexHtml)
+		.pipe(plumber({ errorHandler: onError }))
+		.pipe(include())
+		.pipe(htmlify())
+		.pipe(gulp.dest(dirs.html));
+});
+
+gulp.task('jshint', function () {
+	return gulp.src(globs.scripts)
+		.pipe(jshint())
+		.pipe(jshint.reporter(stylish));
+});
+
+gulp.task('scripts', ['jshint'], function() {
+	return gulp.src(globs.scripts)
+		.pipe(plumber({ errorHandler: onError }))
+		.pipe(sourcemaps.init())
+		.pipe(uglify())
+		.pipe(concat('app.js'))
+		.pipe(sourcemaps.write())
+		.pipe(gulp.dest(dirs.js));
+});
+
+gulp.task('images', function() {
+	return gulp.src(globs.img)
+		.pipe(plumber({ errorHandler: onError }))
+		.pipe(changed(dirs.img))
+		.pipe(imagemin({
+			optimizationLevel: 5,
+			progressive: true,
+			svgoPlugins: [{ removeViewBox: false }]
+		}))
+		.pipe(gulp.dest(dirs.img));
+});
+
+gulp.task('watch', ['build'], function() {
+	gulp.watch(globs.config, ['config']);
+	gulp.watch(globs.html, ['html']);
+	gulp.watch(globs.styles, ['sass']);
+	gulp.watch(globs.scripts, ['scripts']);
+	gulp.watch(globs.img, ['images']);
+});
+
+gulp.task('serve', ['watch'], function() {
+	var server = gls.static(dirs.html, 8001);
+	
+	server.start();
+
+	gulp.watch(globs.staticAssets, function(file) {
+		server.notify.apply(server, [file]);
+	});
+});
+
+gulp.task('build', ['config', 'html', 'sass', 'scripts', 'images']);
+
+gulp.task('default', ['serve']);
+
+
+
+/*** Server tasks ***/
 
 gulp.task("db:dump", shell.task(
     "mysqldump -u " + config.db.user + 
@@ -29,7 +159,8 @@ gulp.task("db:dump", shell.task(
     " --host=" + config.db.host + 
     " --port=" + config.db.port + 
     " --add-drop-table --no-data " + config.db.name + 
-    " > ./sql/GigKeeper-schema.sql"));
+    " > ./sql/GigKeeper-schema.sql")
+);
 
 /**
  * Process sequelize migration.

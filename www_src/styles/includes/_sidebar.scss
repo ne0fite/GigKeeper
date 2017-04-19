@@ -1,0 +1,33 @@
+.sidebar {
+    padding: 20px 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* Scrollable contents if viewport is shorter than content. */
+    border-right: 1px solid #eee;
+
+	/* Navigation */
+    
+    .nav {
+        margin-bottom: 20px;
+    }
+
+    .nav-item {
+        width: 100%;
+    }
+
+    .nav-item + .nav-item {
+        margin-left: 0;
+    }
+
+    .nav-link {
+        border-radius: 0;
+    }
+
+    .bg-faded {
+        background-color: #f7f7f7;
+    }
+
+    .pac-container {
+        z-index: 10000;
+    }
+}

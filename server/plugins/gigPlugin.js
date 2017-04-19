@@ -11,7 +11,11 @@ var gigPlugin = {
         server.route({
             method: "GET",
             path: "/api/v1/gig",
-            config: {},
+            config: {
+                cors: {
+                    origin: ['*']
+                }
+            },
             handler: function(request, reply) {
 
                 var db = server.plugins["hapi-sequelize"].gigkeeperdb;
@@ -42,6 +46,9 @@ var gigPlugin = {
             method: "GET",
             path: "/api/v1/gig/{id}",
             config: {
+                cors: {
+                    origin: ['*']
+                },
                 validate: {
                     params: {
                         id: Joi.string().guid().required()
@@ -75,6 +82,9 @@ var gigPlugin = {
             method: "POST",
             path: "/api/v1/gig",
             config: {
+                cors: {
+                    origin: ['*']
+                },
                 validate: {
                     payload: {
                         name: Joi.string().required(),
@@ -126,6 +136,9 @@ var gigPlugin = {
             method: "POST",
             path: "/api/v1/gig/{id}",
             config: {
+                cors: {
+                    origin: ['*']
+                },
                 validate: {
                     params: {
                         id: Joi.string().guid().required()
@@ -197,6 +210,9 @@ var gigPlugin = {
             method: "DELETE",
             path: "/api/v1/gig/{id}",
             config: {
+                cors: {
+                    origin: ['*']
+                },
                 validate: {
                     params: {
                         id: Joi.string().guid().required()
@@ -231,6 +247,11 @@ var gigPlugin = {
         server.route({
             method: "GET",
             path: "/api/v1/gig/descriptions",
+            config: {
+                cors: {
+                    origin: ['*']
+                }
+            },
             handler: function(request, reply) {
 
                 var db = server.plugins["hapi-sequelize"].gigkeeperdb;
@@ -258,6 +279,9 @@ var gigPlugin = {
             method: "GET",
             path: "/api/v1/gig/{id}/distance",
             config: {
+                cors: {
+                    origin: ['*']
+                },
                 validate: {
                     params: {
                         id: Joi.string().guid().required()
@@ -307,6 +331,9 @@ var gigPlugin = {
             method: "GET",
             path: "/api/v1/gig/distance/{placeId}",
             config: {
+                cors: {
+                    origin: ['*']
+                },
                 validate: {
                     params: {
                         placeId: Joi.string().required()

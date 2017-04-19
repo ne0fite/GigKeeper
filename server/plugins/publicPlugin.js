@@ -5,6 +5,9 @@ var publicPlugin = {
             method: "GET",
             path: "/{param*}",
             config: {
+                cors: {
+                    origin: ['*']
+                },
                 auth: false
             },
             handler: {
