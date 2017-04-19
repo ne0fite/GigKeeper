@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('GigKeeper').factory('Gig', [
-        '$resource',
-        function($resource) {
+        '$resource', 'UrlBuilder',
+        function($resource, UrlBuilder) {
             return {
                 data: $resource('/api/v1/gig', {}, {
                     index: {
@@ -18,22 +18,22 @@
                     update: {
                         action: 'update',
                         method: 'POST',
-                        url: '/api/v1/gig/:id'
+                        url: UrlBuilder.build('/api/v1/gig/:id')
                     },
                     delete: {
                         action: 'delete',
                         method: 'DELETE',
-                        url: '/api/v1/gig/:id'
+                        url: UrlBuilder.build('/api/v1/gig/:id')
                     },
                     distance: {
                         action: 'distance',
                         method: 'GET',
-                        url: '/api/v1/gig/:id/distance'
+                        url: UrlBuilder.build('/api/v1/gig/:id/distance')
                     },
                     distanceTo: {
                         action: 'distanceTo',
                         method: 'GET',
-                        url: '/api/v1/gig/distance/:placeId'
+                        url: UrlBuilder.build('/api/v1/gig/distance/:placeId')
                     }
                 }),
                 getModel: function() {
@@ -62,7 +62,7 @@
                     return new kendo.data.DataSource({
                         transport: {
                             read: {
-                                url: '/api/v1/gig'
+                                url: UrlBuilder.build('/api/v1/gig')
                             }
                         },
                         schema: {
