@@ -6,7 +6,7 @@
  * @return {function}
  */
 module.exports = function() {
-    const whitelistedElements = ['place_id', 'adr_address', 'name'];
+    const whitelistedElements = ['place_id', 'formatted_address', 'name'];
 
     var model = {};
     var place = null;
