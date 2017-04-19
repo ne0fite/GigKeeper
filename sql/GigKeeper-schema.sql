@@ -1,30 +1,42 @@
-# ************************************************************
-# Sequel Pro SQL dump
-# Version 4541
-#
-# http://www.sequelpro.com/
-# https://github.com/sequelpro/sequelpro
-#
-# Host: localhost (MySQL 5.6.28)
-# Database: gigkeeper
-# Generation Time: 2017-04-18 21:42:30 +0000
-# ************************************************************
-
+-- MySQL dump 10.13  Distrib 5.6.28, for osx10.9 (x86_64)
+--
+-- Host: localhost    Database: gigkeeper
+-- ------------------------------------------------------
+-- Server version	5.6.28
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+--
+-- Table structure for table `SequelizeMeta`
+--
 
-# Dump of table contractors
-# ------------------------------------------------------------
+DROP TABLE IF EXISTS `SequelizeMeta`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `SequelizeMeta` (
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`name`),
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `SequelizeMeta_name_unique` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `contractors`
+--
 
 DROP TABLE IF EXISTS `contractors`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `contractors` (
   `id` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `profileId` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
@@ -44,14 +56,15 @@ CREATE TABLE `contractors` (
   KEY `profileId` (`profileId`),
   CONSTRAINT `contractors_ibfk_1` FOREIGN KEY (`profileId`) REFERENCES `profiles` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-
-
-# Dump of table gig_tags
-# ------------------------------------------------------------
+--
+-- Table structure for table `gig_tags`
+--
 
 DROP TABLE IF EXISTS `gig_tags`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `gig_tags` (
   `id` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `profileId` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
@@ -67,14 +80,15 @@ CREATE TABLE `gig_tags` (
   CONSTRAINT `gig_tags_ibfk_2` FOREIGN KEY (`gigId`) REFERENCES `gigs` (`id`) ON DELETE CASCADE,
   CONSTRAINT `gig_tags_ibfk_3` FOREIGN KEY (`tagId`) REFERENCES `tags` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-
-
-# Dump of table gigs
-# ------------------------------------------------------------
+--
+-- Table structure for table `gigs`
+--
 
 DROP TABLE IF EXISTS `gigs`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `gigs` (
   `id` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `profileId` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
@@ -94,29 +108,32 @@ CREATE TABLE `gigs` (
   CONSTRAINT `gigs_ibfk_1` FOREIGN KEY (`profileId`) REFERENCES `profiles` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `gigs_ibfk_2` FOREIGN KEY (`contractorId`) REFERENCES `contractors` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-
-
-# Dump of table profiles
-# ------------------------------------------------------------
+--
+-- Table structure for table `profiles`
+--
 
 DROP TABLE IF EXISTS `profiles`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `profiles` (
   `id` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `homeBasePlace` text,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
+  `defaultDuration` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-
-
-# Dump of table tags
-# ------------------------------------------------------------
+--
+-- Table structure for table `tags`
+--
 
 DROP TABLE IF EXISTS `tags`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tags` (
   `id` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
   `profileId` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
@@ -128,14 +145,15 @@ CREATE TABLE `tags` (
   KEY `profileId` (`profileId`),
   CONSTRAINT `tags_ibfk_1` FOREIGN KEY (`profileId`) REFERENCES `profiles` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-
-
-# Dump of table users
-# ------------------------------------------------------------
+--
+-- Table structure for table `users`
+--
 
 DROP TABLE IF EXISTS `users`;
-
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
   `id` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `profileId` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
@@ -146,16 +164,19 @@ CREATE TABLE `users` (
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `unq_email` (`email`),
   KEY `profileId` (`profileId`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`profileId`) REFERENCES `profiles` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
-
-
-
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2017-04-19 14:25:10

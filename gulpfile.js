@@ -21,6 +21,7 @@ var gulp = require('gulp'),
 	shell = require("gulp-shell"),
 	minimist = require("minimist"),
 	gkutil = require("./util/gulp-gk.js"),
+	config = require("./config/config.js"),
 	fs = require('fs');
 
 var globs = {
@@ -151,6 +152,15 @@ gulp.task('default', ['serve']);
 
 
 /*** Server tasks ***/
+
+gulp.task("db:dump", shell.task(
+    "mysqldump -u " + config.db.user + 
+    " --password=" + config.db.pass + 
+    " --host=" + config.db.host + 
+    " --port=" + config.db.port + 
+    " --add-drop-table --no-data " + config.db.name + 
+    " > ./sql/GigKeeper-schema.sql")
+);
 
 /**
  * Process sequelize migration.

@@ -50,33 +50,44 @@ module.exports = {
 
         var db = initDb();
 
-        var profile;
+        return db.models.user.findOne({
+            where: {
+                email: email
+            }
+        }).then(function(existingUser) {
+            if (existingUser) {
+                console.log("User already exists with email " + email);
+            } else {
+            
+                var profile;
 
-        return db.sequelize.transaction(function(t) {
+                return db.sequelize.transaction(function(t) {
 
-            return db.models.profile.create({}, {
-                transaction: t
-            }).then(function(result) {
-                profile = result;
+                    return db.models.profile.create({}, {
+                        transaction: t
+                    }).then(function(result) {
+                        profile = result;
 
-                var bcrypt = require("bcrypt");
-                var salt = bcrypt.genSaltSync(10);
-                var hash = bcrypt.hashSync("password", salt);
+                        var bcrypt = require("bcrypt");
+                        var salt = bcrypt.genSaltSync(10);
+                        var hash = bcrypt.hashSync("password", salt);
 
-                var userPayload = {
-                    profileId: profile.id,
-                    email: email,
-                    password: hash,
-                    active: true
-                };
+                        var userPayload = {
+                            profileId: profile.id,
+                            email: email,
+                            password: hash,
+                            active: true
+                        };
 
-                return db.models.user.create(userPayload, {
-                    transaction: t
+                        return db.models.user.create(userPayload, {
+                            transaction: t
+                        });
+                    });
+                }).then(function() {
+                    console.log("Profile and user created!");
+                    return;
                 });
-            });
-        }).then(function() {
-            console.log("Profile and user created!");
-            return;
+            }
         });
     }
 };
