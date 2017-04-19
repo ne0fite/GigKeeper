@@ -56,7 +56,11 @@ lab.experiment("gig", function () {
             },
             payload: {
                 name: chance.sentence({words: 5}),
-                place: {},
+                place: {
+                    formatted_address: null,
+                    name: null,
+                    place_id: null
+                },
                 distance: chance.floating({min: 0, max: 100}),
                 duration: chance.integer({min: 0, max: 100}),
                 startDate: new Date(),
@@ -96,7 +100,11 @@ lab.experiment("gig", function () {
             },
             payload: {
                 name: chance.sentence({words: 5}),
-                place: {},
+                place: {
+                    formatted_address: null,
+                    name: null,
+                    place_id: null
+                },
                 distance: chance.floating({min: 0, max: 100}),
                 duration: chance.integer({min: 0, max: 100}),
                 startDate: new Date(),

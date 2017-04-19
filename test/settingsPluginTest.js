@@ -8,7 +8,7 @@ var Chance = require("chance");
 var chance = new Chance();
 var Utils = require("./testUtils.js");
 
-lab.experiment("gig", function () {
+lab.experiment("settings", function () {
     var authCookie;
 
     lab.before(function (done) {
