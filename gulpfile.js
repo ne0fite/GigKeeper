@@ -30,6 +30,7 @@ var globs = {
         indexHtml: "www_src/index.html",
         html: ["www_src/index.html", "www_src/template/**/*.html"],
         styles: "www_src/styles/**/*.scss",
+        stylesMain: "www_src/styles/main.scss",
         scripts: ["www_src/app.js", "www_src/js/**/*.js"],
         img: "www_src/images/**/*"
     },
@@ -81,7 +82,7 @@ gulp.task("config", function() {
 });
 
 gulp.task("sass", function() {
-    return gulp.src(globs.styles)
+    return gulp.src(globs.stylesMain)
         .pipe(plumber({ errorHandler: onError }))
         .pipe(sourcemaps.init())
         .pipe(sass())
