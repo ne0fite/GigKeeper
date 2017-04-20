@@ -85,6 +85,12 @@
                 controller: 'profile',
                 templateUrl: '/template/profile.html',
                 resolve: {
+                    profile: [
+                        'Profile', 
+                        function(Profile) {
+                            return Profile.data.index().$promise;
+                        }
+                    ],
                     $title: function() {
                         return 'My Profile';
                     }

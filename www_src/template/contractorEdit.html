@@ -10,49 +10,57 @@
 
             <div class="alert alert-danger" ng-if="errorMessage">{{ errorMessage }}</div>
 
-            <div class="form-group" ng-class="{ 'has-error': contractorForm.name.$invalid }">
+            <div class="form-group" data-ng-class="{ 'has-error': contractorForm.$submitted && contractorForm.name.$invalid }">
                 <label for="contractor_name">Name</label>
-                <input type="text" name="name" ng-model="form.name" id="contractor_name" class="form-control" ng-required="true" />
-                <p ng-show="contractorForm.name.$error.required && !contractorForm.name.$pristine" class="help-block">Name is required.</p>
+                <input type="text" name="name" data-ng-model="form.name" id="contractor_name" class="form-control" required />
+                <div ng-messages="contractorForm.name.$error" role="alert" ng-if="contractorForm.$submitted">
+                    <p class="help-block" ng-message="required">Name is required</p>
+                </div>
             </div>
 
-            <div class="form-group" ng-class="{ 'has-error': contractorForm.contact.$invalid }">
+            <div class="form-group" data-ng-class="{ 'has-error': contractorForm.$submitted && contractorForm.contact.$invalid }">
                 <label for="contractor_contact">Contact</label>
                 <input type="text" name="contact" ng-model="form.contact" id="contractor_contact" class="form-control" />
             </div>
-            <div class="form-group" ng-class="{ 'has-error': contractorForm.address1.$invalid }">
+            <div class="form-group" data-ng-class="{ 'has-error': contractorForm.$submitted && contractorForm.address1.$invalid }">
                 <label for="contractor_address1">Address 1</label>
                 <input type="text" name="address1" ng-model="form.address1" id="contractor_address1" class="form-control" />
             </div>
-            <div class="form-group" ng-class="{ 'has-error': contractorForm.address2.$invalid }">
+            <div class="form-group" data-ng-class="{ 'has-error': contractorForm.$submitted && contractorForm.address2.$invalid }">
                 <label for="contractor_address2">Address 2</label>
                 <input type="text" name="address2" ng-model="form.address2" id="contractor_address2" class="form-control" />
             </div>
-            <div class="form-group" ng-class="{ 'has-error': contractorForm.city.$invalid }">
+            <div class="form-group" data-ng-class="{ 'has-error': contractorForm.$submitted && contractorForm.city.$invalid }">
                 <label for="contractor_city">City</label>
                 <input type="text" name="city" ng-model="form.city" id="contractor_city" class="form-control" />
             </div>
-            <div class="form-group" ng-class="{ 'has-error': contractorForm.region.$invalid }">
+            <div class="form-group" data-ng-class="{ 'has-error': contractorForm.$submitted && contractorForm.region.$invalid }">
                 <label for="contractor_region">State</label>
                 <input type="text" name="region" ng-model="form.region" id="contractor_region" class="form-control" />
             </div>
-            <div class="form-group" ng-class="{ 'has-error': contractorForm.postalCode.$invalid }">
+            <div class="form-group" data-ng-class="{ 'has-error': contractorForm.$submitted && contractorForm.postalCode.$invalid }">
                 <label for="contractor_postalCode">Zip</label>
                 <input type="text" name="postalCode" ng-model="form.postalCode" id="contractor_postalCode" class="form-control" />
             </div>
-            <div class="form-group" ng-class="{ 'has-error': contractorForm.phone.$invalid }">
+            <div class="form-group" data-ng-class="{ 'has-error': contractorForm.$submitted && contractorForm.phone.$invalid }">
                 <label for="contractor_phone">Phone</label>
                 <input type="text" name="phone" ng-model="form.phone" id="contractor_phone" class="form-control" />
             </div>
-            <div class="form-group" ng-class="{ 'has-error': contractorForm.email.$invalid }">
+
+            <div class="form-group" data-ng-class="{ 'has-error': contractorForm.$submitted && contractorForm.email.$invalid }">
                 <label for="contractor_email">Email</label>
-                <input type="email" name="email" ng-model="form.email" id="contractor_email" class="form-control" />
-                <p ng-show="contractorForm.name.$error.email && !contractorForm.name.$pristine" class="help-block">Email is invalid.</p>
+                <input type="email" name="email" data-ng-model="form.email" id="contractor_email" class="form-control" />
+                <div ng-messages="contractorForm.email.$error" role="alert" ng-if="contractorForm.$submitted">
+                    <p class="help-block" ng-message="email">Email is invalid</p>
+                </div>
             </div>
-            <div class="form-group" ng-class="{ 'has-error': contractorForm.web.$invalid }">
+
+            <div class="form-group" data-ng-class="{ 'has-error': contractorForm.$submitted && contractorForm.web.$invalid }">
                 <label for="contractor_web">Web</label>
-                <input type="url" name="web" ng-model="form.web" id="contractor_web" class="form-control" />
-                <p ng-show="contractorForm.name.$error.url && !contractorForm.name.$pristine" class="help-block">Web URL is invalid.</p>
+                <input type="url" name="web" data-ng-model="form.web" id="contractor_web" class="form-control" />
+                <div ng-messages="contractorForm.web.$error" role="alert" ng-if="contractorForm.$submitted">
+                    <p class="help-block" ng-message="url">Web site URL is invalid</p>
+                </div>
             </div>
 
         </div>

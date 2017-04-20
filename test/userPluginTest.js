@@ -38,4 +38,27 @@ lab.experiment("user", function () {
             done(error);
         });
     });
+
+    lab.test("Update Profile", function(done) {
+        var options = {
+            method: "POST",
+            url: "/api/v1/user/profile",
+            headers: {
+                cookie: authCookie
+            },
+            payload: {
+                email: "test@example.com"
+            }
+        };
+
+        Utils.sendRequest(options).then(function(response) {
+            console.log(response.payload);
+            Code.expect(response.statusCode).to.equal(200);
+            done();
+        }).catch(function(error) {
+            done(error);
+        });
+    });
+
+
 });
