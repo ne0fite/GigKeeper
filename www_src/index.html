@@ -44,9 +44,19 @@
                     <li class="dropdown" data-ng-if="profile">
                         <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Account <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a data-ui-sref="profile">My Profile</a></li>
+                            <li>
+                                <a data-ui-sref="profile">
+                                    <i class="fa fa-user pad-right"></i>
+                                    My Profile
+                                </a>
+                            </li>
                             <li class="divider"></li>
-                            <li><a data-ng-click="logout()">Log Out</a></li>
+                            <li>
+                                <a data-ng-click="logout()">
+                                    <i class="fa fa-sign-out pad-right"></i>
+                                    Log Out
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 </ul>
