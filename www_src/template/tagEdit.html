@@ -1,30 +1,37 @@
 <script type="text/ng-template"  id="/template/tagEdit.html">
-    <form name="tagForm" data-ng-submit="submit(tagForm)" novalidate>
+    <form name="tagForm" ng-submit="submit(tagForm)" novalidate>
         <div class="modal-header">
-            <h3 class="modal-title" id="modal-title">Edit Tag</h3>
+            <h3 class="modal-title" id="modal-title">
+                <i class="fa fa-pencil pad-right"></i>
+                Edit Tag
+            </h3>
         </div>
         <div class="modal-body" id="modal-body">
 
-            <div class="alert alert-danger" data-ng-if="errorMessage">{{ errorMessage }}</div>
+            <div class="alert alert-danger" ng-if="errorMessage">{{ errorMessage }}</div>
 
-            <div class="form-group" data-ng-class="{ 'has-error': tagForm.name.$invalid }">
+            <div class="form-group" ng-class="{ 'has-error': tagForm.name.$invalid }">
                 <label for="tag_name">Name</label>
-                <input type="text" name="name" data-ng-model="form.name" id="tag_name" class="form-control" data-ng-required="true" />
-                <p data-ng-show="tagForm.name.$error.required && !tagForm.name.$pristine" class="help-block">Name is required.</p>
+                <input type="text" name="name" ng-model="form.name" id="tag_name" class="form-control" ng-required="true" />
+                <p ng-show="tagForm.name.$error.required && !tagForm.name.$pristine" class="help-block">Name is required.</p>
             </div>
 
-            <div class="form-group" data-ng-class="{ 'has-error': tagForm.description.$invalid }">
+            <div class="form-group" ng-class="{ 'has-error': tagForm.description.$invalid }">
                 <label for="tag_description">Description</label>
                 <textarea name="description" 
-                          data-ng-model="form.description" 
+                          ng-model="form.description" 
                           id="tag_description" 
                           class="form-control">
                 </textarea>
             </div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary" id="save_button" type="submit" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving...">Save</button>
-            <button class="btn btn-warning" id="cancel_button" type="button" data-ng-click="cancel()">Cancel</button>
+            <button class="btn btn-primary" id="save_button" type="submit" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving...">
+                <i class="fa fa-check"></i> Save
+            </button>
+            <button class="btn btn-warning" id="cancel_button" type="button" ng-click="cancel()">
+                <i class="fa fa-times"></i> Cancel
+            </button>
         </div>
     </form>
 </script>

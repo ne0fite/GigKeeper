@@ -46,7 +46,16 @@
                 notes: gig.notes
             };
 
-            $scope.estimateDistance = function() {
+            /**
+             * Estimate the distance to the specified location
+             * 
+             * @param  {object} $event The Angular event object
+             * 
+             * @return {void}
+             */
+            $scope.estimateDistance = function($event) {
+                $event.preventDefault();
+
                 if ($scope.form.place) {
 
                     var button = angular.element('#estimate_button');

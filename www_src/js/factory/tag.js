@@ -5,7 +5,7 @@
         '$resource', 'UrlBuilder',
         function($resource, UrlBuilder) {
             return {
-                data: $resource('/api/v1/tag', {}, {
+                data: $resource(UrlBuilder.build('/api/v1/tag'), {}, {
                     index: {
                         action: 'index',
                         method: 'GET',
