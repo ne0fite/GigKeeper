@@ -2,19 +2,38 @@
     'use strict';
 
     angular.module('GigKeeper').controller('profile', [
-        '$scope', '$http', 'UrlBuilder',
-        function($scope, $http, UrlBuilder) {
+        '$scope', '$http', 'UrlBuilder', 'Profile', 'profile',
+        function($scope, $http, UrlBuilder, Profile, profile) {
 
-            $scope.form = {};
+            $scope.form = {
+                email: profile.email
+            };
 
-            $http.get(UrlBuilder.build('/api/v1/user/profile')).then(function(response) {
+            $scope.submit = function(profileForm) {
+                $scope.errorMessage = null;
+                $scope.successMessage = null;
 
-                $scope.form.email = response.data.email;
-                $scope.form.homeBaseAddress = response.data.profile.homeBaseAddress;
+                if (!profileForm.$invalid) {
 
-            }).catch(function(error) {
-                console.error(error);
-            });
+                    var payload = {
+                        email: $scope.form.email,
+                        password: $scope.form.password || null,
+                        passwordConfirm: $scope.form.passwordConfirm || null
+                    };
+
+                    Profile.data.update({}, payload).$promise.then(function() {
+                        $scope.successMessage = 'Saved!';
+                    }).catch(function(err) {
+                        console.log(err);
+                        $scope.errorMessage = err.message;
+                    }).finally(function() {
+                        $scope.form.password = null;
+                        $scope.form.passwordConfirm = null;
+                    });
+                } else {
+                    $scope.errorMessage = 'Check form for errors';
+                }
+            };
         }
     ]);
 })();

@@ -5,6 +5,9 @@
                 <h1>My Profile</h1>
             </div>
 
+            <div class="alert alert-danger" data-ng-if="errorMessage">{{ errorMessage }}</div>
+            <div class="alert alert-success" data-ng-if="successMessage">{{ successMessage }}</div>
+            
             <form name="profileForm" data-ng-submit="submit(profileForm)">
                 <div class="row">
 
@@ -14,17 +17,43 @@
                                 <h3 class="panel-title">Account Settings</h3>
                             </div>
                             <div class="panel-body">
-                                <div class="form-group">
+
+                                <div class="form-group" ng-class="{ 'has-error': profileForm.$submitted && profileForm.email.$invalid }">
                                     <label for="profile_email">Email</label>
-                                    <input type="email" id="profile_email" name="email" data-ng-model="form.email" class="form-control" data-ng-required />
+                                    <input type="email" 
+                                           id="profile_email" 
+                                           name="email" 
+                                           data-ng-model="form.email" 
+                                           class="form-control" 
+                                           ng-email
+                                           required />
+                                    <div ng-messages="profileForm.email.$error" role="alert" ng-if="profileForm.$submitted">
+                                        <p class="help-block" ng-message="required">Email is required</p>
+                                        <p class="help-block" ng-message="email">Email is invalid</p>
+                                    </div>
                                 </div>
-                                <div class="form-group">
+
+                                <div class="form-group" ng-class="{ 'has-error': profileForm.$submitted && profileForm.password.$invalid }">
                                     <label for="profile_password">Password</label>
-                                    <input type="password" id="profile_password" name="password" data-ng-model="form.password" class="form-control" data-ng-required />
+                                    <input type="password" 
+                                           id="profile_password" 
+                                           name="password" 
+                                           data-ng-model="form.password"
+                                           class="form-control" />
                                 </div>
-                                <div class="form-group">
+
+                                <div class="form-group" ng-class="{ 'has-error': profileForm.$submitted && profileForm.passwordConfirm.$invalid }">
                                     <label for="profile_password_confirm">Confirm Password</label>
-                                    <input type="password" id="profile_password_confirm" name="passwordConfirm" data-ng-model="form.passwordConfirm" class="form-control" data-ng-required />
+                                    <input type="password" 
+                                           id="profile_password_confirm" 
+                                           name="passwordConfirm" 
+                                           data-ng-model="form.passwordConfirm" 
+                                           class="form-control" 
+                                           data-ng-required
+                                           gk-compare-to="form.password" />
+                                    <div ng-messages="profileForm.passwordConfirm.$error" role="alert" ng-if="profileForm.$submitted">
+                                        <p class="help-block" ng-message="compareTo">Passwords do not match</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

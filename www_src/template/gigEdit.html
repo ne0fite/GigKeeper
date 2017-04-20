@@ -8,7 +8,7 @@
             <div class="alert alert-danger" data-ng-if="errorMessage">{{ errorMessage }}</div>
             <div class="alert alert-success" data-ng-if="successMessage">{{ successMessage }}</div>
 
-            <div class="form-group" data-ng-class="{ 'has-error': gigForm.contractorId.$invalid && !gigForm.contractorId.$pristine }">
+            <div class="form-group" data-ng-class="{ 'has-error': gigForm.$submitted && gigForm.contractorId.$invalid }">
                 <label for="contractorId">Contractor</label>
                 <div>
                     <select id="contractorId" 
@@ -16,14 +16,16 @@
                             style="width: 100%"
                             kendo-dropdownlist="contractorDropdown" 
                             options="contractorDropdownOptions" 
-                            k-ng-model="form.contractorId" 
+                            ng-model="form.contractorId" 
                             required>
                     </select>
-                    <p data-ng-show="gigForm.contractorId.$error.required && !gigForm.contractorId.$pristine" class="help-block">Contractor is required.</p>
+                    <div ng-messages="gigForm.contractorId.$error" role="alert" ng-if="gigForm.$submitted">
+                        <p class="help-block" ng-message="required">Select a contractor</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="form-group" data-ng-class="{ 'has-error': gigForm.name.$invalid && !gigForm.name.$pristine }">
+            <div class="form-group" data-ng-class="{ 'has-error': gigForm.$submitted && gigForm.name.$invalid }">
                 <label for="gig_name">Description</label>
                 <input type="text" 
                        name="name" 
@@ -32,11 +34,13 @@
                        data-ng-model="form.name" 
                        id="gig_name" 
                        style="width: 100%;"
-                       data-ng-required="true" />
-                <p data-ng-show="gigForm.name.$error.required && !gigForm.name.$pristine" class="help-block">Description is required.</p>
+                       required />
+                <div ng-messages="gigForm.name.$error" role="alert" ng-if="gigForm.$submitted">
+                    <p class="help-block" ng-message="required">Enter a description</p>
+                </div>
             </div>
 
-            <div class="form-group" data-ng-class="{ 'has-error': gigForm.place.$invalid && !gigForm.place.$pristine }">
+            <div class="form-group" data-ng-class="{ 'has-error': gigForm.$submitted && gigForm.place.$invalid }">
                 <label for="place">Location</label>
                 <input type="text" 
                        id="place" 
@@ -47,26 +51,39 @@
                        data-ng-model="form.place"
                        autocomplete="off" 
                        required />
+                <div ng-messages="gigForm.name.$error" role="alert" ng-if="gigForm.$submitted">
+                    <p class="help-block" ng-message="required">Choose a location</p>
+                </div>
             </div>
             
-            <div class="form-group" data-ng-class="{ 'has-error': gigForm.startDate.$invalid && !gigForm.startDate.$pristine }">
+            <div class="form-group" data-ng-class="{ 'has-error': gigForm.$submitted && gigForm.startDate.$invalid }">
                 <label for="startDate">Start</label>
                 <input name="startDate" 
+                       type="text"
                        id="startDate" 
                        style="width: 100%" 
                        kendo-date-time-picker 
-                       k-ng-model="form.startDate" 
+                       ng-model="form.startDate" 
                        required />
+                <div ng-messages="gigForm.startDate.$error" role="alert" ng-if="gigForm.$submitted">
+                    <p class="help-block" ng-message="required">Choose a start date/time</p>
+                    <p class="help-block" ng-message="date">Invalid date format</p>
+                </div>
             </div>
 
-            <div class="form-group" data-ng-class="{ 'has-error': gigForm.endDate.$invalid && !gigForm.endDate.$pristine }">
+            <div class="form-group" data-ng-class="{ 'has-error': gigForm.$submitted && gigForm.endDate.$invalid }">
                 <label for="endDate">End</label>
-                <input name="endDate" 
+                <input name="endDate"  
+                       type="text"
                        id="endDate" 
                        style="width: 100%" 
                        kendo-date-time-picker 
-                       k-ng-model="form.endDate" 
+                       ng-model="form.endDate" 
                        required />
+                <div ng-messages="gigForm.endDate.$error" role="alert" ng-if="gigForm.$submitted">
+                    <p class="help-block" ng-message="required">Choose an end date/time</p>
+                    <p class="help-block" ng-message="date">Invalid date format</p>
+                </div>
             </div>
 
             <div class="row">

@@ -8,6 +8,7 @@
         'ui.router.title',
         'kendo.directives',
         'google.places',
+        'ngMessages',
         'ui.bootstrap',
         'ui.grid',
         'ui.grid.edit',

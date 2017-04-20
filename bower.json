@@ -16,7 +16,8 @@
     "font-awesome": "^4.7.0",
     "jquery": "^3.1.1",
     "kendo-ui": "kendo-ui-core#^2017.1.307",
-    "angular-ui-router-title": "^0.1.1"
+    "angular-ui-router-title": "^0.1.1",
+    "angular-messages": "^1.6.4"
   },
   "devDependencies": {},
   "resolutions": {
