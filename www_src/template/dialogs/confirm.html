@@ -9,7 +9,11 @@
         {{ dialogSettings.message }}
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" id="ok_button" type="button" data-ng-click="ok()">{{ dialogSettings.okText }}</button>
-        <button class="btn btn-warning" id="cancel_button" type="button" data-ng-click="cancel()">{{ dialogSettings.cancelText }}</button>
+        <button class="btn btn-primary" id="ok_button" type="button" data-ng-click="ok()">
+            <i class="fa fa-check"></i> {{ dialogSettings.okText }}
+        </button>
+        <button class="btn btn-warning" id="cancel_button" type="button" data-ng-click="cancel()">
+            <i class="fa fa-times"></i> {{ dialogSettings.cancelText }}
+        </button>
     </div>
 </script>
