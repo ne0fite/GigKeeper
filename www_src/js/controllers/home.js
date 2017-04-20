@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('GigKeeper').controller('home', [
-        '$rootScope', '$scope', '$state', '$http', 'UrlBuilder',
-        function($rootScope, $scope, $state, $http, UrlBuilder) {
+        '$rootScope', '$scope', '$state', '$http', 'UrlBuilder', 'BlockingPromiseManager',
+        function($rootScope, $scope, $state, $http, UrlBuilder, BlockingPromiseManager) {
 
             $scope.submitLoginForm = function(loginForm) {
                 if (loginForm.$valid) {
@@ -13,7 +13,7 @@
                         password: $scope.password
                     };
 
-                    $http.post(UrlBuilder.build('/api/v1/login'), postData).then(function(response) {
+                    var request = $http.post(UrlBuilder.build('/api/v1/login'), postData).then(function(response) {
                         if (response.status === 200) {
                             $rootScope.profile = response.data;
                             $state.go('my.gigs');
@@ -27,6 +27,8 @@
                             alert('System error');
                         }
                     });
+
+                    BlockingPromiseManager.add(request);
                 }
             };
         }

@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('GigKeeper').controller('contractors', [
-        '$scope', '$uibModal', 'dialogs', 'Contractor',
-        function($scope, $uibModal, dialogs, Contractor) {
+        '$scope', '$uibModal', 'dialogs', 'Contractor', 'BlockingPromiseManager',
+        function($scope, $uibModal, dialogs, Contractor, BlockingPromiseManager) {
 
             $scope.selected = null;
 
@@ -45,11 +45,13 @@
             $scope.selected = null;
 
             function load() {
-                Contractor.data.index().$promise.then(function(contractors) {
+                var request = Contractor.data.index().$promise.then(function(contractors) {
                     $scope.gridOptions.data = contractors;
                 }).catch(function(err) {
                     console.error(err);
                 });
+
+                BlockingPromiseManager.add(request);
             }
 
             load();
@@ -68,11 +70,13 @@
                     title: 'Confirm Delete',
                     message: 'Are you sure you want to delete ' + $scope.selected.entity.name + '?'
                 }).then(function() {
-                    Contractor.data.delete({ id: $scope.selected.entity.id }).$promise.then(function() {
+                    var request = Contractor.data.delete({ id: $scope.selected.entity.id }).$promise.then(function() {
                         load();
                     }).catch(function(error) {
                         console.error(error);
                     });
+
+                    BlockingPromiseManager.add(request);
                 }, function() {
 
                 });

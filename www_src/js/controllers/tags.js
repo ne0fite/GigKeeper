@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('GigKeeper').controller('tags', [
-        '$scope', '$uibModal', 'dialogs', 'Tag',
-        function($scope, $uibModal, dialogs, Tag) {
+        '$scope', '$uibModal', 'dialogs', 'Tag', 'BlockingPromiseManager',
+        function($scope, $uibModal, dialogs, Tag, BlockingPromiseManager) {
 
             $scope.selected = null;
 
@@ -36,11 +36,13 @@
             $scope.selected = null;
 
             function load() {
-                Tag.data.index().$promise.then(function(tags) {
+                var request = Tag.data.index().$promise.then(function(tags) {
                     $scope.gridOptions.data = tags;
                 }).catch(function(err) {
                     console.error(err);
                 });
+
+                BlockingPromiseManager.add(request);
             }
 
             load();
@@ -59,11 +61,13 @@
                     title: 'Confirm Delete',
                     message: 'Are you sure you want to delete ' + $scope.selected.entity.name + '?'
                 }).then(function() {
-                    Tag.data.delete({ id: $scope.selected.entity.id }).$promise.then(function() {
+                    var request = Tag.data.delete({ id: $scope.selected.entity.id }).$promise.then(function() {
                         load();
                     }).catch(function(error) {
                         console.error(error);
                     });
+
+                    BlockingPromiseManager.add(request);
                 }, function() {
 
                 });
@@ -92,8 +96,8 @@
     ]);
 
     angular.module('GigKeeper').controller('TagEditController', [
-        '$scope', '$uibModalInstance', 'Tag', 'tag',
-        function($scope, $uibModalInstance, Tag, tag) {
+        '$scope', '$uibModalInstance', 'Tag', 'tag', 'BlockingPromiseManager',
+        function($scope, $uibModalInstance, Tag, tag, BlockingPromiseManager) {
 
             $scope.form = {
                 id: tag.id,
@@ -127,6 +131,8 @@
                         $scope.errorMessage = error.message;
                         button.button('reset');
                     });
+
+                    BlockingPromiseManager.add(promise);
                 } else {
                     $scope.errorMessage = 'Check form for errors';
                 }

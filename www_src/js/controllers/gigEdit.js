@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('GigKeeper').controller('GigEditController', [
-        '$scope', '$uibModalInstance', 'Contractor', 'Tag', 'Gig', 'gig', 'UrlBuilder',
-        function($scope, $uibModalInstance, Contractor, Tag, Gig, gig, UrlBuilder) {
+        '$scope', '$uibModalInstance', 'Contractor', 'Tag', 'Gig', 'gig', 'UrlBuilder', 'BlockingPromiseManager',
+        function($scope, $uibModalInstance, Contractor, Tag, Gig, gig, UrlBuilder, BlockingPromiseManager) {
 
             $scope.contractorDropdownOptions = Contractor.getDropdownOptions();
 
@@ -52,24 +52,27 @@
                     var button = angular.element('#estimate_button');
                     button.button('loading');
 
-                    Gig.data.distanceTo({placeId: $scope.form.place.place_id}).$promise.then(function(response) {
-                        if (response) {
-                            var element = response.rows[0].elements[0];
+                    var request = Gig.data.distanceTo({placeId: $scope.form.place.place_id}).$promise
+                        .then(function(response) {
+                            if (response) {
+                                var element = response.rows[0].elements[0];
 
-                            // convert KM to miles
-                            $scope.form.distance = element.distance.value / 1000 / 1.609344;
+                                // convert KM to miles
+                                $scope.form.distance = element.distance.value / 1000 / 1.609344;
 
-                            // convert seconds to minutes
-                            $scope.form.duration = element.duration.value / 60;
-                        } else {
-                            console.log(response);
-                        }
+                                // convert seconds to minutes
+                                $scope.form.duration = element.duration.value / 60;
+                            } else {
+                                console.log(response);
+                            }
 
-                        button.button('reset');
-                    }).catch(function(error) {
-                        console.log(error);
-                        button.button('reset');
-                    });
+                            button.button('reset');
+                        }).catch(function(error) {
+                            console.log(error);
+                            button.button('reset');
+                        });
+
+                    BlockingPromiseManager.add(request);
                 } else {
                     console.log('Please select a location');
                 }
@@ -117,6 +120,8 @@
                         $scope.errorMessage = error.message;
                         button.button('reset');
                     });
+
+                    BlockingPromiseManager.add(promise);
                 } else {
                     $scope.errorMessage = 'Check form for errors';
                 }

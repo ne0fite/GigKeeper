@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('GigKeeper').controller('settings', [
-        '$scope', 'Settings', 'settings',
-        function($scope, Settings, settings) {
+        '$scope', 'Settings', 'settings', 'BlockingPromiseManager',
+        function($scope, Settings, settings, BlockingPromiseManager) {
 
             $scope.homeBaseOptions = {
                 placeIdOnly: true
@@ -23,12 +23,14 @@
                         homeBasePlace: $scope.form.homeBasePlace
                     };
 
-                    Settings.data.update({}, payload).$promise.then(function() {
+                    var request = Settings.data.update({}, payload).$promise.then(function() {
                         button.button('reset');
                     }).catch(function(error) {
                         $scope.errorMessage = error.message;
                         button.button('reset');
                     });
+
+                    BlockingPromiseManager.add(request);
                 } else {
                     $scope.errorMessage = 'Check form for errors';
                 }
