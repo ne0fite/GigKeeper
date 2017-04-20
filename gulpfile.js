@@ -20,6 +20,7 @@ var gulp = require("gulp"),
     eslint = require("gulp-eslint"),
     shell = require("gulp-shell"),
     minimist = require("minimist"),
+    noop = require("gulp-noop"),
     gkutil = require("./util/gulp-gk.js"),
     config = require("./config/config.js"),
     fs = require("fs");
@@ -49,10 +50,21 @@ var options = minimist(process.argv.slice(2), {
     }
 });
 
+/**
+ * Outputs Gulp errors to the console.
+ * 
+ * @param  {object} err The error
+ * @return {void}
+ */
 function onError(err) {
     console.log(err.toString());
 }
 
+/**
+ * Ensure that all of the necessary directories exist.
+ * 
+ * @return {void}
+ */
 function makeDirs() {
     var keys = Object.keys(dirs),
         i;
@@ -62,6 +74,32 @@ function makeDirs() {
             fs.mkdirSync(dirs[keys[i]]);
         }
     }
+}
+
+/**
+ * Only perform the operation in the dev environment.
+ * 
+ * @param  {object} operation The Gulp operation to be performed
+ * 
+ * @return {object}           The provided operation or noop
+ */
+function ifDev(operation) {
+    var isDev = options.env == "development";
+    
+    return isDev ? operation : noop();
+}
+
+/**
+ * Only perform the operation in the prod environment.
+ * 
+ * @param  {object} operation The Gulp operation to be performed
+ * 
+ * @return {object}           The provided operation or noop
+ */
+function ifProd(operation) {
+    var isProd = options.env != "development";
+    
+    return isProd ? operation : noop();
 }
 
 makeDirs();
@@ -84,11 +122,11 @@ gulp.task("config", function() {
 gulp.task("sass", function() {
     return gulp.src(globs.stylesMain)
         .pipe(plumber({ errorHandler: onError }))
-        .pipe(sourcemaps.init())
+        .pipe(ifDev(sourcemaps.init()))
         .pipe(sass())
         .pipe(autoprefixer())
-        .pipe(minifyCss())
-        .pipe(sourcemaps.write())
+        .pipe(ifProd(minifyCss()))
+        .pipe(ifDev(sourcemaps.write()))
         .pipe(gulp.dest(dirs.css));
 });
 
@@ -109,10 +147,10 @@ gulp.task("jshint", function() {
 gulp.task("scripts", ["jshint"], function() {
     return gulp.src(globs.scripts)
         .pipe(plumber({ errorHandler: onError }))
-        .pipe(sourcemaps.init())
-        .pipe(uglify())
+        .pipe(ifDev(sourcemaps.init()))
+        .pipe(ifProd(uglify()))
         .pipe(concat("app.js"))
-        .pipe(sourcemaps.write())
+        .pipe(ifDev(sourcemaps.write()))
         .pipe(gulp.dest(dirs.js));
 });
 
