@@ -10,7 +10,7 @@ var gulp = require("gulp"),
     imagemin = require("gulp-imagemin"),
     uglify = require("gulp-uglify"),
     changed = require("gulp-changed"),
-    minifyCss = require("gulp-minify-css"),
+    cleanCss = require("gulp-clean-css"),
     concat = require("gulp-concat"),
     htmlify = require("gulp-angular-htmlify"),
     include = require("gulp-include-2"),
@@ -125,7 +125,7 @@ gulp.task("sass", function() {
         .pipe(ifDev(sourcemaps.init()))
         .pipe(sass())
         .pipe(autoprefixer())
-        .pipe(ifProd(minifyCss()))
+        .pipe(ifProd(cleanCss()))
         .pipe(ifDev(sourcemaps.write()))
         .pipe(gulp.dest(dirs.css));
 });
@@ -155,7 +155,9 @@ gulp.task("scripts", ["jshint"], function() {
     return gulp.src(globs.scripts)
         .pipe(plumber({ errorHandler: onError }))
         .pipe(ifDev(sourcemaps.init()))
-        .pipe(ifProd(uglify()))
+        .pipe(ifProd(uglify({
+            preserveComments: "license"
+        })))
         .pipe(concat("app.js"))
         .pipe(ifDev(sourcemaps.write()))
         .pipe(gulp.dest(dirs.js));

@@ -22,12 +22,20 @@ angular.module('GigKeeper').factory('SoftErrorInterceptor', [
     '$rootScope', '$q',
     function($rootScope, $q) {
         return {
-            response: function (response) {
+            response: function(response) {
                 return response;
             },
-            
+
             responseError: function(response) {
-                if(typeof $rootScope.alerts == 'undefined') {
+                if (response.status == 401) {
+                    return response; //it is redundant to display a message for a 401
+                }
+
+                if (typeof $rootScope.alerts == 'undefined') {
+                    $rootScope.alerts = [];
+                }
+
+                if (typeof $rootScope.alerts == 'undefined') {
                     $rootScope.alerts = [];
                 }
 
