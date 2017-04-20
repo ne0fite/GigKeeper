@@ -10,6 +10,10 @@
                 },
                 
                 responseError: function(response) {
+                    if(response.status == 401) {
+                        return response;        //it is redundant to display a message for a 401
+                    }
+
                     if(typeof $rootScope.alerts == 'undefined') {
                         $rootScope.alerts = [];
                     }
