@@ -1,0 +1,18 @@
+#spinner {
+	display: flex;
+	align-items: center;
+	position: fixed;
+	z-index: 9999999;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	color: #337ab7;
+	background-color: rgba(255, 255, 255, 0.8);
+	font-size: 1600%;
+
+	> div {
+		width: 100%;
+		text-align: center;
+	}
+}
