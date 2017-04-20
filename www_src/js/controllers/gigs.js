@@ -1,150 +1,166 @@
-(function() {
-    'use strict';
+/**
+ * @license
+ * Copyright (C) 2017 Phoenix Bright Software, LLC
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-    angular.module('GigKeeper').controller('gigs', [
-        '$scope', '$uibModal', 'uiGridConstants', 'dialogs', 'contractors', 'Gig', 'UrlBuilder',
-        'BlockingPromiseManager',
-        function(
-            $scope, $uibModal, uiGridConstants, dialogs, contractors, Gig, UrlBuilder,
-            BlockingPromiseManager
-        ) {
+'use strict';
 
-            $scope.selected = null;
+angular.module('GigKeeper').controller('gigs', [
+    '$scope', '$uibModal', 'uiGridConstants', 'dialogs', 'contractors', 'Gig', 'UrlBuilder',
+    'BlockingPromiseManager',
+    function(
+        $scope, $uibModal, uiGridConstants, dialogs, contractors, Gig, UrlBuilder,
+        BlockingPromiseManager
+    ) {
 
-            $scope.gridOptions = {
-                enableFiltering: true,
-                enableRowHeaderSelection: false,
-                enableRowSelection: true,
-                enableSelectAll: false,
-                enableSorting: true,
-                multiSelect: false,
-                paginationPageSize: 10,
-                paginationPageSizes: [10, 25, 50, 100],
-                showColumnFooter: true,
-                showGridFooter: true,
-                columnDefs: [{
-                    name: 'Contractor',
-                    field: 'contractor.name',
-                    type: 'string',
-                    filter: {
-                        type: uiGridConstants.filter.SELECT,
-                        selectOptions: contractors.map(function(contractor) {
-                            return {
-                                value: contractor.name,
-                                label: contractor.name
-                            };
-                        })
-                    }
-                }, {
-                    name: 'Description',
-                    field: 'name',
-                    type: 'string'
-                }, {
-                    name: 'Location',
-                    field: 'place.name',
-                    type: 'string'
-                }, {
-                    name: 'Distance',
-                    field: 'distance',
-                    type: 'string',
-                    cellFilter: 'number:1',
-                    footerCellFilter: 'number:1',
-                    cellClass: 'text-right',
-                    footerCellClass: 'text-right',
-                    aggregationHideLabel: true,
-                    aggregationType: uiGridConstants.aggregationTypes.sum
-                }, {
-                    name: 'Travel Time',
-                    field: 'duration',
-                    type: 'number',
-                    cellFilter: 'number:0',
-                    footerCellFilter: 'number:0',
-                    cellClass: 'text-right',
-                    footerCellClass: 'text-right',
-                    aggregationHideLabel: true,
-                    aggregationType: uiGridConstants.aggregationTypes.sum
-                }, {
-                    name: 'Start',
-                    field: 'startDate',
-                    type: 'date',
-                    cellFilter: 'date:"MM/dd/yyyy hh:mm a"'
-                }, {
-                    name: 'End',
-                    field: 'endDate',
-                    type: 'date',
-                    cellFilter: 'date:"MM/dd/yyyy hh:mm a"'
-                }],
-                data: [],
-                onRegisterApi: function(gridApi) {
-                    gridApi.selection.on.rowSelectionChanged($scope, function(row) {
-                        if (row.isSelected) {
-                            $scope.selected = row;
-                        } else {
-                            $scope.selected = null;
-                        }
-                    });
+        $scope.selected = null;
+
+        $scope.gridOptions = {
+            enableFiltering: true,
+            enableRowHeaderSelection: false,
+            enableRowSelection: true,
+            enableSelectAll: false,
+            enableSorting: true,
+            multiSelect: false,
+            paginationPageSize: 10,
+            paginationPageSizes: [10, 25, 50, 100],
+            showColumnFooter: true,
+            showGridFooter: true,
+            columnDefs: [{
+                name: 'Contractor',
+                field: 'contractor.name',
+                type: 'string',
+                filter: {
+                    type: uiGridConstants.filter.SELECT,
+                    selectOptions: contractors.map(function(contractor) {
+                        return {
+                            value: contractor.name,
+                            label: contractor.name
+                        };
+                    })
                 }
-            };
+            }, {
+                name: 'Description',
+                field: 'name',
+                type: 'string'
+            }, {
+                name: 'Location',
+                field: 'place.name',
+                type: 'string'
+            }, {
+                name: 'Distance',
+                field: 'distance',
+                type: 'string',
+                cellFilter: 'number:1',
+                footerCellFilter: 'number:1',
+                cellClass: 'text-right',
+                footerCellClass: 'text-right',
+                aggregationHideLabel: true,
+                aggregationType: uiGridConstants.aggregationTypes.sum
+            }, {
+                name: 'Travel Time',
+                field: 'duration',
+                type: 'number',
+                cellFilter: 'number:0',
+                footerCellFilter: 'number:0',
+                cellClass: 'text-right',
+                footerCellClass: 'text-right',
+                aggregationHideLabel: true,
+                aggregationType: uiGridConstants.aggregationTypes.sum
+            }, {
+                name: 'Start',
+                field: 'startDate',
+                type: 'date',
+                cellFilter: 'date:"MM/dd/yyyy hh:mm a"'
+            }, {
+                name: 'End',
+                field: 'endDate',
+                type: 'date',
+                cellFilter: 'date:"MM/dd/yyyy hh:mm a"'
+            }],
+            data: [],
+            onRegisterApi: function(gridApi) {
+                gridApi.selection.on.rowSelectionChanged($scope, function(row) {
+                    if (row.isSelected) {
+                        $scope.selected = row;
+                    } else {
+                        $scope.selected = null;
+                    }
+                });
+            }
+        };
 
-            $scope.selected = null;
+        $scope.selected = null;
 
-            function load() {
-                var request = Gig.data.index().$promise.then(function(gigs) {
-                    $scope.gridOptions.data = gigs;
-                }).catch(function(err) {
-                    console.error(err);
+        function load() {
+            var request = Gig.data.index().$promise.then(function(gigs) {
+                $scope.gridOptions.data = gigs;
+            }).catch(function(err) {
+                console.error(err);
+            });
+
+            BlockingPromiseManager.add(request);
+        }
+
+        load();
+
+        $scope.add = function() {
+            editDialog({});
+        };
+
+        $scope.editSelected = function() {
+            editDialog($scope.selected.entity);
+        };
+
+        $scope.deleteSelected = function() {
+            dialogs.confirm({
+                okText: 'Delete',
+                title: 'Confirm Delete',
+                message: 'Are you sure you want to delete ' + $scope.selected.entity.name + '?'
+            }).then(function() {
+                var request = Gig.data.delete({ id: $scope.selected.entity.id }).$promise.then(function() {
+                    load();
+                }).catch(function(error) {
+                    console.error(error);
                 });
 
                 BlockingPromiseManager.add(request);
-            }
+            }, function() {
 
-            load();
+            });
+        };
 
-            $scope.add = function() {
-                editDialog({});
-            };
-
-            $scope.editSelected = function() {
-                editDialog($scope.selected.entity);
-            };
-
-            $scope.deleteSelected = function() {
-                dialogs.confirm({
-                    okText: 'Delete',
-                    title: 'Confirm Delete',
-                    message: 'Are you sure you want to delete ' + $scope.selected.entity.name + '?'
-                }).then(function() {
-                    var request = Gig.data.delete({ id: $scope.selected.entity.id }).$promise.then(function() {
-                        load();
-                    }).catch(function(error) {
-                        console.error(error);
-                    });
-
-                    BlockingPromiseManager.add(request);
-                }, function() {
-
-                });
-            };
-
-            function editDialog(gig) {
-                var modalInstance = $uibModal.open({
-                    ariaLabelledBy: 'modal-title',
-                    ariaDescribedBy: 'modal-body',
-                    templateUrl: '/template/gigEdit.html',
-                    controller: 'GigEditController',
-                    resolve: {
-                        gig: function() {
-                            return gig;
-                        }
+        function editDialog(gig) {
+            var modalInstance = $uibModal.open({
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: '/template/gigEdit.html',
+                controller: 'GigEditController',
+                resolve: {
+                    gig: function() {
+                        return gig;
                     }
-                });
+                }
+            });
 
-                modalInstance.result.then(function() {
-                    load();
-                }, function() {
+            modalInstance.result.then(function() {
+                load();
+            }, function() {
 
-                });
-            }
+            });
         }
-    ]);
-})();
+    }
+]);
