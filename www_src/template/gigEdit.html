@@ -1,4 +1,4 @@
-<script type="text/ng-template"  id="/template/gigEdit.html">
+<script type="text/ng-template" id="/template/gigEdit.html">
     <form name="gigForm" ng-submit="submit(gigForm)" novalidate>
         <div class="modal-header">
             <h3 class="modal-title" id="modal-title">
@@ -16,11 +16,11 @@
                 <div>
                     <select id="contractorId" 
                             name="contractorId" 
-                            style="width: 100%"
-                            kendo-dropdownlist="contractorDropdown" 
-                            options="contractorDropdownOptions" 
+                            class="form-control"
                             ng-model="form.contractorId" 
+                            ng-options="contractor as contractor.name for contractor in contractors track by id"
                             required>
+                        <option value="">Select a Contractor</option>
                     </select>
                     <div ng-messages="gigForm.contractorId.$error" role="alert" ng-if="gigForm.$submitted">
                         <p class="help-block" ng-message="required">Select a contractor</p>
@@ -61,13 +61,10 @@
             
             <div class="form-group" data-ng-class="{ 'has-error': gigForm.$submitted && gigForm.startDate.$invalid }">
                 <label for="startDate">Start</label>
-                <input name="startDate" 
-                       type="text"
-                       id="startDate" 
-                       style="width: 100%" 
-                       kendo-date-time-picker 
-                       ng-model="form.startDate" 
-                       required />
+                <div style="width: 100%;">
+                    <datetimepicker id="startDate" name="startDate" ng-model="form.startDate" date-format="M/d/yyyy" ng-required="true">
+                    </datetimepicker>
+                </div>
                 <div ng-messages="gigForm.startDate.$error" role="alert" ng-if="gigForm.$submitted">
                     <p class="help-block" ng-message="required">Choose a start date/time</p>
                     <p class="help-block" ng-message="date">Invalid date format</p>
@@ -76,13 +73,10 @@
 
             <div class="form-group" data-ng-class="{ 'has-error': gigForm.$submitted && gigForm.endDate.$invalid }">
                 <label for="endDate">End</label>
-                <input name="endDate"  
-                       type="text"
-                       id="endDate" 
-                       style="width: 100%" 
-                       kendo-date-time-picker 
-                       ng-model="form.endDate" 
-                       required />
+                <div style="width: 100%;">
+                    <datetimepicker id="endDate" name="endDate" ng-model="form.endDate" date-format="M/d/yyyy" ng-required="true">
+                    </datetimepicker>
+                </div>
                 <div ng-messages="gigForm.endDate.$error" role="alert" ng-if="gigForm.$submitted">
                     <p class="help-block" ng-message="required">Choose an end date/time</p>
                     <p class="help-block" ng-message="date">Invalid date format</p>

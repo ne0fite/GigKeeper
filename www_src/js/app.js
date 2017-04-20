@@ -27,6 +27,7 @@ angular.module('GigKeeper', [
     'google.places',
     'ngMessages',
     'ui.bootstrap',
+    'ui.bootstrap.datetimepicker',
     'ui.grid',
     'ui.grid.edit',
     'ui.grid.selection',

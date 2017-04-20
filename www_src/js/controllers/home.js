@@ -23,6 +23,8 @@ angular.module('GigKeeper').controller('home', [
     function($rootScope, $scope, $state, $http, UrlBuilder, BlockingPromiseManager) {
 
         $scope.submitLoginForm = function(loginForm) {
+            $scope.errorMessage = null;
+
             if (loginForm.$valid) {
 
                 var postData = {
@@ -34,9 +36,11 @@ angular.module('GigKeeper').controller('home', [
                     if (response.status === 200) {
                         $rootScope.profile = response.data;
                         $state.go('my.gigs');
+                    } else {
+                        $scope.errorMessage = response.data.message;
                     }
-                }).catch(function(error) { // eslint-disable-line no-unused-vars
-                    
+                }).catch(function(error) {
+                    $scope.errorMessage = error.message;
                 });
 
                 BlockingPromiseManager.add(request);

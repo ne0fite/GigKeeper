@@ -19,10 +19,10 @@
 'use strict';
 
 angular.module('GigKeeper').controller('GigEditController', [
-    '$scope', '$uibModalInstance', 'Contractor', 'Tag', 'Gig', 'gig', 'UrlBuilder', 'BlockingPromiseManager',
-    function($scope, $uibModalInstance, Contractor, Tag, Gig, gig, UrlBuilder, BlockingPromiseManager) {
+    '$scope', '$uibModalInstance', 'contractors', 'Tag', 'Gig', 'gig', 'UrlBuilder', 'BlockingPromiseManager',
+    function($scope, $uibModalInstance, contractors, Tag, Gig, gig, UrlBuilder, BlockingPromiseManager) {
 
-        $scope.contractorDropdownOptions = Contractor.getDropdownOptions();
+        $scope.contractors = contractors;
 
         $scope.descriptionsComboOptions = {
             autoBind: false,
@@ -73,35 +73,27 @@ angular.module('GigKeeper').controller('GigEditController', [
         $scope.estimateDistance = function($event) {
             $event.preventDefault();
 
-            if ($scope.form.place) {
+            var button = angular.element('#estimate_button');
+            button.button('loading');
 
-                var button = angular.element('#estimate_button');
-                button.button('loading');
+            var request = Gig.data.distanceTo({placeId: $scope.form.place.place_id}).$promise
+                .then(function(response) {
 
-                var request = Gig.data.distanceTo({placeId: $scope.form.place.place_id}).$promise
-                    .then(function(response) {
-                        if (response) {
-                            var element = response.rows[0].elements[0];
+                    // TODO: move this logic server-side
+                    var element = response.rows[0].elements[0];
 
-                            // convert KM to miles
-                            $scope.form.distance = element.distance.value / 1000 / 1.609344;
+                    // convert KM to miles
+                    $scope.form.distance = element.distance.value / 1000 / 1.609344;
 
-                            // convert seconds to minutes
-                            $scope.form.duration = element.duration.value / 60;
-                        } else {
-                            console.log(response);
-                        }
+                    // convert seconds to minutes
+                    $scope.form.duration = element.duration.value / 60;
 
-                        button.button('reset');
-                    }).catch(function(error) {
-                        console.log(error);
-                        button.button('reset');
-                    });
+                    button.button('reset');
+                }).catch(function(error) { // eslint-disable-line no-unused-vars
+                    button.button('reset');
+                });
 
-                BlockingPromiseManager.add(request);
-            } else {
-                console.log('Please select a location');
-            }
+            BlockingPromiseManager.add(request);
         };
 
         $scope.next = function() {
@@ -140,7 +132,6 @@ angular.module('GigKeeper').controller('GigEditController', [
 
                 promise.then(function() {
                     $uibModalInstance.close();
-                    // $scope.successMessage = 'Saved!';
                     button.button('reset');
                 }).catch(function(error) {
                     $scope.errorMessage = error.message;

@@ -152,6 +152,9 @@ angular.module('GigKeeper').controller('gigs', [
                 resolve: {
                     gig: function() {
                         return gig;
+                    },
+                    contractors: function(Contractor) {
+                        return Contractor.data.index().$promise;
                     }
                 }
             });

@@ -14,16 +14,28 @@
                         </div>
                         <div class="panel-body">
                             <form name="loginForm" ng-submit="submitLoginForm(loginForm)" novalidate>
-                                <div class="form-group">
+
+                                <div class="alert alert-danger" data-ng-if="errorMessage">{{ errorMessage }}</div>
+
+                                <div class="form-group" ng-class="{ 'has-error': loginForm.$submitted && loginForm.email.$invalid }">
                                     <label>Email</label>
                                     <input class="form-control" type="email" name="email" ng-model="email" required />
+                                    <div ng-messages="loginForm.email.$error" role="alert" ng-if="loginForm.$submitted">
+                                        <p class="help-block" ng-message="required">Email is required</p>
+                                        <p class="help-block" ng-message="email">Email is invalid</p>
+                                    </div>
                                 </div>
-                                <div class="form-group">
+
+                                <div class="form-group" ng-class="{ 'has-error': loginForm.$submitted && loginForm.password.$invalid }">
                                     <label>Password</label>
                                     <input class="form-control" type="password" name="password" ng-model="password" required />
+                                    <div ng-messages="loginForm.password.$error" role="alert" ng-if="loginForm.$submitted">
+                                        <p class="help-block" ng-message="required">Password is required</p>
+                                    </div>
                                 </div>
+
                                 <div class="text-center">
-                                    <button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="loginForm.$invalid">Login</button>
+                                    <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
                                 </div>
                             </form>
                         </div>
