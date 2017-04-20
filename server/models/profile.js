@@ -36,7 +36,8 @@ module.exports = function(sequelize, DataTypes) {
                 this.setDataValue("homeBasePlace", place.toString());
             }
         },
-        defaultDuration: { type: DataTypes.INTEGER, allowNull: true }
+        defaultDuration: { type: DataTypes.INTEGER, allowNull: true },
+        leadTime: { type: DataTypes.INTEGER, allowNull: true }
     }, {
         classMethods: {
             

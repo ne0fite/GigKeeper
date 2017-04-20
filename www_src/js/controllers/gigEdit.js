@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('GigEditController', [
-    '$scope', '$uibModalInstance', 'contractors', 'Tag', 'Gig', 'gig', 'UrlBuilder', 'BlockingPromiseManager',
-    function($scope, $uibModalInstance, contractors, Tag, Gig, gig, UrlBuilder, BlockingPromiseManager) {
+    '$rootScope', '$scope', '$uibModalInstance', 'contractors', 'Tag', 'Gig', 'gig', 'UrlBuilder', 'BlockingPromiseManager',
+    function($rootScope, $scope, $uibModalInstance, contractors, Tag, Gig, gig, UrlBuilder, BlockingPromiseManager) {
 
         $scope.contractors = contractors;
 
@@ -62,6 +62,25 @@ angular.module('GigKeeper').controller('GigEditController', [
             tags: gig.tags,
             notes: gig.notes
         };
+
+        $scope.$watch('form.startDate', function(newValue, oldValue) {
+            if (newValue != oldValue && newValue) {
+                if ($scope.form.endDate < $scope.form.startDate) {
+                    $scope.form.endDate = $scope.form.startDate;
+                }
+                if ($rootScope.profile.profile.defaultDuration > 0) {
+                    $scope.form.endDate = new Date(newValue.getTime() + ($rootScope.profile.profile.defaultDuration * 60 * 1000));
+                }
+            }
+        });
+
+        $scope.$watch('form.endDate', function(newValue, oldValue) {
+            if (newValue != oldValue && newValue) {
+                if ($scope.form.endDate < $scope.form.startDate) {
+                    $scope.form.startDate = $scope.form.endDate;
+                }
+            }
+        });
 
         /**
          * Estimate the distance to the specified location
