@@ -22,11 +22,16 @@ angular.module('GigKeeper').controller('settings', [
     '$scope', 'Settings', 'settings', 'BlockingPromiseManager',
     function($scope, Settings, settings, BlockingPromiseManager) {
 
-        $scope.homeBaseOptions = {
-            placeIdOnly: true
+        $scope.durationOptions = {
+            decimals: 0,
+            format: '0 minutes',
+            min: 0,
+            defaultValue: 0
         };
 
         $scope.form = {
+            defaultDuration: settings.defaultDuration || 0,
+            leadTime: settings.leadTime || 0,
             homeBasePlace: settings.homeBasePlace
         };
 
@@ -37,6 +42,8 @@ angular.module('GigKeeper').controller('settings', [
                 button.button('loading');
 
                 var payload = {
+                    defaultDuration: $scope.form.defaultDuration,
+                    leadTime: $scope.form.leadTime,
                     homeBasePlace: $scope.form.homeBasePlace
                 };
 

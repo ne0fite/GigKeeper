@@ -46,16 +46,13 @@ var settingsPlugin = {
 
                 models.profile.findOne(options).then(function(profile) {
                     if (profile) {
-                        var settings = {
-                            homeBasePlace: profile.homeBasePlace
-                        };
+                        var settings = profile.get({ plain: true });
                         return reply(settings);
                     } else {
                         return reply(Boom.unauthorized("Invalid Session"));
                     }
                 }).catch(function(err) {
-                    console.log(err);
-                    return reply(Boom.badImplementation());
+                    return reply(Boom.badImplementation(err));
                 });
             }
         });
@@ -70,7 +67,8 @@ var settingsPlugin = {
                 validate: {
                     payload: {
                         homeBasePlace: Joi.object().optional().allow(null).default(null),
-                        defaultDuration: Joi.number().integer().optional().allow(null)
+                        defaultDuration: Joi.number().integer().optional().allow(null),
+                        leadTime: Joi.number().integer().optional().allow(null)
                     }
                 }
             },
@@ -99,8 +97,7 @@ var settingsPlugin = {
                 }).then(function() {
                     return reply();
                 }).catch(function(err) {
-                    console.log(err);
-                    return reply(Boom.badImplementation());
+                    return reply(Boom.badImplementation(err));
                 });
             }
         });
