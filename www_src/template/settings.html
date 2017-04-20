@@ -6,7 +6,7 @@
         </h1>
     </div>
 
-    <form name="settingsForm" data-ng-submit="submit(settingsForm)" novalidate>
+    <form name="settingsForm" ng-submit="submit(settingsForm)" novalidate>
 
         <div class="row">
             <div class="col-md-6">
@@ -24,7 +24,7 @@
                                    g-places-autocomplete 
                                    options="homeBaseOptions"
                                    data-force-selection="true"
-                                   data-ng-model="form.homeBasePlace"
+                                   ng-model="form.homeBasePlace"
                                    autocomplete="off" />
                         </div>
                     </div>
