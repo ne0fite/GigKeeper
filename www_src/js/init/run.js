@@ -9,7 +9,7 @@
 
             $rootScope.profile = false;
 
-            $rootScope.$on('$stateChangeStart', function(event, toState) {
+            $rootScope.$on('$stateChangeStart', function(event, toState) { // eslint-disable-line no-unused-vars
                 var request = $http.get(UrlBuilder.build('/api/v1/user/profile')).then(function(response) {
                     if (response.data.active) {
                         $rootScope.profile = response.data;
@@ -18,7 +18,7 @@
                         event.preventDefault();
                         $state.go('home');
                     }
-                }).catch(function(error) {
+                }).catch(function(error) { // eslint-disable-line no-unused-vars
                     event.preventDefault();
                     $state.go('home');
                 });
@@ -27,7 +27,7 @@
             });
 
             $rootScope.logout = function() {
-               var request = $http.post(UrlBuilder.build('/api/v1/logout')).then(function(response) {
+                var request = $http.post(UrlBuilder.build('/api/v1/logout')).then(function(response) { // eslint-disable-line no-unused-vars
                     $rootScope.profile = null;
                     $state.go('home');
                 }).catch(function(error) {
