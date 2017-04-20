@@ -11,7 +11,7 @@
   ],
   "homepage": "https://github.com/ne0fite/GigKeeper",
   "bugs": "https://github.com/ne0fite/GigKeeper/issues",
-  "license": "UNLICENSED",
+  "license": "GPL-3.0+",
   "author": {
     "name": "Steve Wamsley",
     "email": "swamsley@gmail.com",

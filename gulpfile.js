@@ -140,7 +140,14 @@ gulp.task("html", function() {
 
 gulp.task("jshint", function() {
     return gulp.src(globs.scripts)
-        .pipe(jshint())
+        .pipe(jshint({
+            node: true,
+            browser: true,
+            globals: {
+                angular: true,
+                kendo: true
+            }
+        }))
         .pipe(jshint.reporter(stylish));
 });
 
