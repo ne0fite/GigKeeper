@@ -12,7 +12,8 @@
         'ui.bootstrap',
         'ui.grid',
         'ui.grid.edit',
-        'ui.grid.selection'
+        'ui.grid.selection',
+        'BlockingPromiseManager'
     ]);
 
 }());

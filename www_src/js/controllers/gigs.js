@@ -3,7 +3,11 @@
 
     angular.module('GigKeeper').controller('gigs', [
         '$scope', '$uibModal', 'uiGridConstants', 'dialogs', 'contractors', 'Gig', 'UrlBuilder',
-        function($scope, $uibModal, uiGridConstants, dialogs, contractors, Gig, UrlBuilder) {
+        'BlockingPromiseManager',
+        function(
+            $scope, $uibModal, uiGridConstants, dialogs, contractors, Gig, UrlBuilder,
+            BlockingPromiseManager
+        ) {
 
             $scope.selected = null;
 
@@ -85,11 +89,13 @@
             $scope.selected = null;
 
             function load() {
-                Gig.data.index().$promise.then(function(gigs) {
+                var request = Gig.data.index().$promise.then(function(gigs) {
                     $scope.gridOptions.data = gigs;
                 }).catch(function(err) {
                     console.error(err);
                 });
+
+                BlockingPromiseManager.add(request);
             }
 
             load();
@@ -108,11 +114,13 @@
                     title: 'Confirm Delete',
                     message: 'Are you sure you want to delete ' + $scope.selected.entity.name + '?'
                 }).then(function() {
-                    Gig.data.delete({ id: $scope.selected.entity.id }).$promise.then(function() {
+                    var request = Gig.data.delete({ id: $scope.selected.entity.id }).$promise.then(function() {
                         load();
                     }).catch(function(error) {
                         console.error(error);
                     });
+
+                    BlockingPromiseManager.add(request);
                 }, function() {
 
                 });

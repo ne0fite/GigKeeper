@@ -1,12 +1,15 @@
 <script type="text/ng-template"  id="/template/gigEdit.html">
-    <form name="gigForm" data-ng-submit="submit(gigForm)" novalidate>
+    <form name="gigForm" ng-submit="submit(gigForm)" novalidate>
         <div class="modal-header">
-            <h3 class="modal-title" id="modal-title">Edit Gig</h3>
+            <h3 class="modal-title" id="modal-title">
+                <i class="fa fa-pencil pad-right"></i>
+                Edit Gig
+            </h3>
         </div>
         <div class="modal-body" id="modal-body">
 
-            <div class="alert alert-danger" data-ng-if="errorMessage">{{ errorMessage }}</div>
-            <div class="alert alert-success" data-ng-if="successMessage">{{ successMessage }}</div>
+            <div class="alert alert-danger" ng-if="errorMessage">{{ errorMessage }}</div>
+            <div class="alert alert-success" ng-if="successMessage">{{ successMessage }}</div>
 
             <div class="form-group" data-ng-class="{ 'has-error': gigForm.$submitted && gigForm.contractorId.$invalid }">
                 <label for="contractorId">Contractor</label>
@@ -31,7 +34,7 @@
                        name="name" 
                        kendo-combo-box
                        options="descriptionsComboOptions"
-                       data-ng-model="form.name" 
+                       ng-model="form.name" 
                        id="gig_name" 
                        style="width: 100%;"
                        required />
@@ -48,7 +51,7 @@
                        class="form-control"
                        g-places-autocomplete 
                        data-force-selection="true"
-                       data-ng-model="form.place"
+                       ng-model="form.place"
                        autocomplete="off" 
                        required />
                 <div ng-messages="gigForm.name.$error" role="alert" ng-if="gigForm.$submitted">
@@ -93,7 +96,7 @@
                            id="distance" 
                            kendo-numeric-text-box
                            options="distanceOptions"
-                           data-ng-model="form.distance" />
+                           ng-model="form.distance" />
                 </div>
                 <div class="col-md-4 form-group">
                     <label for="duration">Travel Time (minutes)</label>
@@ -101,16 +104,16 @@
                            id="duration" 
                            kendo-numeric-text-box
                            options="durationOptions"
-                           data-ng-model="form.duration" />
+                           ng-model="form.duration" />
                 </div>
                 <div class="col-md-4 form-group">
-                    <br/>
-                    <a class="btn btn-default" 
+                    <label class="block">&nbsp;</label>
+                    <button class="btn btn-default btn-estimate" 
                        id="estimate_button" 
-                       data-ng-click="estimateDistance()" 
+                       ng-click="estimateDistance($event)" 
                        data-loading-text="<i class='fa fa-spinner fa-spin'></i> Estimating...">
                        <i class="fa fa-car"></i> Estimate
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -125,19 +128,19 @@
 
             <div class="form-group">
                 <label for="notes">Notes</label>
-                <textarea id="notes" name="notes" class="form-control" data-ng-model="form.notes"></textarea>
+                <textarea id="notes" name="notes" class="form-control" ng-model="form.notes"></textarea>
             </div>
         </div>
 
         <div class="modal-footer">
             <!--<a class="btn btn-default" 
-               data-ng-click="prev()"
-               data-ng-disabled="!hasPrev()">
+               ng-click="prev()"
+               ng-disabled="!hasPrev()">
                 <i class="fa fa-chevron-left"></i> Prev
             </a>
             <a class="btn btn-default" 
-               data-ng-click="next()"
-               data-ng-disabled="!hasNext()">
+               ng-click="next()"
+               ng-disabled="!hasNext()">
                 Next <i class="fa fa-chevron-right"></i>
             </a>-->
 
@@ -150,7 +153,7 @@
             <button class="btn btn-warning" 
                     id="cancel_button" 
                     type="button" 
-                    data-ng-click="cancel()">
+                    ng-click="cancel()">
                     <i class="fa fa-times"></i> Cancel
             </button>
         </div>

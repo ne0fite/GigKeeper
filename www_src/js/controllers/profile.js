@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('GigKeeper').controller('profile', [
-        '$scope', '$http', 'UrlBuilder', 'Profile', 'profile',
-        function($scope, $http, UrlBuilder, Profile, profile) {
+        '$scope', '$http', 'UrlBuilder', 'BlockingPromiseManager', 'Profile', 'profile',
+        function($scope, $http, UrlBuilder, BlockingPromiseManager, Profile, profile) {
 
             $scope.form = {
                 email: profile.email

@@ -65,5 +65,21 @@ code {
     z-index: 20000;
 }
 
+i.pad-right {
+    margin-right: 0.25em;
+}
+
+.block {
+    display: block;
+}
+
+//the estimate button's siblings are a little short
+.btn-estimate {
+    height: 30px;
+    padding: 4px 12px;
+}
+
+
 @import 'includes/sidebar';
+@import 'includes/spinner';
 @import 'includes/validation';

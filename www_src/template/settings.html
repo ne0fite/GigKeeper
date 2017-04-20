@@ -1,9 +1,12 @@
 <script type="text/ng-template" id="/template/settings.html">
     <div class="page-header">
-        <h1>Settings</h1>
+        <h1>
+            <i class="fa fa-cog pad-right"></i>
+            Settings
+        </h1>
     </div>
 
-    <form name="settingsForm" data-ng-submit="submit(settingsForm)" novalidate>
+    <form name="settingsForm" ng-submit="submit(settingsForm)" novalidate>
 
         <div class="row">
             <div class="col-md-6">
@@ -21,7 +24,7 @@
                                    g-places-autocomplete 
                                    options="homeBaseOptions"
                                    data-force-selection="true"
-                                   data-ng-model="form.homeBasePlace"
+                                   ng-model="form.homeBasePlace"
                                    autocomplete="off" />
                         </div>
                     </div>
@@ -31,7 +34,9 @@
 
         <div class="row">
             <div class="col-md-12">
-                <button type="submit" id="save_button" class="btn btn-primary">Update</button>
+                <button type="submit" id="save_button" class="btn btn-primary">
+                    <i class="fa fa-check"></i> Update
+                </button>
             </div>
         </div>
     </form>
