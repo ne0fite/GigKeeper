@@ -148,7 +148,9 @@ gulp.task("scripts", ["jshint"], function() {
     return gulp.src(globs.scripts)
         .pipe(plumber({ errorHandler: onError }))
         .pipe(ifDev(sourcemaps.init()))
-        .pipe(ifProd(uglify()))
+        .pipe(ifProd(uglify({
+            preserveComments: "license"
+        })))
         .pipe(concat("app.js"))
         .pipe(ifDev(sourcemaps.write()))
         .pipe(gulp.dest(dirs.js));
