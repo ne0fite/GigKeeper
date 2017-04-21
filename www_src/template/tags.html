@@ -12,5 +12,5 @@
         <button class="btn btn-danger pull-right" ng-click="deleteSelected()" ng-disabled="!selected"><i class="fa fa-times"></i> Delete Selected</button>
         <div class="clearfix"></div>
     </div>
-    <div ui-grid="gridOptions" ui-grid-selection></div>
+    <div ui-grid="gridOptions" ui-grid-selection ng-dblclick="editSelected($event)"></div>
 </script>

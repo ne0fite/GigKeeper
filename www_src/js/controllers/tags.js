@@ -30,6 +30,7 @@ angular.module('GigKeeper').controller('tags', [
             multiSelect: false,
             enableRowHeaderSelection: false,
             enableSorting: true,
+            noUnselect: true,
             columnDefs: [{
                 name: 'Name',
                 field: 'name',
@@ -68,7 +69,20 @@ angular.module('GigKeeper').controller('tags', [
             editDialog({});
         };
 
-        $scope.editSelected = function() {
+        /**
+         * Edit the selected UI Grid row.
+         * 
+         * @param {object} [$event] Angular event
+         * 
+         * @return {void}
+         */
+        $scope.editSelected = function($event) {
+            if($event) {
+                if($event.target.closest('[ui-grid-row]').length === 0) {
+                    return;
+                }
+            }
+
             editDialog($scope.selected.entity);
         };
 
@@ -79,6 +93,7 @@ angular.module('GigKeeper').controller('tags', [
                 message: 'Are you sure you want to delete ' + $scope.selected.entity.name + '?'
             }).then(function() {
                 var request = Tag.data.delete({ id: $scope.selected.entity.id }).$promise.then(function() {
+                    $scope.selected = null;
                     load();
                 }).catch(function(error) {
                     console.error(error);
