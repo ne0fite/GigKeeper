@@ -102,6 +102,7 @@ angular.module('GigKeeper').controller('contractors', [
                 message: 'Are you sure you want to delete ' + $scope.selected.entity.name + '?'
             }).then(function() {
                 var request = Contractor.data.delete({ id: $scope.selected.entity.id }).$promise.then(function() {
+                    $scope.selected = null;
                     load();
                 }).catch(function(error) {
                     console.error(error);

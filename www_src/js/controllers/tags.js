@@ -93,6 +93,7 @@ angular.module('GigKeeper').controller('tags', [
                 message: 'Are you sure you want to delete ' + $scope.selected.entity.name + '?'
             }).then(function() {
                 var request = Tag.data.delete({ id: $scope.selected.entity.id }).$promise.then(function() {
+                    $scope.selected = null;
                     load();
                 }).catch(function(error) {
                     console.error(error);
