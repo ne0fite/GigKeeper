@@ -39,6 +39,7 @@ angular.module('GigKeeper').controller('gigs', [
             paginationPageSizes: [10, 25, 50, 100],
             showColumnFooter: true,
             showGridFooter: true,
+            noUnselect: true,
             columnDefs: [{
                 name: 'Contractor',
                 field: 'contractor.name',
@@ -121,7 +122,20 @@ angular.module('GigKeeper').controller('gigs', [
             editDialog({});
         };
 
-        $scope.editSelected = function() {
+        /**
+         * Edit the selected UI Gridrow.
+         * 
+         * @param {object} [$event] Angular event
+         * 
+         * @return {void}
+         */
+        $scope.editSelected = function($event) {
+            if($event) {
+                if($event.target.closest('[ui-grid-row]').length === 0) {
+                    return;
+                }
+            }
+
             editDialog($scope.selected.entity);
         };
 
