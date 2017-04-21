@@ -57,6 +57,7 @@ angular.module('GigKeeper').controller('GigEditController', [
             format: 'n0'
         };
 
+        gig.tags = gig.tags ? gig.tags : [];
         $scope.form = {
             name: gig.name,
             place: angular.fromJson(gig.place),
@@ -192,6 +193,7 @@ angular.module('GigKeeper').controller('GigEditController', [
                     delete result.$resolved;
                     
                     $scope.tagDropdownOptions.dataSource.add(result);
+                    $scope.form.tags.push(result);
                 },
                 function () {}
             );
