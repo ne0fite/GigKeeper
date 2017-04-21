@@ -120,9 +120,10 @@ DROP TABLE IF EXISTS `profiles`;
 CREATE TABLE `profiles` (
   `id` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `homeBasePlace` text,
+  `defaultDuration` int(11) DEFAULT NULL,
+  `leadTime` int(11) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
-  `defaultDuration` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -179,4 +180,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-19 14:25:10
+-- Dump completed on 2017-04-21  9:51:04

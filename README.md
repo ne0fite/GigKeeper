@@ -63,35 +63,31 @@ npm install sequelize -g
 
 ## Getting Started
 
-Once you have the application installed and configured, time to create an initial profile and user and get logged in. _For now_, this is done with SQL. Log in to the database with your favorite client and execute the following SQL:
+Once you have the application installed and configured, time to create an initial profile and user and get logged in. Execute the following gulp task to create a new profile:
 
 ```
-insert into profiles set
-    id="af357ec6-999b-4414-948e-37e2d73c31ff",
-    createdAt=now(),
-    updatedAt=now();
-    
-insert into users set
-    id="4d3a1d69-f7b5-4d71-9c10-1e764b8819fb",
-    profileId="af357ec6-999b-4414-948e-37e2d73c31ff",
-    email="<your email address",
-    password="$2a$10$AUdoEZF0lOQdvUt6VCHv1OnqAZ2WOZeDDVinthvFIhjfD/H8esHSi",
-    active=1,
-    createdAt=now(),
-    updatedAt=now();
+gulp profile:create --email <email address> --password <password>
 ```
 
-Use the [Online UUID Generator](https://www.uuidgenerator.net/) to generate your own UUID's or the [Online Bcrypt Hash Generator](http://bcrypthashgenerator.apphb.com/) to generate your own password if you desire.
+This will create a new profile and user with the specified email and password.
 
-This will create a new profile and user with the password `password`.
+Navigate to the home page (i.e., http://localhost:8000) and log in with the email and password used above.
 
-Navigate to the home page (i.e., http://localhost:8000) and log in. From there you can change your password under My Account > My Profile.
+Navigate to My Account > My Profile to update your email address or password, as needed.
+
+Navigate to My Gigs > Settings to setup your homebase location and gig defaults.
 
 Navigate to My Gigs > Contractors to add contractors. These are the companies or people who book you to to gigs and pay you cheddar.
 
 Navigate to My Gigs > Tags to add tags that you will use to categorize your gigs (i.e., Wedding, Private Party, Charitable Event, etc.).
 
 Finally, navigate to My Gigs > Gigs and start adding gigs!
+
+## Support
+
+Submit an issue at <https://github.com/ne0fite/GigKeeper/issues> to request enhancements or report a bug.
+
+Pull requests are always welcome!
 
 ## License
 
