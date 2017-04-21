@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').factory('Tag', [
-    '$resource', 'UrlBuilder',
-    function($resource, UrlBuilder) {
+    '$resource', '$uibModal', 'UrlBuilder',
+    function($resource, $uibModal, UrlBuilder) {
         return {
             data: $resource(UrlBuilder.build('/api/v1/tag'), {}, {
                 index: {
@@ -75,6 +75,29 @@ angular.module('GigKeeper').factory('Tag', [
                     dataTextField: 'name',
                     dataValueField: 'id'
                 };
+            },
+
+            /**
+             * Open the tag editor modal.
+             * 
+             * @param  {object} [tag] The tag to edit
+             * 
+             * @return {object} The modal's promise
+             */
+            editDialog: function (tag) {
+                var modalInstance = $uibModal.open({
+                    ariaLabelledBy: 'modal-title',
+                    ariaDescribedBy: 'modal-body',
+                    templateUrl: '/template/tagEdit.html',
+                    controller: 'TagEditController',
+                    resolve: {
+                        tag: function() {
+                            return tag;
+                        }
+                    }
+                });
+
+                return modalInstance.result;
             }
         };
     }
