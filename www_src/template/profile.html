@@ -8,10 +8,10 @@
                 </h1>
             </div>
 
-            <div class="alert alert-danger" data-ng-if="errorMessage">{{ errorMessage }}</div>
-            <div class="alert alert-success" data-ng-if="successMessage">{{ successMessage }}</div>
+            <div class="alert alert-danger" ng-if="errorMessage">{{ errorMessage }}</div>
+            <div class="alert alert-success" ng-if="successMessage">{{ successMessage }}</div>
             
-            <form name="profileForm" data-ng-submit="submit(profileForm)">
+            <form name="profileForm" ng-submit="submit(profileForm)">
                 <div class="row">
 
                     <div class="col-md-6">
@@ -26,7 +26,7 @@
                                     <input type="email" 
                                            id="profile_email" 
                                            name="email" 
-                                           data-ng-model="form.email" 
+                                           ng-model="form.email" 
                                            class="form-control" 
                                            ng-email
                                            required />
@@ -41,7 +41,7 @@
                                     <input type="password" 
                                            id="profile_password" 
                                            name="password" 
-                                           data-ng-model="form.password"
+                                           ng-model="form.password"
                                            class="form-control" />
                                 </div>
 
@@ -50,9 +50,9 @@
                                     <input type="password" 
                                            id="profile_password_confirm" 
                                            name="passwordConfirm" 
-                                           data-ng-model="form.passwordConfirm" 
+                                           ng-model="form.passwordConfirm" 
                                            class="form-control" 
-                                           data-ng-required
+                                           ng-required
                                            gk-compare-to="form.password" />
                                     <div ng-messages="profileForm.passwordConfirm.$error" role="alert" ng-if="profileForm.$submitted">
                                         <p class="help-block" ng-message="compareTo">Passwords do not match</p>

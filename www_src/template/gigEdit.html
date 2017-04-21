@@ -11,7 +11,7 @@
             <div class="alert alert-danger" ng-if="errorMessage">{{ errorMessage }}</div>
             <div class="alert alert-success" ng-if="successMessage">{{ successMessage }}</div>
 
-            <div class="form-group" data-ng-class="{ 'has-error': gigForm.$submitted && gigForm.contractorId.$invalid }">
+            <div class="form-group" ng-class="{ 'has-error': gigForm.$submitted && gigForm.contractorId.$invalid }">
                 <label for="contractorId">Contractor</label>
                 <div>
                     <select id="contractorId" 
@@ -28,7 +28,7 @@
                 </div>
             </div>
 
-            <div class="form-group" data-ng-class="{ 'has-error': gigForm.$submitted && gigForm.name.$invalid }">
+            <div class="form-group" ng-class="{ 'has-error': gigForm.$submitted && gigForm.name.$invalid }">
                 <label for="gig_name">Description</label>
                 <input type="text" 
                        name="name" 
@@ -43,7 +43,7 @@
                 </div>
             </div>
 
-            <div class="form-group" data-ng-class="{ 'has-error': gigForm.$submitted && gigForm.place.$invalid }">
+            <div class="form-group" ng-class="{ 'has-error': gigForm.$submitted && gigForm.place.$invalid }">
                 <label for="place">Location</label>
                 <input type="text" 
                        id="place" 
@@ -59,7 +59,7 @@
                 </div>
             </div>
             
-            <div class="form-group" data-ng-class="{ 'has-error': gigForm.$submitted && gigForm.startDate.$invalid }">
+            <div class="form-group" ng-class="{ 'has-error': gigForm.$submitted && gigForm.startDate.$invalid }">
                 <label for="startDate">Start</label>
                 <div style="width: 100%;">
                     <datetimepicker id="startDate" name="startDate" ng-model="form.startDate" date-format="M/d/yyyy" ng-required="true">
@@ -71,7 +71,7 @@
                 </div>
             </div>
 
-            <div class="form-group" data-ng-class="{ 'has-error': gigForm.$submitted && gigForm.endDate.$invalid }">
+            <div class="form-group" ng-class="{ 'has-error': gigForm.$submitted && gigForm.endDate.$invalid }">
                 <label for="endDate">End</label>
                 <div style="width: 100%;">
                     <datetimepicker id="endDate" name="endDate" ng-model="form.endDate" date-format="M/d/yyyy" ng-required="true">

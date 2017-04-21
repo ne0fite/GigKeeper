@@ -15,7 +15,7 @@
                         <div class="panel-body">
                             <form name="loginForm" ng-submit="submitLoginForm(loginForm)" novalidate>
 
-                                <div class="alert alert-danger" data-ng-if="errorMessage">{{ errorMessage }}</div>
+                                <div class="alert alert-danger" ng-if="errorMessage">{{ errorMessage }}</div>
 
                                 <div class="form-group" ng-class="{ 'has-error': loginForm.$submitted && loginForm.email.$invalid }">
                                     <label>Email</label>

@@ -10,9 +10,9 @@
 
             <div class="alert alert-danger" ng-if="errorMessage">{{ errorMessage }}</div>
 
-            <div class="form-group" data-ng-class="{ 'has-error': tagForm.$submitted && tagForm.name.$invalid }">
+            <div class="form-group" ng-class="{ 'has-error': tagForm.$submitted && tagForm.name.$invalid }">
                 <label for="tag_name">Name</label>
-                <input type="text" name="name" data-ng-model="form.name" id="tag_name" class="form-control" data-ng-required="true" />
+                <input type="text" name="name" ng-model="form.name" id="tag_name" class="form-control" ng-required="true" />
                 <div ng-messages="tagForm.name.$error" role="alert" ng-if="tagForm.$submitted">
                     <p class="help-block" ng-message="required">Name is required</p>
                 </div>
