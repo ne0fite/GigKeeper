@@ -231,3 +231,7 @@ gulp.task("lint", function() {
 gulp.task("profile:create", function() {
     return gkutil.createProfile(options.email, options.password);
 });
+
+gulp.task("smtp:test", function() {
+    return gkutil.smtpTest(options.to, options.from);
+});
