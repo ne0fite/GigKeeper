@@ -19,8 +19,16 @@
 'use strict';
 
 angular.module('GigKeeper').controller('GigEditController', [
-    '$rootScope', '$scope', '$uibModalInstance', 'contractors', 'Tag', 'Gig', 'gig', 'UrlBuilder', 'BlockingPromiseManager',
-    function($rootScope, $scope, $uibModalInstance, contractors, Tag, Gig, gig, UrlBuilder, BlockingPromiseManager) {
+    '$rootScope', '$scope', '$uibModalInstance', 'contractors', 'Tag', 'Gig', 'gig', 'UrlBuilder',
+    'BlockingPromiseManager', '$q',
+    function(
+        $rootScope, $scope, $uibModalInstance, contractors, Tag, Gig, gig, UrlBuilder,
+        BlockingPromiseManager, $q
+    ) {
+
+        function loadTags() {
+            $scope.tagDropdownOptions = Tag.getDropdownOptions();
+        }
 
         $scope.contractors = contractors;
 
@@ -49,8 +57,7 @@ angular.module('GigKeeper').controller('GigEditController', [
             format: 'n0'
         };
 
-        $scope.tagDropdownOptions = Tag.getDropdownOptions();
-
+        gig.tags = gig.tags ? gig.tags : [];
         $scope.form = {
             name: gig.name,
             place: angular.fromJson(gig.place),
@@ -166,5 +173,34 @@ angular.module('GigKeeper').controller('GigEditController', [
         $scope.cancel = function() {
             $uibModalInstance.dismiss('cancel');
         };
+        
+        /**
+         * Open the tag editor dialog, and refresh the list on success.
+         * 
+         * @param  {object} $event The Angular event object
+         * 
+         * @return {void}
+         */
+        $scope.addTag = function($event) {
+            var promise = Tag.editDialog();
+
+            $event.preventDefault();
+
+            promise.then(
+                function (result) {
+                    //clean the result to prevent an error
+                    delete result.$promise;
+                    delete result.$resolved;
+                    
+                    $scope.tagDropdownOptions.dataSource.add(result);
+                    $scope.form.tags.push(result);
+                },
+                function () {}
+            );
+        };
+
+
+
+        loadTags();
     }
 ]);  

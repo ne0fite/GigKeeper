@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('tags', [
-    '$scope', '$uibModal', 'dialogs', 'Tag', 'BlockingPromiseManager',
-    function($scope, $uibModal, dialogs, Tag, BlockingPromiseManager) {
+    '$scope', 'dialogs', 'Tag', 'BlockingPromiseManager',
+    function($scope, dialogs, Tag, BlockingPromiseManager) {
 
         $scope.selected = null;
 
@@ -90,24 +90,20 @@ angular.module('GigKeeper').controller('tags', [
             });
         };
 
+        /**
+         * Open the tag editor dialog, and refresh the list on success.
+         * 
+         * @param {object} [tag] A tag object
+         * 
+         * @return {void}
+         */
         function editDialog(tag) {
-            var modalInstance = $uibModal.open({
-                ariaLabelledBy: 'modal-title',
-                ariaDescribedBy: 'modal-body',
-                templateUrl: '/template/tagEdit.html',
-                controller: 'TagEditController',
-                resolve: {
-                    tag: function() {
-                        return tag;
-                    }
-                }
-            });
-
-            modalInstance.result.then(function() {
-                load();
-            }, function() {
-
-            });
+            Tag.editDialog(tag).then(
+                function(result) {
+                    load();
+                },
+                function() {}
+            );
         }
     }
 ]);
