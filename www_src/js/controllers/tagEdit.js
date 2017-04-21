@@ -22,11 +22,12 @@ angular.module('GigKeeper').controller('TagEditController', [
     '$scope', '$uibModalInstance', 'Tag', 'tag', 'BlockingPromiseManager',
     function($scope, $uibModalInstance, Tag, tag, BlockingPromiseManager) {
 
-        $scope.form = {
-            id: tag.id,
-            name: tag.name,
-            description: tag.description
-        };
+        tag = tag ? tag : {};
+        $scope.form = angular.extend({
+            id: 0,
+            name: "",
+            description: ""
+        }, tag);
 
         $scope.submit = function(tagForm) {
 
@@ -47,8 +48,8 @@ angular.module('GigKeeper').controller('TagEditController', [
                     promise = Tag.data.create({}, payload).$promise;
                 }
 
-                promise.then(function() {
-                    $uibModalInstance.close();
+                promise.then(function(result) {
+                    $uibModalInstance.close(result);
                     button.button('reset');
                 }).catch(function(error) {
                     $scope.errorMessage = error.message;
