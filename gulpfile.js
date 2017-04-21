@@ -105,8 +105,10 @@ function ifProd(operation) {
 makeDirs();
 
 gulp.task("config", function() {
-    var config = require("./config/config.json"),
-        appConfig = {},
+    var config = require("./config/config.js"),
+        appConfig = {
+            env: config.app.env
+        },
         appConfigString = "var appConfig = ";
 
     appConfig.api = {

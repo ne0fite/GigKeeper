@@ -97,6 +97,9 @@ i.pad-right {
     padding: 4px 12px;
 }
 
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
 
 @import 'includes/grid';
 @import 'includes/sidebar';

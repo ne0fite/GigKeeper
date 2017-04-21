@@ -19,9 +19,17 @@
 'use strict';
 
 angular.module('GigKeeper').config([
-    '$stateProvider', '$urlRouterProvider', '$titleProvider', '$httpProvider',
-    function($stateProvider, $urlRouterProvider, $titleProvider, $httpProvider) {
+    '$compileProvider', '$stateProvider', '$urlRouterProvider', '$titleProvider', '$httpProvider',
+    function($compileProvider, $stateProvider, $urlRouterProvider, $titleProvider, $httpProvider) {
 
+        var appConfig = window.appConfig;
+
+        if (appConfig.env != 'development') {
+            $compileProvider.debugInfoEnabled(false);
+        }
+        $compileProvider.commentDirectivesEnabled(false);
+        $compileProvider.cssClassDirectivesEnabled(false);
+        
         $urlRouterProvider.otherwise('/');
 
         $stateProvider.state({

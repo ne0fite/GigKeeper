@@ -25,7 +25,7 @@
     <![endif]-->
 </head>
 
-<body ng-app="GigKeeper">
+<body ng-app="GigKeeper" ng-strict-di>
 
     <!-- Fixed navbar -->
     <nav class="navbar navbar-default navbar-fixed-top">
@@ -72,11 +72,11 @@
 
     <footer class="footer">
         <div class="container">
-            <p class="text-muted">GigKeeper &copy; 2016 Steve Wamsley</p>
+            <p class="text-muted">GigKeeper &copy; <span ng-cloak>{{  copyrightDate | date:'yyyy' }}</span> Phoenix Bright Software, LLC</p>
         </div>
     </footer>
 
-    <div class="alerts container" ng-controller="alert" ng-if="alerts.length">
+    <div class="alerts container" ng-controller="alert" ng-if="alerts.length" ng-cloak>
         <div class="row"
                 ng-repeat="alert in alerts"
                 ng-class="'alert-' + (alert.type || 'warning')"

@@ -22,6 +22,8 @@ angular.module('GigKeeper').run([
     '$rootScope', '$state', '$http', 'UrlBuilder', 'BlockingPromiseManager',
     function($rootScope, $state, $http, UrlBuilder, BlockingPromiseManager) {
 
+        $rootScope.copyrightDate = new Date();
+        
         $rootScope.BlockingPromiseManager = BlockingPromiseManager;
 
         $rootScope.profile = false;
