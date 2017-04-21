@@ -123,7 +123,7 @@ angular.module('GigKeeper').controller('gigs', [
         };
 
         /**
-         * Edit the selected UI Gridrow.
+         * Edit the selected UI Grid row.
          * 
          * @param {object} [$event] Angular event
          * 
