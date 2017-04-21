@@ -167,9 +167,12 @@ angular.module('GigKeeper').controller('gigs', [
                     gig: function() {
                         return gig;
                     },
-                    contractors: function(Contractor) {
-                        return Contractor.data.index().$promise;
-                    }
+                    contractors: [
+                        'Contractor',
+                        function(Contractor) {
+                            return Contractor.data.index().$promise;
+                        }
+                    ]
                 }
             });
 
