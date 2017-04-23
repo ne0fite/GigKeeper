@@ -41,7 +41,7 @@ angular.module('GigKeeper').controller('profile', [
                 Profile.data.update({}, payload).$promise.then(function() {
                     $scope.successMessage = 'Saved!';
                 }).catch(function(err) {
-                    console.log(err);
+                    console.log(err); // eslint-disable-line no-console
                     $scope.errorMessage = err.message;
                 }).finally(function() {
                     $scope.form.password = null;

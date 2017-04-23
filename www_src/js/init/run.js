@@ -46,12 +46,12 @@ angular.module('GigKeeper').run([
         });
 
         $rootScope.logout = function() {
-            var request = $http.post(UrlBuilder.build('/api/v1/logout')).then(function(response) { // eslint-disable-line no-unused-vars
+            var request = $http.post(UrlBuilder.build('/api/v1/logout')).then(function() {
                 $rootScope.profile = null;
                 $state.go('home');
             }).catch(function(error) {
                 // TODO: flash error message
-                console.log(error);
+                console.log(error); // eslint-disable-line no-console
             });
 
             BlockingPromiseManager.add(request);
