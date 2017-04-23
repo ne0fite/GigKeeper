@@ -25,8 +25,8 @@ angular.module('GigKeeper').controller('TagEditController', [
         tag = tag ? tag : {};
         $scope.form = angular.extend({
             id: 0,
-            name: "",
-            description: ""
+            name: '',
+            description: ''
         }, tag);
 
         $scope.submit = function(tagForm) {
