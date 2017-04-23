@@ -113,7 +113,7 @@ var gigPlugin = {
                         endDate: Joi.date().required(),
                         contractorId: Joi.string().required(),
                         tags: Joi.any().optional(),
-                        notes: Joi.string().optional().allow('').allow(null)
+                        notes: Joi.string().optional().allow(null, "")
                     }
                 }
             },
@@ -170,7 +170,7 @@ var gigPlugin = {
                         endDate: Joi.date().required(),
                         contractorId: Joi.string().required(),
                         tags: Joi.any().optional(),
-                        notes: Joi.string().optional().allow('').allow(null)
+                        notes: Joi.string().optional().allow(null, "")
                     }
                 }
             },

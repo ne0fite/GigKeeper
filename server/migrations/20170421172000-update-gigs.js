@@ -23,17 +23,17 @@ module.exports = {
         return queryInterface.changeColumn(
             "gigs",
             "notes", {
-				type: Sequelize.STRING,
+                type: Sequelize.STRING,
                 allowNull: true
             }
         );
     },
 
-    down: function(queryInterface, Sequelize) { // eslint-disable-line
+    down: function(queryInterface, Sequelize) {
         return queryInterface.changeColumn(
             "gigs",
             "notes", {
-				type: Sequelize.STRING,
+                type: Sequelize.STRING,
                 allowNull: false
             }
         );

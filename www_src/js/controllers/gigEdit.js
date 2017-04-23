@@ -20,10 +20,10 @@
 
 angular.module('GigKeeper').controller('GigEditController', [
     '$rootScope', '$scope', '$uibModalInstance', 'contractors', 'Tag', 'Gig', 'gig', 'UrlBuilder',
-    'BlockingPromiseManager', '$q',
+    'BlockingPromiseManager',
     function(
         $rootScope, $scope, $uibModalInstance, contractors, Tag, Gig, gig, UrlBuilder,
-        BlockingPromiseManager, $q
+        BlockingPromiseManager
     ) {
 
         function loadTags() {
