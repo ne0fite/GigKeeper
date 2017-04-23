@@ -114,7 +114,7 @@ angular.module('GigKeeper').controller('tags', [
          */
         function editDialog(tag) {
             Tag.editDialog(tag).then(
-                function(result) {
+                function(result) { // eslint-disable-line no-unused-vars
                     load();
                 },
                 function() {}

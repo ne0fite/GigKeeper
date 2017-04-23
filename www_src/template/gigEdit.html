@@ -18,9 +18,11 @@
                             name="contractorId" 
                             class="form-control"
                             ng-model="form.contractorId" 
-                            ng-options="contractor as contractor.name for contractor in contractors track by id"
                             required>
                         <option value="">Select a Contractor</option>
+                        <option ng-repeat="contractor in contractors track by contractor.id" ng-value="contractor.id">
+                            {{contractor.name}}
+                        </option>
                     </select>
                     <div ng-messages="gigForm.contractorId.$error" role="alert" ng-if="gigForm.$submitted">
                         <p class="help-block" ng-message="required">Select a contractor</p>
