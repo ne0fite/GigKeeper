@@ -51,6 +51,11 @@
                                     My Profile
                                 </a>
                             </li>
+                            <li ng-if="profile.scope == 'admin'">
+                                <a data-ui-sref="send-invite">
+                                    Invite
+                                </a>
+                            </li>
                             <li class="divider"></li>
                             <li>
                                 <a ng-click="logout()">

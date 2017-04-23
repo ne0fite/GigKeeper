@@ -45,6 +45,7 @@ var env = process.env.NODE_ENV || configJson.app.env || "development";
 module.exports = {
     app: {
         env: env,
+        baseUrl: process.env.BASE_URL || configJson.app.baseUrl || "http://localhost:8000",
         host: process.env.SERVER_HOST || configJson.app.host || "localhost",
         port: process.env.SERVER_PORT || configJson.app.port || 8000,
         cookie: {

@@ -22,6 +22,7 @@ var Boom = require("boom");
 var Joi = require("joi");
 var Promise = require("bluebird");
 var bcrypt = Promise.promisifyAll(require("bcrypt"));
+var Registration = require("../lib/registration.js");
 
 var userPlugin = {
 
@@ -128,6 +129,31 @@ var userPlugin = {
 
                     return user.update(payload);
                 }).then(function() {
+                    reply();
+                }).catch(function(err) {
+                    return reply(Boom.badImplementation("Failed to update user profile due to internal error: " + err.message)); 
+                });
+            }
+        });
+
+        server.route({
+            method: "POST",
+            path: "/api/v1/user/invite",
+            config: {
+                cors: {
+                    origin: ["*"]
+                },
+                validate: {
+                    payload: {
+                        email: Joi.string().email().required()
+                    }
+                }
+            },
+            handler: function(request, reply) {
+
+                var registration = new Registration(server);
+                
+                registration.sendInvite(request.payload.email).then(function() {
                     reply();
                 }).catch(function(err) {
                     return reply(Boom.badImplementation("Failed to update user profile due to internal error: " + err.message)); 

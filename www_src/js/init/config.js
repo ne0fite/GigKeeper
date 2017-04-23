@@ -44,6 +44,34 @@ angular.module('GigKeeper').config([
                 }
             }
         }).state({
+            public: true,
+            name: 'register-invite',
+            url: '/register/invite/:code',
+            controller: 'registerInvite',
+            templateUrl: '/template/registerInvite.html',
+            resolve: {
+                invite: [
+                    '$stateParams',
+                    'Registration',
+                    function($stateParams, Registration) {
+                        return Registration.data.invite({ code: $stateParams.code }).$promise;
+                    }
+                ],
+                $title: function() {
+                    return 'Register';
+                }
+            }
+        }).state({
+            name: 'send-invite',
+            url: '/profile/invite',
+            controller: 'sendInvite',
+            templateUrl: '/template/sendInvite.html',
+            resolve: {
+                $title: function() {
+                    return 'Send Invite';
+                }
+            }
+        }).state({
             name: 'my',
             url: '/my',
             templateUrl: '/template/my.html',

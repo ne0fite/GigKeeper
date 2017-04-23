@@ -1,7 +1,6 @@
 You have geen invited to sign up for GigKeeper!
 
-To sign up, go to http://localhost:8000
-and fill out the Registration form with the following information:
+Your unique invite code is {{ code }}.
 
-Email Address: {{ email }}
-Invite Code: {{ code }}
+To sign up, go to {{ baseUrl }}/register/invite/{{ code }}
+and complete the Registration form.

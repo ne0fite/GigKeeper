@@ -85,6 +85,9 @@ Mailer.prototype.sendEmail = function(mailOptions, templateName, context) {
         mailOptions.to = config.smtp.singleAddress;
     }
 
+    // add baseUrl to the context
+    context.baseUrl = config.app.baseUrl;
+
     // load / compile / render the templates
     var textTemplate;
     var htmlTemplate;

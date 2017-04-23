@@ -22,47 +22,40 @@ var Lab = require("lab");
 var lab = exports.lab = Lab.script();
 var server = require("../main.js");
 var Code = require("code");
-var Chance = require("chance");
-var chance = new Chance();
-var Registration = require("../server/lib/registration.js");
+var Utils = require("./testUtils.js");
 
 lab.experiment("registration", function () {
-    var registration;
+    var authCookie;
 
     lab.before(function (done) {
         setTimeout(function () {
             server.initialize(function () {
-                registration = new Registration(server);
-                done();
+                Utils.login("test@example.com", "password").then(function (resCookie) {
+                    authCookie = resCookie;
+                    done();
+                }).catch(function(error) {
+                    done(error);
+                });
             });
         }, 1000);
     });
 
-    lab.test("Create Code", function(done) {
-        registration.createCode().then(function(code) {
-            Code.expect(code).to.not.be.null();
-            Code.expect(code.length).to.equal(6);
+    lab.test("Lookup Invite", function(done) {
+
+        var options = {
+            method: "GET",
+            url: "/api/v1/register/invite/123XYZ",
+            headers: {
+                cookie: authCookie
+            }
+        };
+
+        Utils.sendRequest(options).then(function(response) {
+            Code.expect(response.statusCode).to.equal(200);
             done();
-        }).catch(function(err) {
-            done(err);
+        }).catch(function(error) {
+            done(error);
         });
     });
 
-    lab.test("Send Invite", function(done) {
-
-        var email = chance.email();
-
-        registration.sendInvite(email).then(function(invite) {
-            
-            Code.expect(invite).to.not.be.undefined();
-            Code.expect(invite).to.not.be.null();
-            Code.expect(invite.email).to.equal(email);
-            Code.expect(invite.code).to.not.be.null();
-            Code.expect(invite.code.length).to.equal(6);
-
-            done();
-        }).catch(function(err) {
-            done(err);
-        });
-    });
 });

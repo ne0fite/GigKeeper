@@ -29,20 +29,24 @@ angular.module('GigKeeper').run([
         $rootScope.profile = false;
 
         $rootScope.$on('$stateChangeStart', function(event, toState) { // eslint-disable-line no-unused-vars
-            var request = $http.get(UrlBuilder.build('/api/v1/user/profile')).then(function(response) {
-                if (response.data.active) {
-                    $rootScope.profile = response.data;
-                } else {
-                    $rootScope.profile = null;
+            
+            if (!toState.public) {
+
+                var request = $http.get(UrlBuilder.build('/api/v1/user/profile')).then(function(response) {
+                    if (response.data.active) {
+                        $rootScope.profile = response.data;
+                    } else {
+                        $rootScope.profile = null;
+                        event.preventDefault();
+                        $state.go('home');
+                    }
+                }).catch(function(error) { // eslint-disable-line no-unused-vars
                     event.preventDefault();
                     $state.go('home');
-                }
-            }).catch(function(error) { // eslint-disable-line no-unused-vars
-                event.preventDefault();
-                $state.go('home');
-            });
+                });
 
-            BlockingPromiseManager.add(request);
+                BlockingPromiseManager.add(request);
+            }
         });
 
         $rootScope.logout = function() {

@@ -62,47 +62,112 @@ Registration.prototype.createCode = function() {
 Registration.prototype.sendInvite = function(email) {
     var self = this;
 
-    // create random code
-    var code;
-    return self.createCode().then(function(result) {
-        code = result;
+    return self.db.sequelize.transaction(function(t) {
 
-        // lookup an existing invite for the user
-        var queryOptions = {
+        var invite;
+        var code;
+
+        var userQuery = {
             where: {
                 email: email
             }
         };
-        return self.models.invite.findOne(queryOptions);
-    }).then(function(invite) {
 
-        var invitePayload = {
-            email: email,
-            code: code
-        };
+        return self.models.user.findOne(userQuery).then(function(existingUser) {
+            if (existingUser) {
+                throw new Error("User already registered with email");
+            }
 
-        // if found, update, otherwise, create
-        if (invite) {
-            return invite.update(invitePayload);
-        } else {
-            return self.models.invite.create(invitePayload);
+            // create random code
+            return self.createCode();
+        }).then(function(result) {
+            code = result;
+
+            // lookup an existing invite for the user
+            var queryOptions = {
+                where: {
+                    email: email
+                }
+            };
+            return self.models.invite.findOne(queryOptions);
+        }).then(function(result) {
+
+            var invitePayload = {
+                email: email,
+                code: code
+            };
+
+            // if found, update, otherwise, create
+            if (result) {
+                return result.update(invitePayload, {
+                    transaction: t
+                });
+            } else {
+                return self.models.invite.create(invitePayload, {
+                    transaction: t
+                });
+            }
+        }).then(function(result) {
+            invite = result;
+
+            // send email
+
+            // TODO export sender and subject strings - language file?
+            var mailOptions = {
+                from: "swamsley@gmail.com",
+                to: email,
+                subject: "[Gig Keeper] Invitation",
+            };
+
+            var context = {
+                email: email,
+                code: code
+            };
+
+            return self.mailer.sendEmail(mailOptions, "invite", context);
+        }).then(function() {
+            return invite;
+        });
+    });
+};
+
+Registration.prototype.createAccount = function(email, password) {
+    var self = this;
+    
+    return self.db.models.user.findOne({
+        where: {
+            email: email
         }
-    }).then(function() {
+    }).then(function(existingUser) {
+        if (existingUser) {
+            throw new Error("Email address already in use");
+        } else {
 
-        // send email
+            var profile;
 
-        // TODO export sender and subject strings - language file?
-        var mailOptions = {
-            from: "swamsley@gmail.com",
-            to: email,
-            subject: "[Gig Keeper] Invitation",
-        };
+            return self.db.sequelize.transaction(function(t) {
 
-        var context = {
-            email: email,
-            code: code
-        };
+                return self.db.models.profile.create({}, {
+                    transaction: t
+                }).then(function(result) {
+                    profile = result;
 
-        return self.mailer.sendEmail(mailOptions, "invite", context);
+                    var bcrypt = require("bcrypt");
+                    var salt = bcrypt.genSaltSync(10);
+                    var hash = bcrypt.hashSync(password, salt);
+
+                    var userPayload = {
+                        profileId: profile.id,
+                        email: email,
+                        password: hash,
+                        active: true
+                    };
+
+                    return self.db.models.user.create(userPayload, {
+                        transaction: t
+                    });
+                });
+            });
+        }
     });
 };
