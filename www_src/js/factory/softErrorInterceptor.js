@@ -31,10 +31,6 @@ angular.module('GigKeeper').factory('SoftErrorInterceptor', [
                     return response;        //it is redundant to display a message for a 401
                 }
 
-                if(typeof $rootScope.alerts == 'undefined') {
-                    $rootScope.alerts = [];
-                }
-
                 $rootScope.alerts.push({
                     type: 'danger',
                     msg: response.data.message

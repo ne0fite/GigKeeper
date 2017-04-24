@@ -27,6 +27,7 @@ angular.module('GigKeeper').run([
         $rootScope.BlockingPromiseManager = BlockingPromiseManager;
 
         $rootScope.profile = false;
+        $rootScope.alerts = [];
 
         $rootScope.$on('$stateChangeStart', function(event, toState) { // eslint-disable-line no-unused-vars
             var request = $http.get(UrlBuilder.build('/api/v1/user/profile')).then(function(response) {
