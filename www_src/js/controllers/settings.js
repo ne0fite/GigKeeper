@@ -49,6 +49,10 @@ angular.module('GigKeeper').controller('settings', [
 
                 var request = Settings.data.update({}, payload).$promise.then(function() {
                     button.button('reset');
+                    $scope.alerts.push({
+                        msg: 'Your settings were saved.',
+                        type: 'success'
+                    });
                 }).catch(function(error) {
                     $scope.errorMessage = error.message;
                     button.button('reset');
