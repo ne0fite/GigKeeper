@@ -4,7 +4,7 @@
 
 1. Run `./install.sh`
 1. Create a database and user for the application using phpMyAdmin or whatever you prefer
-1. Run **./sql/GigKeeper-schema.sql** on the new database
+1. Run **sql/GigKeeper-schema.sql** on the new database
 1. Customize the values in **config/config.json**
 
 ## Environment Variable Alternative
@@ -49,12 +49,6 @@ If you are migrating anything other than the development environmnet, pass an `e
 
 ```
 gulp db:migrate --env production
-```
-
-Note you will need to install [Sequelize](https://www.npmjs.com/package/sequelize) globally for this to work:
-
-```
-npm install sequelize -g
 ```
 
 ## Usage
