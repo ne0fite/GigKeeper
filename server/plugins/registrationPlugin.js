@@ -100,6 +100,9 @@ var registrationPlugin = {
                     },
                     payload: {
                         email: Joi.string().email().required(),
+                        firstName: Joi.string().optional().allow(null, ""),
+                        lastName: Joi.string().optional().allow(null, ""),
+                        phone: Joi.string().optional().allow(null, ""),
                         password: Joi.string().required(),
                         passwordConfirm: Joi.any().valid(Joi.ref("password")).optional().allow(null).options({ 
                             language: { 
@@ -133,7 +136,7 @@ var registrationPlugin = {
                     }
 
                     var registration = new Registration(server);
-                    return registration.createAccount(request.payload.email, request.payload.password);
+                    return registration.createAccount(request.payload);
                 }).then(function(result) {
                     newUser = result;
                     return invite.destroy();

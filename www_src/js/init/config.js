@@ -45,6 +45,16 @@ angular.module('GigKeeper').config([
             }
         }).state({
             public: true,
+            name: 'terms',
+            url: '/terms',
+            templateUrl: '/template/terms.html'
+        }).state({
+            public: true,
+            name: 'privacyPolicy',
+            url: '/privacy-policy',
+            templateUrl: '/template/privacyPolicy.html'
+        }).state({
+            public: true,
             name: 'register-invite',
             url: '/register/invite/:code',
             controller: 'registerInvite',

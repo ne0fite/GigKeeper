@@ -64,7 +64,6 @@ Registration.prototype.sendInvite = function(email) {
 
     return self.db.sequelize.transaction(function(t) {
 
-        var invite;
         var code;
 
         var userQuery = {
@@ -107,8 +106,7 @@ Registration.prototype.sendInvite = function(email) {
                     transaction: t
                 });
             }
-        }).then(function(result) {
-            invite = result;
+        }).then(function(invite) {
 
             // send email
 
@@ -124,19 +122,19 @@ Registration.prototype.sendInvite = function(email) {
                 code: code
             };
 
-            return self.mailer.sendEmail(mailOptions, "invite", context);
-        }).then(function() {
+            self.mailer.sendEmail(mailOptions, "invite", context);
+            
             return invite;
         });
     });
 };
 
-Registration.prototype.createAccount = function(email, password) {
+Registration.prototype.createAccount = function(payload) {
     var self = this;
     
     return self.db.models.user.findOne({
         where: {
-            email: email
+            email: payload.email
         }
     }).then(function(existingUser) {
         if (existingUser) {
@@ -154,11 +152,14 @@ Registration.prototype.createAccount = function(email, password) {
 
                     var bcrypt = require("bcrypt");
                     var salt = bcrypt.genSaltSync(10);
-                    var hash = bcrypt.hashSync(password, salt);
+                    var hash = bcrypt.hashSync(payload.password, salt);
 
                     var userPayload = {
                         profileId: profile.id,
-                        email: email,
+                        email: payload.email,
+                        firstName: payload.firstName,
+                        lastName: payload.lastName,
+                        phone: payload.phone,
                         password: hash,
                         active: true
                     };
@@ -167,6 +168,25 @@ Registration.prototype.createAccount = function(email, password) {
                         transaction: t
                     });
                 });
+            }).then(function(newUser) {
+
+                // TODO export sender and subject strings - language file?
+                var mailOptions = {
+                    from: "swamsley@gmail.com",
+                    to: "swamsley@gamil.com",
+                    subject: "[Gig Keeper] New Account Created",
+                };
+
+                var context = {
+                    firstName: newUser.firstName,
+                    lastName: newUser.lastName,
+                    email: newUser.email,
+                    phone: newUser.phone,
+                };
+
+                self.mailer.sendEmail(mailOptions, "registrationNotice", context);
+
+                return newUser;
             });
         }
     });

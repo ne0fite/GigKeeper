@@ -78,7 +78,10 @@ var userPlugin = {
                 },
                 validate: {
                     payload: {
+                        firstName: Joi.string().optional().allow(null, ""),
+                        lastName: Joi.string().optional().allow(null, ""),
                         email: Joi.string().email().required(),
+                        phone: Joi.string().optional().allow(null, ""),
                         password: Joi.string().optional().allow(null),
                         passwordConfirm: Joi.any().valid(Joi.ref("password")).optional().allow(null).options({ 
                             language: { 
@@ -120,7 +123,10 @@ var userPlugin = {
                     }
                 }).then(function(passwordHash) {
                     var payload = {
-                        email: request.payload.email
+                        email: request.payload.email,
+                        firstName: request.payload.firstName,
+                        lastName: request.payload.lastName,
+                        phone: request.payload.phone
                     };
 
                     if (passwordHash) {

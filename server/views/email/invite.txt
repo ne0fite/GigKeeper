@@ -2,5 +2,5 @@ You have geen invited to sign up for GigKeeper!
 
 Your unique invite code is {{ code }}.
 
-To sign up, go to {{ baseUrl }}/register/invite/{{ code }}
+To sign up, go to {{ baseUrl }}/#!/register/invite/{{ code }}
 and complete the Registration form.

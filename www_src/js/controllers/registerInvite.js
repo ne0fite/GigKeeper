@@ -26,6 +26,9 @@ angular.module('GigKeeper').controller('registerInvite', [
 
         $scope.form = {
             email: invite.email,
+            firstName: null,
+            lastName: null,
+            phone: null,
             password: null,
             passwordConfirm: null
         };
@@ -39,6 +42,9 @@ angular.module('GigKeeper').controller('registerInvite', [
 
                 var payload = {
                     email: $scope.form.email,
+                    firstName: $scope.form.firstName,
+                    lastName: $scope.form.lastName,
+                    phone: $scope.form.phone,
                     password: $scope.form.password,
                     passwordConfirm: $scope.form.passwordConfirm
                 };
