@@ -1,0 +1,21 @@
+<script type="text/ng-template"  id="/template/dialogs/selectRoute.html">
+    <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">
+            <i class="fa fa-map pad-right"></i>
+            Select your route
+        </h3>
+    </div>
+    <div class="modal-body" id="modal-body">
+        <ngMap ng-repeat="direction in directions">
+			<directions></directions>
+		</ngMap
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" id="ok_button" type="button" ng-click="ok()">
+            <i class="fa fa-check"></i> {{ dialogSettings.okText }}
+        </button>
+        <button class="btn btn-warning" id="cancel_button" type="button" ng-click="cancel()">
+            <i class="fa fa-times"></i> {{ dialogSettings.cancelText }}
+        </button>
+    </div>
+</script>

@@ -30,6 +30,23 @@ angular.module('GigKeeper').controller('GigEditController', [
             $scope.tagDropdownOptions = Tag.getDropdownOptions();
         }
 
+        /**
+         * Splits a DirectionsResult into multiple DirectionsResults, each having exactly one route.
+         * 
+         * @param {object} DirectionsResult The result of a successful request to the Google Directions API
+         * 
+         * @return {object[]} One route per DirectionsResult
+         */
+        function splitDirectionsResult(DirectionsResult) {            
+            return DirectionsResult.routes.map(function (route) {
+                var newResult = JSON.parse(JSON.stringify(DirectionsResult));   //deep copy the original
+
+                newResult.routes = [route];
+
+                return newResult;
+            });
+        }
+
         $scope.contractors = contractors;
 
         $scope.descriptionsComboOptions = {
