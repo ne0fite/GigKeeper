@@ -1,0 +1,5 @@
+New User Registration
+
+Name:    {{ firstName }} {{ lastName }}
+Email:   {{ email }} {{ email }}
+Phone #: {{ phone }} {{ phone }}

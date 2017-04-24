@@ -20,11 +20,23 @@ var Boom = require("boom");
 var Joi = require("joi");
 var bcrypt = require("bcrypt");
 var Promise = require("bluebird");
+var config = require("../../config/config.js");
 
 var securityPlugin = {
 
     register: function(server, options, next) {
 
+        server.auth.strategy("base", "cookie", {
+            cookie: config.app.cookie.name,
+            password: config.app.cookie.secret,
+            ttl: 24 * 60 * 60 * 1000,
+            isSecure: false
+        });
+
+        server.auth.default({
+            strategy: "base"
+        });
+        
         server.route({
             method: "POST",
             path: "/api/v1/login",
@@ -78,7 +90,7 @@ var securityPlugin = {
                 var db = server.plugins["hapi-sequelize"].gigkeeperdb;
                 var models = db.sequelize.models;
 
-                var options = {
+                var queryOptions = {
                     where: {
                         email: email
                     },
@@ -88,7 +100,7 @@ var securityPlugin = {
                     }]
                 };
 
-                models.user.findOne(options).then(function(user) {
+                models.user.findOne(queryOptions).then(function(user) {
                     if (user) {
 
                         bcrypt.compare(password, user.password, function(err, result) {

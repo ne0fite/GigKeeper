@@ -22,6 +22,7 @@ var Boom = require("boom");
 var Joi = require("joi");
 var Promise = require("bluebird");
 var bcrypt = Promise.promisifyAll(require("bcrypt"));
+var Registration = require("../lib/registration.js");
 
 var userPlugin = {
 
@@ -77,7 +78,10 @@ var userPlugin = {
                 },
                 validate: {
                     payload: {
+                        firstName: Joi.string().optional().allow(null, ""),
+                        lastName: Joi.string().optional().allow(null, ""),
                         email: Joi.string().email().required(),
+                        phone: Joi.string().optional().allow(null, ""),
                         password: Joi.string().optional().allow(null),
                         passwordConfirm: Joi.any().valid(Joi.ref("password")).optional().allow(null).options({ 
                             language: { 
@@ -119,7 +123,10 @@ var userPlugin = {
                     }
                 }).then(function(passwordHash) {
                     var payload = {
-                        email: request.payload.email
+                        email: request.payload.email,
+                        firstName: request.payload.firstName,
+                        lastName: request.payload.lastName,
+                        phone: request.payload.phone
                     };
 
                     if (passwordHash) {
@@ -128,6 +135,31 @@ var userPlugin = {
 
                     return user.update(payload);
                 }).then(function() {
+                    reply();
+                }).catch(function(err) {
+                    return reply(Boom.badImplementation("Failed to update user profile due to internal error: " + err.message)); 
+                });
+            }
+        });
+
+        server.route({
+            method: "POST",
+            path: "/api/v1/user/invite",
+            config: {
+                cors: {
+                    origin: ["*"]
+                },
+                validate: {
+                    payload: {
+                        email: Joi.string().email().required()
+                    }
+                }
+            },
+            handler: function(request, reply) {
+
+                var registration = new Registration(server);
+                
+                registration.sendInvite(request.payload.email).then(function() {
                     reply();
                 }).catch(function(err) {
                     return reply(Boom.badImplementation("Failed to update user profile due to internal error: " + err.message)); 

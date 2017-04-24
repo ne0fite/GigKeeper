@@ -52,6 +52,10 @@ server.register([
             forceSync: false
         }]
     },
+
+    // order matters! security plugin needs to be registered
+    // before all other GK plugins
+    require("./server/plugins/securityPlugin"),    
     require("./server/plugins/contractorPlugin"),
     {
         register: require("./server/plugins/gigPlugin"),
@@ -61,7 +65,7 @@ server.register([
     },
     require("./server/plugins/profilePlugin"),
     require("./server/plugins/publicPlugin"),
-    require("./server/plugins/securityPlugin"),
+    require("./server/plugins/registrationPlugin"),
     require("./server/plugins/settingsPlugin"),
     require("./server/plugins/tagPlugin"),
     require("./server/plugins/userPlugin")
@@ -70,17 +74,6 @@ server.register([
     if (err) {
         throw err;
     }
-
-    server.auth.strategy("base", "cookie", {
-        cookie: config.app.cookie.name,
-        password: config.app.cookie.secret,
-        ttl: 24 * 60 * 60 * 1000,
-        isSecure: false
-    });
-
-    server.auth.default({
-        strategy: "base"
-    });
 
     // Start the server
     server.start(function(err) {
