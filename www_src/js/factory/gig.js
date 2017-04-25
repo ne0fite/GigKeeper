@@ -51,6 +51,11 @@ angular.module('GigKeeper').factory('Gig', [
                     action: 'distanceTo',
                     method: 'GET',
                     url: UrlBuilder.build('/api/v1/gig/distance/:placeId')
+                },
+                directionsTo: {
+                    action: 'directionsTo',
+                    method: 'GET',
+                    url: UrlBuilder.build('/api/v1/gig/directions/:placeId')
                 }
             }),
             getModel: function() {
