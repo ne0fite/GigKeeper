@@ -6,19 +6,20 @@
         </h3>
     </div>
     <div class="modal-body" id="modal-body">
-        <div class="row">
-            <map class="col-xs-12" zoom-to-inlude-markers="true">
-                <directions origin="{{preparedRoutes[selection].origin}}"
+        <map zoom-to-inlude-markers="true">
+            <directions origin="{{preparedRoutes[selection].origin}}"
                     destination="{{preparedRoutes[selection].destination}}"
                     waypoints="{{preparedRoutes[selection].waypoints}}"></directions>
-            </map>
-            <div class="col-xs-12">
-                <div ng-repeat="route in preparedRoutes">
-                    <input type="radio" id="route-{{$index}}" name="route" ng-value="$index" ng-model="$parent.selection">
-                    <label for="route-{{$index}}">{{route.summary}}</label>
-                </div>
+        </map>
+        <p>
+            <div ng-repeat="route in preparedRoutes">
+                <input type="radio" id="route-{{$index}}" name="route" ng-value="$index" ng-model="$parent.selection">
+                <label for="route-{{$index}}"
+                        ng-class="{'text-primary': $index == $parent.selection, 'text-muted': $index != $parent.selection}">
+                    {{route.summary}}
+                </label>
             </div>
-        </div>
+        </p>
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary" id="ok_button" type="button" ng-click="ok()">

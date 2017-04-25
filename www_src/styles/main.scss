@@ -91,6 +91,26 @@ i.pad-right {
     display: block;
 }
 
+input[type=radio] {
+    display: none;
+
+    + label {
+        cursor: pointer;
+
+        &:before {
+            content: "\f096";
+            font-family: FontAwesome;
+            display: inline-block;
+            width: 1em;
+            margin-right: 0.5em;
+        }
+    }
+
+    &:checked + label:before {
+        content: "\f046";
+    }
+}
+
 //the estimate button's siblings are a little short
 .btn-estimate {
     height: 30px;
