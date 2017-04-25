@@ -7,13 +7,15 @@
     </div>
     <div class="modal-body" id="modal-body">
         <div class="row">
-            <div class="col-xs-12" ng-repeat="route in preparedRoutes">
-                <div class="panel panel-default">
-                    <div class="panel panel-body">
-                        <map zoom-to-inlude-markers="true">
-                            <directions origin="{{route.origin}}" destination="{{route.destination}}" waypoints="{{route.waypoints}}"></directions>
-                        </map>
-                    </div>
+            <map class="col-xs-12" zoom-to-inlude-markers="true">
+                <directions origin="{{preparedRoutes[selection].origin}}"
+                    destination="{{preparedRoutes[selection].destination}}"
+                    waypoints="{{preparedRoutes[selection].waypoints}}"></directions>
+            </map>
+            <div class="col-xs-12">
+                <div ng-repeat="route in preparedRoutes">
+                    <input type="radio" id="route-{{$index}}" name="route" ng-value="$index" ng-model="$parent.selection">
+                    <label for="route-{{$index}}">{{route.summary}}</label>
                 </div>
             </div>
         </div>
