@@ -6,9 +6,17 @@
         </h3>
     </div>
     <div class="modal-body" id="modal-body">
-        <ngMap ng-repeat="direction in directions">
-			<directions></directions>
-		</ngMap
+        <div class="row">
+            <div class="col-xs-12" ng-repeat="route in preparedRoutes">
+                <div class="panel panel-default">
+                    <div class="panel panel-body">
+                        <map zoom-to-inlude-markers="true">
+                            <directions origin="{{route.origin}}" destination="{{route.destination}}" waypoints="{{route.waypoints}}"></directions>
+                        </map>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary" id="ok_button" type="button" ng-click="ok()">

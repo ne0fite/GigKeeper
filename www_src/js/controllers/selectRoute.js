@@ -19,12 +19,53 @@
 'use strict';
 
 angular.module('GigKeeper').controller('SelectRouteController', [
-    '$scope', '$uibModalInstance', 'DirectionsResults',
-    function($scope, $uibModalInstance, DirectionsResults) {
+    '$scope', '$uibModalInstance', 'DirectionsResult',
+    function($scope, $uibModalInstance, DirectionsResult) {
+        function prepareRoutes(DirectionsResult) {
+            var DirectionsResults = splitDirectionsResult(DirectionsResult);
+
+            return DirectionsResults.map(function (DirectionsResult) {
+                var route = DirectionsResult.routes[0];
+                var leg = route.legs[0];
+                var steps = leg.steps.slice(1); //skip the first step, because it begins at the origin
+
+                return {
+                    summary: route.summary,
+                    origin: leg.start_location,
+                    destination: leg.end_location,
+                    waypoints: steps.map(function (step) {
+                        return {
+                            location: step.start_location,
+                            stopover: false
+                        };
+                    })
+                };
+            });
+        }
+
+        /**
+         * Splits a DirectionsResult into multiple DirectionsResults, each having exactly one route.
+         * 
+         * @param {object} DirectionsResult The result of a successful request to the Google Directions API
+         * 
+         * @return {object[]} One route per DirectionsResult
+         */
+        function splitDirectionsResult(DirectionsResult) {
+            return DirectionsResult.routes.map(function (route) {
+                var newResult = JSON.parse(JSON.stringify(DirectionsResult));   //deep copy the original
+
+                newResult.routes = [route];
+
+                return newResult;
+            });
+        }
+
         $scope.selection = 0;
 
+        $scope.preparedRoutes = prepareRoutes(DirectionsResult);
+
         $scope.ok = function () {
-            $uibModalInstance.close(DirectionsResults[$scope.selection]);
+            $uibModalInstance.close(DirectionsResult.routes[$scope.selection]);
         };
 
         $scope.cancel = function() {

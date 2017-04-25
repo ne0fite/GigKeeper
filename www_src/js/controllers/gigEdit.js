@@ -31,23 +31,6 @@ angular.module('GigKeeper').controller('GigEditController', [
         }
 
         /**
-         * Splits a DirectionsResult into multiple DirectionsResults, each having exactly one route.
-         * 
-         * @param {object} DirectionsResult The result of a successful request to the Google Directions API
-         * 
-         * @return {object[]} One route per DirectionsResult
-         */
-        function splitDirectionsResult(DirectionsResult) {
-            return DirectionsResult.routes.map(function (route) {
-                var newResult = JSON.parse(JSON.stringify(DirectionsResult));   //deep copy the original
-
-                newResult.routes = [route];
-
-                return newResult;
-            });
-        }
-
-        /**
          * Calculate a route's distance.
          * 
          * @param {object} route A route from the Google Directions API
@@ -55,8 +38,8 @@ angular.module('GigKeeper').controller('GigEditController', [
          * @return {number} The route's distance in meters
          */
         function calculateDistance(route) {
-            return route.legs.reduce(function (accumulator, leg) {
-                return accumulator + leg.distance.value;
+            return route.legs[0].steps.reduce(function (accumulator, step) {
+                return accumulator + step.distance.value;
             }, 0);
         }
 
@@ -68,8 +51,8 @@ angular.module('GigKeeper').controller('GigEditController', [
          * @return {number} The route's travel time in seconds
          */
         function calculateTravelTime(route) {
-            return route.legs.reduce(function (accumulator, leg) {
-                return accumulator + leg.duration.value;
+            return route.legs[0].steps.reduce(function (accumulator, step) {
+                return accumulator + step.duration.value;
             }, 0);
         }
 
@@ -259,16 +242,14 @@ angular.module('GigKeeper').controller('GigEditController', [
          * @return {void}
          */
         function selectRouteDialog(DirectionsResult) {
-            var DirectionsResults = splitDirectionsResult(DirectionsResult);
-
             var modalInstance = $uibModal.open({
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
                 templateUrl: '/template/dialogs/selectRoute.html',
                 controller: 'SelectRouteController',
                 resolve: {
-                    DirectionsResults: function() {
-                        return DirectionsResults;
+                    DirectionsResult: function() {
+                        return DirectionsResult;
                     }
                 }
             });
