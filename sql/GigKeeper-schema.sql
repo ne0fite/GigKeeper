@@ -1,183 +1,324 @@
--- MySQL dump 10.13  Distrib 5.6.28, for osx10.9 (x86_64)
 --
--- Host: localhost    Database: gigkeeper
--- ------------------------------------------------------
--- Server version	5.6.28
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `SequelizeMeta`
+-- PostgreSQL database dump
 --
 
-DROP TABLE IF EXISTS `SequelizeMeta`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `SequelizeMeta` (
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`name`),
-  UNIQUE KEY `name` (`name`),
-  UNIQUE KEY `SequelizeMeta_name_unique` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+-- Dumped from database version 9.6.2
+-- Dumped by pg_dump version 9.6.2
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
 
 --
--- Table structure for table `contractors`
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
 
-DROP TABLE IF EXISTS `contractors`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `contractors` (
-  `id` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `profileId` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `contact` varchar(255) DEFAULT NULL,
-  `address1` varchar(255) DEFAULT NULL,
-  `address2` varchar(255) DEFAULT NULL,
-  `city` varchar(255) DEFAULT NULL,
-  `region` varchar(255) DEFAULT NULL,
-  `postalCode` varchar(255) DEFAULT NULL,
-  `phone` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `web` varchar(255) DEFAULT NULL,
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `profileId` (`profileId`),
-  CONSTRAINT `contractors_ibfk_1` FOREIGN KEY (`profileId`) REFERENCES `profiles` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
 
 --
--- Table structure for table `gig_tags`
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
 
-DROP TABLE IF EXISTS `gig_tags`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `gig_tags` (
-  `id` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `profileId` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `gigId` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
-  `tagId` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `gig_id` (`gigId`),
-  KEY `profileId` (`profileId`),
-  KEY `tagId` (`tagId`),
-  CONSTRAINT `gig_tags_ibfk_1` FOREIGN KEY (`profileId`) REFERENCES `profiles` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `gig_tags_ibfk_2` FOREIGN KEY (`gigId`) REFERENCES `gigs` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `gig_tags_ibfk_3` FOREIGN KEY (`tagId`) REFERENCES `tags` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
 
 --
--- Table structure for table `gigs`
+-- Name: SequelizeMeta; Type: TABLE; Schema: public; Owner: gigkeeper
 --
 
-DROP TABLE IF EXISTS `gigs`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `gigs` (
-  `id` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `profileId` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `contractorId` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `place` text,
-  `distance` decimal(8,2) DEFAULT NULL,
-  `duration` decimal(8,2) DEFAULT NULL,
-  `startDate` datetime NOT NULL,
-  `endDate` datetime NOT NULL,
-  `notes` text,
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `profileId` (`profileId`),
-  KEY `contractorId` (`contractorId`),
-  CONSTRAINT `gigs_ibfk_1` FOREIGN KEY (`profileId`) REFERENCES `profiles` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  CONSTRAINT `gigs_ibfk_2` FOREIGN KEY (`contractorId`) REFERENCES `contractors` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE TABLE "SequelizeMeta" (
+    name character varying(255) NOT NULL
+);
+
+
+ALTER TABLE "SequelizeMeta" OWNER TO gigkeeper;
 
 --
--- Table structure for table `profiles`
+-- Name: contractors; Type: TABLE; Schema: public; Owner: gigkeeper
 --
 
-DROP TABLE IF EXISTS `profiles`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `profiles` (
-  `id` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `homeBasePlace` text,
-  `defaultDuration` int(11) DEFAULT NULL,
-  `leadTime` int(11) DEFAULT NULL,
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE TABLE contractors (
+    id uuid NOT NULL,
+    name character varying(255) NOT NULL,
+    contact character varying(255),
+    address1 character varying(255),
+    address2 character varying(255),
+    city character varying(255),
+    region character varying(255),
+    "postalCode" character varying(255),
+    phone character varying(255),
+    email character varying(255),
+    web character varying(255),
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL,
+    "profileId" uuid NOT NULL
+);
+
+
+ALTER TABLE contractors OWNER TO gigkeeper;
 
 --
--- Table structure for table `tags`
+-- Name: gig_tags; Type: TABLE; Schema: public; Owner: gigkeeper
 --
 
-DROP TABLE IF EXISTS `tags`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tags` (
-  `id` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
-  `profileId` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `description` varchar(255) DEFAULT NULL,
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `profileId` (`profileId`),
-  CONSTRAINT `tags_ibfk_1` FOREIGN KEY (`profileId`) REFERENCES `profiles` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE TABLE gig_tags (
+    id uuid NOT NULL,
+    "gigId" uuid NOT NULL,
+    "tagId" uuid NOT NULL,
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL,
+    "profileId" uuid NOT NULL
+);
+
+
+ALTER TABLE gig_tags OWNER TO gigkeeper;
 
 --
--- Table structure for table `users`
+-- Name: gigs; Type: TABLE; Schema: public; Owner: gigkeeper
 --
 
-DROP TABLE IF EXISTS `users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `users` (
-  `id` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `profileId` char(36) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `active` tinyint(1) DEFAULT '0',
-  `scope` varchar(255) DEFAULT NULL,
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `unq_email` (`email`),
-  KEY `profileId` (`profileId`),
-  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`profileId`) REFERENCES `profiles` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+CREATE TABLE gigs (
+    id uuid NOT NULL,
+    name character varying(255) NOT NULL,
+    place jsonb,
+    distance numeric(8,2),
+    duration numeric(8,2),
+    "startDate" timestamp with time zone NOT NULL,
+    "endDate" timestamp with time zone NOT NULL,
+    notes text,
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL,
+    "profileId" uuid NOT NULL,
+    "contractorId" uuid NOT NULL
+);
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-21  9:51:04
+ALTER TABLE gigs OWNER TO gigkeeper;
+
+--
+-- Name: invites; Type: TABLE; Schema: public; Owner: gigkeeper
+--
+
+CREATE TABLE invites (
+    id uuid NOT NULL,
+    email character varying(255) NOT NULL,
+    code character varying(255) NOT NULL,
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE invites OWNER TO gigkeeper;
+
+--
+-- Name: profiles; Type: TABLE; Schema: public; Owner: gigkeeper
+--
+
+CREATE TABLE profiles (
+    id uuid NOT NULL,
+    "homeBasePlace" jsonb,
+    "defaultDuration" integer,
+    "leadTime" integer,
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE profiles OWNER TO gigkeeper;
+
+--
+-- Name: tags; Type: TABLE; Schema: public; Owner: gigkeeper
+--
+
+CREATE TABLE tags (
+    id uuid NOT NULL,
+    name character varying(255) NOT NULL,
+    description character varying(255),
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL,
+    "profileId" uuid NOT NULL
+);
+
+
+ALTER TABLE tags OWNER TO gigkeeper;
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: gigkeeper
+--
+
+CREATE TABLE users (
+    id uuid NOT NULL,
+    email character varying(255) NOT NULL,
+    password character varying(255) NOT NULL,
+    "firstName" character varying(255),
+    "lastName" character varying(255),
+    phone character varying(255),
+    active boolean DEFAULT false,
+    scope character varying(255),
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL,
+    "profileId" uuid NOT NULL
+);
+
+
+ALTER TABLE users OWNER TO gigkeeper;
+
+--
+-- Name: SequelizeMeta SequelizeMeta_pkey; Type: CONSTRAINT; Schema: public; Owner: gigkeeper
+--
+
+ALTER TABLE ONLY "SequelizeMeta"
+    ADD CONSTRAINT "SequelizeMeta_pkey" PRIMARY KEY (name);
+
+
+--
+-- Name: contractors contractors_pkey; Type: CONSTRAINT; Schema: public; Owner: gigkeeper
+--
+
+ALTER TABLE ONLY contractors
+    ADD CONSTRAINT contractors_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: gig_tags gig_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: gigkeeper
+--
+
+ALTER TABLE ONLY gig_tags
+    ADD CONSTRAINT gig_tags_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: gigs gigs_pkey; Type: CONSTRAINT; Schema: public; Owner: gigkeeper
+--
+
+ALTER TABLE ONLY gigs
+    ADD CONSTRAINT gigs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: invites invites_pkey; Type: CONSTRAINT; Schema: public; Owner: gigkeeper
+--
+
+ALTER TABLE ONLY invites
+    ADD CONSTRAINT invites_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: profiles profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: gigkeeper
+--
+
+ALTER TABLE ONLY profiles
+    ADD CONSTRAINT profiles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tags tags_pkey; Type: CONSTRAINT; Schema: public; Owner: gigkeeper
+--
+
+ALTER TABLE ONLY tags
+    ADD CONSTRAINT tags_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: gigkeeper
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_email_key UNIQUE (email);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: gigkeeper
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: invites_email_code; Type: INDEX; Schema: public; Owner: gigkeeper
+--
+
+CREATE UNIQUE INDEX invites_email_code ON invites USING btree (email, code);
+
+
+--
+-- Name: contractors contractors_profileId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: gigkeeper
+--
+
+ALTER TABLE ONLY contractors
+    ADD CONSTRAINT "contractors_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES profiles(id) ON UPDATE CASCADE;
+
+
+--
+-- Name: gig_tags gig_tags_gigId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: gigkeeper
+--
+
+ALTER TABLE ONLY gig_tags
+    ADD CONSTRAINT "gig_tags_gigId_fkey" FOREIGN KEY ("gigId") REFERENCES gigs(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: gig_tags gig_tags_profileId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: gigkeeper
+--
+
+ALTER TABLE ONLY gig_tags
+    ADD CONSTRAINT "gig_tags_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES profiles(id) ON UPDATE CASCADE;
+
+
+--
+-- Name: gig_tags gig_tags_tagId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: gigkeeper
+--
+
+ALTER TABLE ONLY gig_tags
+    ADD CONSTRAINT "gig_tags_tagId_fkey" FOREIGN KEY ("tagId") REFERENCES tags(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: gigs gigs_contractorId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: gigkeeper
+--
+
+ALTER TABLE ONLY gigs
+    ADD CONSTRAINT "gigs_contractorId_fkey" FOREIGN KEY ("contractorId") REFERENCES contractors(id) ON UPDATE CASCADE;
+
+
+--
+-- Name: gigs gigs_profileId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: gigkeeper
+--
+
+ALTER TABLE ONLY gigs
+    ADD CONSTRAINT "gigs_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES profiles(id) ON UPDATE CASCADE;
+
+
+--
+-- Name: tags tags_profileId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: gigkeeper
+--
+
+ALTER TABLE ONLY tags
+    ADD CONSTRAINT "tags_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES profiles(id) ON UPDATE CASCADE;
+
+
+--
+-- Name: users users_profileId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: gigkeeper
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT "users_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES profiles(id) ON UPDATE CASCADE;
+
+
+--
+-- PostgreSQL database dump complete
+--
+

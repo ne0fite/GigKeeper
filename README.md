@@ -3,13 +3,16 @@
 ## Setup
 
 1. Run `./install.sh`
-1. Create a database and user for the application using phpMyAdmin or whatever you prefer
-1. Run **sql/GigKeeper-schema.sql** on the new database
-1. Customize the values in **config/config.json**
+1. Create a database and user for the application using your favorite client
+1. Run `sql/GigKeeper-schema.sql` on the new database
+1. Customize the values in `config/config.json`
+1. Run `gulp db:seed:data` to populate the database with test data.
+
+See the `config/config.json.sample` for example config JSON.
 
 ## Environment Variable Alternative
 
-Alternatively, you can provide environment-specific configuration in system environment variables. Environment variables take precedence over the `config.json` variables.
+As an alternative to the `config.json` described above, you can provide environment-specific configuration in system environment variables. Environment variables take precedence over the `config.json` variables.
 
 The `config.json` file works well with local development. However, environment variables are the preferred approach to a hosted solution.
 
@@ -24,11 +27,12 @@ The `config.json` file works well with local development. However, environment v
 <tr><td>COOKIE_NAME</td><td>Session cookie name</td><td>gigkeeper-session</td></tr>
 <tr><td>COOKIE_SECRET</td><td>Session cookie secret</td><td>tempdevcookieneedstobecreated123</td></tr>
 <tr><td>DB_HOST</td><td>Database host name</td><td>localhost</td></tr>
-<tr><td>DB_PORT</td><td>Database host port</td><td>3306</td></tr>
-<tr><td>DB_DIALECT</td><td>Database host dialect</td><td>mysql</td></tr>
+<tr><td>DB_PORT</td><td>Database host port</td><td>5432</td></tr>
+<tr><td>DB_DIALECT</td><td>Database host dialect</td><td>postgres</td></tr>
 <tr><td>DB_NAME</td><td>Database name</td><td>gigkeeper</td></tr>
 <tr><td>DB_USER</td><td>Database username</td><td>gigkeeper</td></tr>
 <tr><td>DB_PASS</td><td>Database password</td><td>gigkeeper</td></tr>
+<tr><td>DB_LOGGING</td><td>Set to true to log SQL commands to the console</td><td>false</td></tr>
 <tr><td>SMTP_ENABLED</td><td>Set to true to enable sending email</td><td>false</td></tr>
 <tr><td>SMTP_SINGLE_ADDRESS</td><td>Set to an email address to send all emails to a single address</td><td></td></tr>
 <tr><td>SMTP_SERVICE</td><td>SMTP service supported by nodemailer</td><td>gmail</td></tr>
@@ -60,7 +64,15 @@ gulp db:migrate --env production
 
 ## Usage
 
+Start up the server with:
+
 ```./start.sh```
+
+## Tests
+
+Once the database is seeded with test fixtures, you can run the lab tests with:
+
+```gulp test```
 
 ## Getting Started
 
