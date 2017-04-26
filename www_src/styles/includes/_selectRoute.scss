@@ -1,5 +1,13 @@
+.route-options {
+    margin-top: 1em;
+}
+
 .route {
-    margin-bottom: 0.75em;
+    margin-bottom: 1em;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
 }
 
 .route-details {

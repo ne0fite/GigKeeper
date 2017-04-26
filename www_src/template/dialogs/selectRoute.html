@@ -11,7 +11,7 @@
                     destination="{{preparedRoutes[selection].destination}}"
                     waypoints="{{preparedRoutes[selection].waypoints}}"></directions>
         </map>
-        <p>
+        <div class="route-options">
             <div class="route" ng-repeat="route in preparedRoutes">
                 <div>
                     <input type="radio" id="route-{{$index}}" name="route" ng-value="$index" ng-model="$parent.selection">
@@ -39,7 +39,7 @@
                     </ol>
                 </div>
             </div>
-        </p>
+        </div>
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary" id="ok_button" type="button" ng-click="ok()">
