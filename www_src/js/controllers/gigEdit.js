@@ -25,18 +25,23 @@ angular.module('GigKeeper').controller('GigEditController', [
         $rootScope, $scope, $uibModal, $filter, $stateParams, $state, contractors, Tag, Gig, UrlBuilder,
         BlockingPromiseManager, GoogleMaps
     ) {
-        var id = typeof $stateParams.id == 'undefined' ? null : $stateParams.id;
-        var gig = loadGig(id);
-
+        /**
+         * Populate the tag dropdown.
+         * 
+         * @return {void}
+         */
         function loadTags() {
             $scope.tagDropdownOptions = Tag.getDropdownOptions();
         }
 
+        /**
+         * Load the gig from the server.
+         * 
+         * @param {string} id A valid gig ID
+         *  
+         * @return {void}
+         */
         function loadGig(id) {
-            if(!id) {
-                return {}; //new gig
-            }
-
             Gig.data.read({id: id}).$promise.then(function (result) {
                 gig = result;
                 gig.tags = gig.tags ? gig.tags : [];
@@ -68,6 +73,9 @@ angular.module('GigKeeper').controller('GigEditController', [
             $scope.form.duration = GoogleMaps.calculateRouteDuration(route) / 60; //convert seconds to minutes
         }
 
+        var id = typeof $stateParams.id == 'undefined' ? null : $stateParams.id;
+        var gig = id ? loadGig(id) : {};
+
         $scope.contractors = contractors;
 
         $scope.descriptionsComboOptions = {
@@ -96,12 +104,14 @@ angular.module('GigKeeper').controller('GigEditController', [
         };
 
         $scope.$watch('form.startDate', function(newValue, oldValue) {
+            var defaultDuration = $rootScope.user.profile.defaultDuration;
+
             if (newValue != oldValue && newValue) {
                 if ($scope.form.endDate < $scope.form.startDate) {
                     $scope.form.endDate = $scope.form.startDate;
                 }
                 if ($rootScope.user.profile.defaultDuration > 0) {
-                    $scope.form.endDate = new Date(newValue.getTime() + ($rootScope.user.profile.defaultDuration * 60 * 1000));
+                    $scope.form.endDate = new Date(newValue.getTime() + defaultDuration * 60 * 1000);
                 }
             }
         });
@@ -146,6 +156,13 @@ angular.module('GigKeeper').controller('GigEditController', [
 
         };
 
+        /**
+         * Save the gig.
+         * 
+         * @param {object} gigForm The editor's form object
+         * 
+         * @return {void}
+         */
         $scope.submit = function(gigForm) {
 
             if (!gigForm.$invalid) {
@@ -183,6 +200,15 @@ angular.module('GigKeeper').controller('GigEditController', [
             } else {
                 $scope.errorMessage = 'Check form for errors';
             }
+        };
+
+        /**
+         * Go back to the gig list.
+         * 
+         * @return {void}
+         */
+        $scope.cancel = function() {
+            $state.go('gigs');
         };
         
         /**
@@ -233,8 +259,6 @@ angular.module('GigKeeper').controller('GigEditController', [
 
             modalInstance.result.then(function(route) {
                 selectRoute(route);
-            }, function() {
-
             });
         }
 
