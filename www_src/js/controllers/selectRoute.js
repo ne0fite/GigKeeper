@@ -21,6 +21,13 @@
 angular.module('GigKeeper').controller('SelectRouteController', [
     '$scope', '$uibModalInstance', 'NgMap', 'DirectionsResult',
     function($scope, $uibModalInstance, NgMap, DirectionsResult) {
+        /**
+         * Prepare routes for use with NgMap. Routes with many waypoints are downsampled to 23 (Google's maximum).
+         * 
+         * @param {object} DirectionsResult A Google Maps DirectionsResult
+         * 
+         * @return {object[]} The preprocessed routes
+         */
         function prepareRoutes(DirectionsResult) {
             var DirectionsResults = splitDirectionsResult(DirectionsResult);
 
@@ -82,20 +89,34 @@ angular.module('GigKeeper').controller('SelectRouteController', [
 
         $scope.preparedRoutes = prepareRoutes(DirectionsResult);
 
+        /**
+         * Finalize user's selection, and close the modal.
+         * 
+         * @return {void}
+         */
         $scope.ok = function () {
             $uibModalInstance.close(DirectionsResult.routes[$scope.selection]);
         };
 
+        /**
+         * Cancel the user's selection, and close the modal.
+         * 
+         * @return {void}
+         */
         $scope.cancel = function() {
             $uibModalInstance.dismiss('cancel');
         };
 
-        $uibModalInstance.rendered.then(function () {
-            setTimeout(function () {
-                var map = NgMap.getMap('select-route-map').$$state.value;
-                google.maps.event.trigger(map, 'resize');
-                map.setCenter($scope.preparedRoutes[$scope.selection].center);
-            }, 1000);
-        });
+        /**
+         * Callback function to work around Google's grey map bug when the map is reused.
+         * 
+         * @param {object} map The Google Map object
+         * 
+         * @return {void}
+         */
+        $scope.mapInitialized = function (map) {
+            window.google.maps.event.trigger(map, 'resize');
+            map.setCenter($scope.preparedRoutes[$scope.selection].center);
+        };
     }
 ]);
