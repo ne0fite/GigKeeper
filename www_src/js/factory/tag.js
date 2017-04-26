@@ -88,7 +88,7 @@ angular.module('GigKeeper').factory('Tag', [
                 var modalInstance = $uibModal.open({
                     ariaLabelledBy: 'modal-title',
                     ariaDescribedBy: 'modal-body',
-                    templateUrl: '/template/tagEdit.html',
+                    templateUrl: '/template/dialogs/tagEdit.html',
                     controller: 'TagEditController',
                     resolve: {
                         tag: function() {

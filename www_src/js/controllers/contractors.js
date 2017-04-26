@@ -118,7 +118,7 @@ angular.module('GigKeeper').controller('contractors', [
             var modalInstance = $uibModal.open({
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
-                templateUrl: '/template/contractorEdit.html',
+                templateUrl: '/template/dialogs/contractorEdit.html',
                 controller: 'ContractorEditController',
                 resolve: {
                     contractor: function() {

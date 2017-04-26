@@ -162,7 +162,7 @@ angular.module('GigKeeper').controller('gigs', [
             var modalInstance = $uibModal.open({
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
-                templateUrl: '/template/gigEdit.html',
+                templateUrl: '/template/views/gigEdit.html',
                 controller: 'GigEditController',
                 resolve: {
                     gig: function() {
