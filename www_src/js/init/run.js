@@ -30,7 +30,7 @@ angular.module('GigKeeper').run([
         $rootScope.user = null;
         $rootScope.alerts = [];
 
-        $rootScope.$on('$stateChangeStart', function(event, toState) { // eslint-disable-line no-unused-vars
+        $rootScope.$on('$stateChangeStart', function(event, toState) {
 
             if (!toState.public) {
 
