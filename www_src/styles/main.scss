@@ -80,6 +80,10 @@ code {
     background-color: #f7f7f7;
 }
 
+a {
+    cursor: pointer;
+}
+
 //google places drawer
 .pac-container {
     z-index: 10000;
@@ -101,6 +105,26 @@ i.pad-right {
     display: block;
 }
 
+input[type=radio] {
+    display: none;
+
+    + label {
+        cursor: pointer;
+
+        &:before {
+            content: "\f096";
+            font-family: FontAwesome;
+            display: inline-block;
+            width: 1em;
+            margin-right: 0.5em;
+        }
+    }
+
+    &:checked + label:before {
+        content: "\f046";
+    }
+}
+
 //the estimate button's siblings are a little short
 .btn-estimate {
     height: 30px;
@@ -111,7 +135,18 @@ i.pad-right {
   display: none !important;
 }
 
+.modal-xl {
+    @media (min-width: 992px) {
+        width: 900px;
+    }
+
+    @media (min-width: 1200px) {
+        width: 1100px;
+    }
+}
+
 @import 'includes/grid';
 @import 'includes/sidebar';
 @import 'includes/spinner';
 @import 'includes/validation';
+@import 'includes/selectRoute';

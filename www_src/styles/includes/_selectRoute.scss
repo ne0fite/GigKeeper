@@ -1,0 +1,31 @@
+.route {
+    overflow: hidden;
+
+    .panel-footer {
+        position: relative;
+    }
+}
+
+.route-stat {
+    color: #777;
+}
+
+.more-or-less {
+    float: right;
+    margin-top: 1em;
+    clear: both;
+}
+
+.directions {
+    margin-top: 0.75em;
+    padding-left: 15px;
+}
+
+.route-selection {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}

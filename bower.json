@@ -18,8 +18,9 @@
     "kendo-ui": "kendo-ui-core#^2017.1.307",
     "angular-ui-router-title": "^0.1.1",
     "angular-messages": "^1.6.4",
-    "angularjs-blocking-promise-manager": "https://github.com/zero-degrees/angularjs-blocking-promise-manager.git",
-    "angular-ui-bootstrap-datetimepicker": "^2.5.0"
+    "angular-blocking-promise-manager": "https://github.com/zero-degrees/angular-blocking-promise-manager.git",
+    "angular-ui-bootstrap-datetimepicker": "^2.5.0",
+    "ngmap":"^1.18.4"
   },
   "devDependencies": {},
   "resolutions": {

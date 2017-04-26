@@ -19,24 +19,26 @@
 'use strict';
 
 angular.module('GigKeeper').run([
-    '$rootScope', '$state', '$http', 'UrlBuilder', 'BlockingPromiseManager',
-    function($rootScope, $state, $http, UrlBuilder, BlockingPromiseManager) {
+    '$rootScope', '$state', '$http', '$sce', 'UrlBuilder', 'BlockingPromiseManager',
+    function($rootScope, $state, $http, $sce, UrlBuilder, BlockingPromiseManager) {
 
         $rootScope.copyrightDate = new Date();
         
+        $rootScope.$sce = $sce;
         $rootScope.BlockingPromiseManager = BlockingPromiseManager;
 
-        $rootScope.profile = false;
+        $rootScope.user = null;
+        $rootScope.alerts = [];
 
-        $rootScope.$on('$stateChangeStart', function(event, toState) { // eslint-disable-line no-unused-vars
-            
+        $rootScope.$on('$stateChangeStart', function(event, toState) {
+
             if (!toState.public) {
 
                 var request = $http.get(UrlBuilder.build('/api/v1/user/profile')).then(function(response) {
                     if (response.data.active) {
-                        $rootScope.profile = response.data;
+                        $rootScope.user = response.data;
                     } else {
-                        $rootScope.profile = null;
+                        $rootScope.user = null;
                         event.preventDefault();
                         $state.go('home');
                     }
@@ -51,7 +53,7 @@ angular.module('GigKeeper').run([
 
         $rootScope.logout = function() {
             var request = $http.post(UrlBuilder.build('/api/v1/logout')).then(function(response) { // eslint-disable-line no-unused-vars
-                $rootScope.profile = null;
+                $rootScope.user = null;
                 $state.go('home');
             }).catch(function(error) {
                 // TODO: flash error message

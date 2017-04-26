@@ -19,15 +19,27 @@
 'use strict';
 
 angular.module('GigKeeper').controller('GigEditController', [
-    '$rootScope', '$scope', '$uibModalInstance', 'contractors', 'Tag', 'Gig', 'gig', 'UrlBuilder',
-    'BlockingPromiseManager',
+    '$rootScope', '$scope', '$uibModalInstance', '$uibModal', '$filter', 'contractors', 'Tag', 'Gig', 'gig', 'UrlBuilder',
+    'BlockingPromiseManager', 'GoogleMaps',
     function(
-        $rootScope, $scope, $uibModalInstance, contractors, Tag, Gig, gig, UrlBuilder,
-        BlockingPromiseManager
+        $rootScope, $scope, $uibModalInstance, $uibModal, $filter, contractors, Tag, Gig, gig, UrlBuilder,
+        BlockingPromiseManager, GoogleMaps
     ) {
 
         function loadTags() {
             $scope.tagDropdownOptions = Tag.getDropdownOptions();
+        }
+
+        /**
+         * Update the form based on the user's selected route.
+         * 
+         * @param {object} route A route from the Google Directions API
+         * 
+         * @return {void}
+         */
+        function selectRoute(route) {
+            $scope.form.distance = $filter('metersToMiles')(GoogleMaps.calculateRouteDistance(route));
+            $scope.form.duration = GoogleMaps.calculateRouteDuration(route) / 60; //convert seconds to minutes
         }
 
         $scope.contractors = contractors;
@@ -75,8 +87,8 @@ angular.module('GigKeeper').controller('GigEditController', [
                 if ($scope.form.endDate < $scope.form.startDate) {
                     $scope.form.endDate = $scope.form.startDate;
                 }
-                if ($rootScope.profile.profile.defaultDuration > 0) {
-                    $scope.form.endDate = new Date(newValue.getTime() + ($rootScope.profile.profile.defaultDuration * 60 * 1000));
+                if ($rootScope.user.profile.defaultDuration > 0) {
+                    $scope.form.endDate = new Date(newValue.getTime() + ($rootScope.user.profile.defaultDuration * 60 * 1000));
                 }
             }
         });
@@ -96,24 +108,15 @@ angular.module('GigKeeper').controller('GigEditController', [
          * 
          * @return {void}
          */
-        $scope.estimateDistance = function($event) {
+        $scope.estimateDistance = function ($event) {
             $event.preventDefault();
 
             var button = angular.element('#estimate_button');
             button.button('loading');
-
-            var request = Gig.data.distanceTo({placeId: $scope.form.place.place_id}).$promise
+            
+            var request = GoogleMaps.data.directionsTo({placeId: $scope.form.place.place_id}).$promise
                 .then(function(response) {
-
-                    // TODO: move this logic server-side
-                    var element = response.rows[0].elements[0];
-
-                    // convert KM to miles
-                    $scope.form.distance = element.distance.value / 1000 / 1.609344;
-
-                    // convert seconds to minutes
-                    $scope.form.duration = element.duration.value / 60;
-
+                    selectRouteDialog(response);
                     button.button('reset');
                 }).catch(function(error) { // eslint-disable-line no-unused-vars
                     button.button('reset');
@@ -198,6 +201,34 @@ angular.module('GigKeeper').controller('GigEditController', [
                 function () {}
             );
         };
+
+        /**
+         * Open a dialog that allows the user to select a route.
+         * 
+         * @param {object} DirectionsResult The result of a successful request to the Google Directions API
+         * 
+         * @return {void}
+         */
+        function selectRouteDialog(DirectionsResult) {
+            var modalInstance = $uibModal.open({
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: '/template/dialogs/selectRoute.html',
+                size: 'xl',
+                controller: 'SelectRouteController',
+                resolve: {
+                    DirectionsResult: function() {
+                        return DirectionsResult;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function(route) {
+                selectRoute(route);
+            }, function() {
+
+            });
+        }
 
 
 

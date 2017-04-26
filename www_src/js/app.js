@@ -31,5 +31,6 @@ angular.module('GigKeeper', [
     'ui.grid',
     'ui.grid.edit',
     'ui.grid.selection',
-    'BlockingPromiseManager'
+    'BlockingPromiseManager',
+    'ngMap'
 ]);

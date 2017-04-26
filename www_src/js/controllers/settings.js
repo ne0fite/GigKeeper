@@ -48,7 +48,15 @@ angular.module('GigKeeper').controller('settings', [
                 };
 
                 var request = Settings.data.update({}, payload).$promise.then(function() {
+                    $scope.user.profile.defaultDuration = payload.defaultDuration;
+                    $scope.user.leadTime = payload.leadTime;
+                    $scope.user.homeBasePlace = payload.homeBasePlace;
+
                     button.button('reset');
+                    $scope.alerts.push({
+                        msg: 'Your settings were saved.',
+                        type: 'success'
+                    });
                 }).catch(function(error) {
                     $scope.errorMessage = error.message;
                     button.button('reset');
