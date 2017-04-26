@@ -17,6 +17,15 @@
                 <label for="route-{{$index}}"
                         ng-class="{'text-primary': $index == $parent.selection, 'text-muted': $index != $parent.selection}">
                     {{route.summary}}
+
+                    <span class="route-stat">
+                        <i class="fa fa-car"></i>
+                        {{route.distance / 1609.344 | number:1}} miles
+                    </span>
+                    <span class="route-stat">
+                        <i class="fa fa-clock-o"></i>
+                        {{route.travelTime / 60 | number:0}} minutes
+                    </span>
                 </label>
                 <a class="more-or-less" ng-click="route.showDirections = !route.showDirections">
                     <span ng-if="route.showDirections">Less...</span>

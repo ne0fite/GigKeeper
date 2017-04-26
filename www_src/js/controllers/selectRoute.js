@@ -56,6 +56,8 @@ angular.module('GigKeeper').controller('SelectRouteController', [
                         lng: (leg.start_location.lng + leg.end_location.lng) / 2
                     },
                     steps: route.legs[0].steps,
+                    distance: calculateDistance(route),
+                    travelTime: calculateTravelTime(route),
                     waypoints: steps.filter(function (element, index) {
                         return steps.length <= 23 || stepIndices.indexOf(index) != -1;
                     })
@@ -84,6 +86,32 @@ angular.module('GigKeeper').controller('SelectRouteController', [
 
                 return newResult;
             });
+        }
+
+        /**
+         * Calculate a route's distance.
+         * 
+         * @param {object} route A route from the Google Directions API
+         * 
+         * @return {number} The route's distance in meters
+         */
+        function calculateDistance(route) {
+            return route.legs[0].steps.reduce(function (accumulator, step) {
+                return accumulator + step.distance.value;
+            }, 0);
+        }
+
+        /**
+         * Calculate a route's travel time.
+         * 
+         * @param {object} route A route from the Google Directions API
+         * 
+         * @return {number} The route's travel time in seconds
+         */
+        function calculateTravelTime(route) {
+            return route.legs[0].steps.reduce(function (accumulator, step) {
+                return accumulator + step.duration.value;
+            }, 0);
         }
 
         $scope.selection = 0;
