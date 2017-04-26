@@ -82,16 +82,7 @@ angular.module('GigKeeper').config([
                 }
             }
         }).state({
-            name: 'my',
-            url: '/my',
-            templateUrl: '/template/my.html',
-            resolve: {
-                $title: function() {
-                    return 'My Stuff';
-                }
-            }
-        }).state({
-            name: 'my.gigs',
+            name: 'gigs',
             url: '/gigs',
             controller: 'gigs',
             templateUrl: '/template/gigs.html',
@@ -107,7 +98,7 @@ angular.module('GigKeeper').config([
                 }
             }
         }).state({
-            name: 'my.contractors',
+            name: 'contractors',
             url: '/contractors',
             controller: 'contractors',
             templateUrl: '/template/contractors.html',
@@ -117,7 +108,7 @@ angular.module('GigKeeper').config([
                 }
             }
         }).state({
-            name: 'my.tags',
+            name: 'tags',
             url: '/tags',
             controller: 'tags',
             templateUrl: '/template/tags.html',
@@ -127,7 +118,7 @@ angular.module('GigKeeper').config([
                 }
             }
         }).state({
-            name: 'my.settings',
+            name: 'settings',
             url: '/settings',
             controller: 'settings',
             templateUrl: '/template/settings.html',
