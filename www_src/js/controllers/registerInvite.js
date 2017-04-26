@@ -54,7 +54,7 @@ angular.module('GigKeeper').controller('registerInvite', [
                 request.then(function(result) {
 
                     if (!result.error) {
-                        $state.go('my.gigs');
+                        $state.go('gigs');
                     } else {
                         $scope.errorMessage = result.message;
                     }
