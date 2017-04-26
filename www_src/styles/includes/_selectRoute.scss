@@ -1,30 +1,31 @@
-.route-options {
-    margin-top: 1em;
-}
-
 .route {
-    margin-bottom: 1em;
+    overflow: hidden;
 
-    &:last-child {
-        margin-bottom: 0;
+    .panel-footer {
+        position: relative;
     }
 }
 
-.route-details {
-    margin-left: 1.75em;
-}
-
 .route-stat {
-    font-weight: normal;
-    margin-right: 1em;
     color: #777;
 }
 
 .more-or-less {
-    margin-left: 1em;
+    float: right;
+    margin-top: 1em;
+    clear: both;
 }
 
 .directions {
-    margin-top: 0.5em;
-    padding-left: 1em;
+    margin-top: 0.75em;
+    padding-left: 15px;
+}
+
+.route-selection {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
 }

@@ -100,8 +100,6 @@ angular.module('GigKeeper').controller('SelectRouteController', [
             });
         }
 
-        $scope.selection = 0;
-
         $scope.preparedRoutes = prepareRoutes(DirectionsResult);
 
         /**
@@ -109,8 +107,8 @@ angular.module('GigKeeper').controller('SelectRouteController', [
          * 
          * @return {void}
          */
-        $scope.ok = function () {
-            $uibModalInstance.close(DirectionsResult.routes[$scope.selection]);
+        $scope.ok = function (selection) {
+            $uibModalInstance.close(DirectionsResult.routes[selection]);
         };
 
         /**
@@ -131,7 +129,7 @@ angular.module('GigKeeper').controller('SelectRouteController', [
          */
         $scope.mapInitialized = function (map) {
             window.google.maps.event.trigger(map, 'resize');
-            map.setCenter($scope.preparedRoutes[$scope.selection].center);
+            map.setCenter($scope.preparedRoutes[0].center);
         };
     }
 ]);

@@ -6,56 +6,64 @@
         </h3>
     </div>
     <div class="modal-body" id="modal-body">
-        <map id="select-route-map" zoom-to-inlude-markers="true" map-initialized="mapInitialized(map)">
-            <directions origin="{{preparedRoutes[selection].origin}}"
-                    destination="{{preparedRoutes[selection].destination}}"
-                    waypoints="{{preparedRoutes[selection].waypoints}}"></directions>
-        </map>
-        <div class="route-options">
-            <div class="route" ng-repeat="route in preparedRoutes">
-                <div>
-                    <input type="radio" id="route-{{$index}}" name="route" ng-value="$index" ng-model="$parent.selection">
-                    <label for="route-{{$index}}"
-                            ng-class="{'text-primary': $index == $parent.selection, 'text-muted': $index != $parent.selection}">
+        <div class="row route-options">
+            <div class="col-xs-12 col-lg-4" ng-repeat="route in preparedRoutes">
+                <div class="panel panel-primary route">
+                    <div class="panel-heading">
+                        <i class="fa fa-map-marker pad-right"></i>
                         {{route.summary}}
-                    </label>
-                </div>
-                <div class="route-details">
-                    <span class="route-stat">
-                        <i class="fa fa-car"></i>
-                        {{route.distance | metersToMiles | number:1}} miles
-                    </span>
-                    <span class="route-stat" ng-init="travelTime = (route.travelTime | secondsToElapsedTime)">
-                        <i class="fa fa-clock-o"></i>
-                        <span ng-if="travelTime.weeks != 0"><!-- why didn't you take a plane??? -->
-                            {{travelTime.weeks}} week<span ng-if="travelTime.weeks != 1">s</span>
-                        </span>
-                        <span ng-if="travelTime.days != 0">
-                            {{travelTime.days}} day<span ng-if="travelTime.days != 1">s</span>
-                        </span>
-                        <span ng-if="travelTime.hours != 0">
-                            {{travelTime.hours}} hour<span ng-if="travelTime.hours != 1">s</span>
-                        </span>
-                        <span ng-if="travelTime.minutes != 0">
-                            {{travelTime.minutes}} minute<span ng-if="travelTime.minutes != 1">s</span>
-                        </span>
-                    </span>
-                    <a class="more-or-less" ng-click="route.showDirections = !route.showDirections">
-                        <span ng-if="route.showDirections">Less...</span>
-                        <span ng-if="!route.showDirections">More...</span>
-                    </a>
+                    </div>
+                    <map id="select-route-map-{{$index}}" zoom-to-inlude-markers="true" map-initialized="mapInitialized(map)">
+                        <directions origin="{{preparedRoutes[$index].origin}}"
+                                destination="{{preparedRoutes[$index].destination}}"
+                                waypoints="{{preparedRoutes[$index].waypoints}}"></directions>
+                    </map>
+                    <div class="panel-footer">
+                        <div class="route-details">
+                            <p class="route-stat" ng-init="travelTime = (route.travelTime | secondsToElapsedTime)">
+                                <i class="fa fa-clock-o"></i>
+                                <span ng-if="travelTime.weeks != 0"><!-- why didn't you take a plane??? -->
+                                    {{travelTime.weeks}} week<span ng-if="travelTime.weeks != 1">s</span>
+                                </span>
+                                <span ng-if="travelTime.days != 0">
+                                    {{travelTime.days}} day<span ng-if="travelTime.days != 1">s</span>
+                                </span>
+                                <span ng-if="travelTime.hours != 0">
+                                    {{travelTime.hours}} hour<span ng-if="travelTime.hours != 1">s</span>
+                                </span>
+                                <span ng-if="travelTime.minutes != 0">
+                                    {{travelTime.minutes}} minute<span ng-if="travelTime.minutes != 1">s</span>
+                                </span>
+                            </p>
+                            <p class="route-stat">
+                                <i class="fa fa-car"></i>
+                                {{route.distance | metersToMiles | number:1}} miles
+                            </p>
 
-                    <ol class="directions" ng-if="route.showDirections">
-                        <li ng-repeat="step in route.steps" ng-bind-html="$sce.trustAsHtml(step.html_instructions)"></li>
-                    </ol>
+                            <ol class="directions" ng-if="route.showDirections">
+                                <li ng-repeat="step in route.steps" ng-bind-html="$sce.trustAsHtml(step.html_instructions)"></li>
+                            </ol>
+
+                            <div class="clearfix"></div>
+                            <div class="more-or-less">
+                                <a ng-click="route.showDirections = !route.showDirections">
+                                    <span ng-if="route.showDirections">Less...</span>
+                                    <span ng-if="!route.showDirections">More...</span>
+                                </a>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <button class="btn btn-primary route-selection" ng-click="ok($index)">
+                                <i class="fa fa-check"></i>
+                                Choose
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" id="ok_button" type="button" ng-click="ok()">
-            <i class="fa fa-check"></i> Ok
-        </button>
         <button class="btn btn-warning" id="cancel_button" type="button" ng-click="cancel()">
             <i class="fa fa-times"></i> Cancel
         </button>
