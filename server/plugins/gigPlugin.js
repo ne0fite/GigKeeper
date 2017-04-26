@@ -346,68 +346,6 @@ var gigPlugin = {
             }
         });
 
-        server.route({
-            method: "GET",
-            path: "/api/v1/gig/distance/{placeId}",
-            config: {
-                cors: {
-                    origin: ["*"]
-                },
-                validate: {
-                    params: {
-                        placeId: Joi.string().required()
-                    }
-                }
-            },
-            handler: function(request, reply) {
-                var placeId1, placeId2;
-
-                if (!request.auth.credentials.profile.homeBasePlace) {
-                    return reply(Boom.badRequest("Home Base Location not set up"));
-                }
-
-                placeId1 = request.auth.credentials.profile.homeBasePlace.place_id;
-                placeId2 = request.params.placeId;
-
-                place.distance(placeId1, placeId2).asPromise().then(function(result) {
-                    reply(result.json);
-                }).catch(function(err) {
-                    return reply(Boom.badRequest(err));
-                });
-            }
-        });
-
-        server.route({
-            method: "GET",
-            path: "/api/v1/gig/directions/{placeId}",
-            config: {
-                cors: {
-                    origin: ["*"]
-                },
-                validate: {
-                    params: {
-                        placeId: Joi.string().required()
-                    }
-                }
-            },
-            handler: function(request, reply) {
-                var placeId1, placeId2;
-
-                if (!request.auth.credentials.profile.homeBasePlace) {
-                    return reply(Boom.badRequest("Home Base Location not set up"));
-                }
-
-                placeId1 = request.auth.credentials.profile.homeBasePlace.place_id;
-                placeId2 = request.params.placeId;
-
-                directions.directions(placeId1, placeId2).asPromise().then(function(result) {
-                    reply(result.json);
-                }).catch(function(err) {
-                    return reply(Boom.badRequest(err));
-                });
-            }
-        });
-
         next();
     }
 };

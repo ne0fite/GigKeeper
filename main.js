@@ -64,7 +64,8 @@ server.register([
     require("./server/plugins/securityPlugin"),
     require("./server/plugins/settingsPlugin"),
     require("./server/plugins/tagPlugin"),
-    require("./server/plugins/userPlugin")
+    require("./server/plugins/userPlugin"),
+    require("./server/plugins/mapPlugin")
 ], function(err) {
 
     if (err) {
