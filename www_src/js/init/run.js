@@ -19,11 +19,12 @@
 'use strict';
 
 angular.module('GigKeeper').run([
-    '$rootScope', '$state', '$http', 'UrlBuilder', 'BlockingPromiseManager',
-    function($rootScope, $state, $http, UrlBuilder, BlockingPromiseManager) {
+    '$rootScope', '$state', '$http', '$sce', 'UrlBuilder', 'BlockingPromiseManager',
+    function($rootScope, $state, $http, $sce, UrlBuilder, BlockingPromiseManager) {
 
         $rootScope.copyrightDate = new Date();
         
+        $rootScope.$sce = $sce;
         $rootScope.BlockingPromiseManager = BlockingPromiseManager;
 
         $rootScope.profile = false;

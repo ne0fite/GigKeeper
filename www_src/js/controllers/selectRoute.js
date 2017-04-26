@@ -55,6 +55,7 @@ angular.module('GigKeeper').controller('SelectRouteController', [
                         lat: (leg.start_location.lat + leg.end_location.lat) / 2,
                         lng: (leg.start_location.lng + leg.end_location.lng) / 2
                     },
+                    steps: route.legs[0].steps,
                     waypoints: steps.filter(function (element, index) {
                         return steps.length <= 23 || stepIndices.indexOf(index) != -1;
                     })

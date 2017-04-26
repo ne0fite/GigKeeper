@@ -70,6 +70,14 @@ code {
     background-color: #f7f7f7;
 }
 
+a {
+    cursor: pointer;
+    
+    &.more-or-less {
+        margin-left: 1em;
+    }
+}
+
 //google places drawer
 .pac-container {
     z-index: 10000;

@@ -18,6 +18,16 @@
                         ng-class="{'text-primary': $index == $parent.selection, 'text-muted': $index != $parent.selection}">
                     {{route.summary}}
                 </label>
+                <a class="more-or-less" ng-click="route.showDirections = !route.showDirections">
+                    <span ng-if="route.showDirections">Less...</span>
+                    <span ng-if="!route.showDirections">More...</span>
+                </a>
+
+                <div ng-if="route.showDirections">
+                    <ol>
+                        <li ng-repeat="step in route.steps" ng-bind-html="$sce.trustAsHtml(step.html_instructions)"></li>
+                    </ol>
+                </div>
             </div>
         </p>
     </div>
