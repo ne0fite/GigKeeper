@@ -142,13 +142,7 @@ angular.module('GigKeeper').controller('GigEditController', [
             
             var request = Gig.data.directionsTo({placeId: $scope.form.place.place_id}).$promise
                 .then(function(response) {
-                    if(response.routes.length == 1) {
-                        selectRoute(response.routes[0]);
-                    }
-                    else {
-                        selectRouteDialog(response);
-                    }
-
+                    selectRouteDialog(response);
                     button.button('reset');
                 }).catch(function(error) { // eslint-disable-line no-unused-vars
                     button.button('reset');
