@@ -20,10 +20,10 @@
 
 angular.module('GigKeeper').controller('GigEditController', [
     '$rootScope', '$scope', '$uibModal', '$filter',  '$stateParams', '$state','contractors', 'Tag', 'Gig', 'UrlBuilder',
-    'BlockingPromiseManager', 'GoogleMaps',
+    'BlockingPromiseManager', 'GoogleMaps', 'dialogs',
     function(
         $rootScope, $scope, $uibModal, $filter, $stateParams, $state, contractors, Tag, Gig, UrlBuilder,
-        BlockingPromiseManager, GoogleMaps
+        BlockingPromiseManager, GoogleMaps, dialogs
     ) {
         /**
          * Populate the tag dropdown.
@@ -203,12 +203,21 @@ angular.module('GigKeeper').controller('GigEditController', [
         };
 
         /**
-         * Go back to the gig list.
+         * Go back to the gig list. Require user confirmation if there are changes.
          * 
          * @return {void}
          */
         $scope.cancel = function() {
-            $state.go('gigs');
+            if($scope.gigForm.$dirty) {
+                dialogs.confirm({
+                    message: 'Are you sure? Your changes will be lost.'
+                }).then(function () {
+                    $state.go('gigs');
+                });
+            }
+            else {
+                $state.go('gigs');
+            }
         };
         
         /**
