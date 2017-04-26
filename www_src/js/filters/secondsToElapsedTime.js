@@ -21,7 +21,27 @@
 angular.module('GigKeeper').filter('secondsToElapsedTime', [
     function() {
         return function(seconds) {
-            return new Date(1970, 0, 1).setSeconds(seconds);
+            var minuteSeconds = 60;
+            var hourSeconds = minuteSeconds * 60;
+            var daySeconds = hourSeconds * 24;
+            var weekSeconds = daySeconds * 7;
+
+            var weeks = Math.floor(seconds / weekSeconds);
+            seconds -= weeks * weekSeconds;
+            var days = Math.floor(seconds / daySeconds);
+            seconds -= days * daySeconds;
+            var hours = Math.floor(seconds / hourSeconds);
+            seconds -= hours * hourSeconds;
+            var minutes = Math.floor(seconds / minuteSeconds);
+            seconds -= minutes * minuteSeconds;
+
+            return {
+                weeks: weeks,
+                days: days,
+                hours: hours,
+                minutes: minutes,
+                seconds: seconds
+            };
         };
     }
 ]);

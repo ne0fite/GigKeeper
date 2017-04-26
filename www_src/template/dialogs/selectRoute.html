@@ -25,16 +25,19 @@
                         <i class="fa fa-car"></i>
                         {{route.distance | metersToMiles | number:1}} miles
                     </span>
-                    <span class="route-stat">
+                    <span class="route-stat" ng-init="travelTime = (route.travelTime | secondsToElapsedTime)">
                         <i class="fa fa-clock-o"></i>
-                        <span ng-if="(route.travelTime | secondsToElapsedTime | date:'d') != '0'">
-                            {{route.travelTime | secondsToElapsedTime | date:'d'}} day<span ng-if="(route.travelTime | secondsToElapsedTime | date:'d') != '1'">s</span>
+                        <span ng-if="travelTime.weeks != 0"><!-- why didn't you take a plane??? -->
+                            {{travelTime.weeks}} week<span ng-if="travelTime.weeks != 1">s</span>
                         </span>
-                        <span ng-if="(route.travelTime | secondsToElapsedTime | date:'H') != '0'">
-                            {{route.travelTime | secondsToElapsedTime | date:'H'}} hour<span ng-if="(route.travelTime | secondsToElapsedTime | date:'H') != '1'">s</span>
+                        <span ng-if="travelTime.days != 0">
+                            {{travelTime.days}} day<span ng-if="travelTime.days != 1">s</span>
                         </span>
-                        <span ng-if="(route.travelTime | secondsToElapsedTime | date:'m') != '0'">
-                            {{route.travelTime | secondsToElapsedTime | date:'m'}} minute<span ng-if="(route.travelTime | secondsToElapsedTime | date:'m') != '1'">s</span>
+                        <span ng-if="travelTime.hours != 0">
+                            {{travelTime.hours}} hour<span ng-if="travelTime.hours != 1">s</span>
+                        </span>
+                        <span ng-if="travelTime.minutes != 0">
+                            {{travelTime.minutes}} minute<span ng-if="travelTime.minutes != 1">s</span>
                         </span>
                     </span>
                     <a class="more-or-less" ng-click="route.showDirections = !route.showDirections">
