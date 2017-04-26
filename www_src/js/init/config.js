@@ -98,6 +98,38 @@ angular.module('GigKeeper').config([
                 }
             }
         }).state({
+            name: 'addGig',
+            url: '/gigs/add',
+            controller: 'GigEditController',
+            templateUrl: '/template/views/gigEdit.html',
+            resolve: {
+                contractors: [
+                    'Contractor',
+                    function(Contractor) {
+                        return Contractor.data.index().$promise;
+                    }
+                ],
+                $title: function() {
+                    return 'Add Gig';
+                }
+            }
+        }).state({
+            name: 'editGig',
+            url: '/gigs/{id}',
+            controller: 'GigEditController',
+            templateUrl: '/template/views/gigEdit.html',
+            resolve: {
+                contractors: [
+                    'Contractor',
+                    function(Contractor) {
+                        return Contractor.data.index().$promise;
+                    }
+                ],
+                $title: function() {
+                    return 'Edit Gig';
+                }
+            }
+        }).state({
             name: 'contractors',
             url: '/contractors',
             controller: 'contractors',

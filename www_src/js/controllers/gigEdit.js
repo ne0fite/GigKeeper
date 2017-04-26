@@ -19,15 +19,41 @@
 'use strict';
 
 angular.module('GigKeeper').controller('GigEditController', [
-    '$rootScope', '$scope', '$uibModalInstance', '$uibModal', '$filter', 'contractors', 'Tag', 'Gig', 'gig', 'UrlBuilder',
+    '$rootScope', '$scope', '$uibModal', '$filter',  '$stateParams', '$state','contractors', 'Tag', 'Gig', 'UrlBuilder',
     'BlockingPromiseManager', 'GoogleMaps',
     function(
-        $rootScope, $scope, $uibModalInstance, $uibModal, $filter, contractors, Tag, Gig, gig, UrlBuilder,
+        $rootScope, $scope, $uibModal, $filter, $stateParams, $state, contractors, Tag, Gig, UrlBuilder,
         BlockingPromiseManager, GoogleMaps
     ) {
+        var id = typeof $stateParams.id == 'undefined' ? null : $stateParams.id;
+        var gig = loadGig(id);
 
         function loadTags() {
             $scope.tagDropdownOptions = Tag.getDropdownOptions();
+        }
+
+        function loadGig(id) {
+            if(!id) {
+                return {}; //new gig
+            }
+
+            Gig.data.read({id: id}).$promise.then(function (result) {
+                gig = result;
+                gig.tags = gig.tags ? gig.tags : [];
+                $scope.form = {
+                    name: gig.name,
+                    place: angular.fromJson(gig.place),
+                    distance: gig.distance,
+                    duration: gig.duration,
+                    startDate: new Date(gig.startDate),
+                    endDate: new Date(gig.endDate),
+                    contractorId: gig.contractorId,
+                    tags: gig.tags,
+                    notes: gig.notes
+                };
+            }, function (error) {
+                $scope.alerts.push({msg: error.message});
+            });
         }
 
         /**
@@ -67,19 +93,6 @@ angular.module('GigKeeper').controller('GigEditController', [
             decimals: 0,
             min: 0,
             format: 'n0'
-        };
-
-        gig.tags = gig.tags ? gig.tags : [];
-        $scope.form = {
-            name: gig.name,
-            place: angular.fromJson(gig.place),
-            distance: gig.distance,
-            duration: gig.duration,
-            startDate: new Date(gig.startDate),
-            endDate: new Date(gig.endDate),
-            contractorId: gig.contractorId,
-            tags: gig.tags,
-            notes: gig.notes
         };
 
         $scope.$watch('form.startDate', function(newValue, oldValue) {
@@ -160,8 +173,7 @@ angular.module('GigKeeper').controller('GigEditController', [
                 }
 
                 promise.then(function() {
-                    $uibModalInstance.close();
-                    button.button('reset');
+                    $state.go('gigs');
                 }).catch(function(error) {
                     $scope.errorMessage = error.message;
                     button.button('reset');
@@ -171,10 +183,6 @@ angular.module('GigKeeper').controller('GigEditController', [
             } else {
                 $scope.errorMessage = 'Check form for errors';
             }
-        };
-
-        $scope.cancel = function() {
-            $uibModalInstance.dismiss('cancel');
         };
         
         /**

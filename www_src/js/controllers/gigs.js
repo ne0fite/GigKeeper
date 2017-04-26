@@ -19,10 +19,10 @@
 'use strict';
 
 angular.module('GigKeeper').controller('gigs', [
-    '$scope', '$uibModal', 'uiGridConstants', 'dialogs', 'contractors', 'Gig', 'UrlBuilder',
+    '$scope', '$state', 'uiGridConstants', 'dialogs', 'contractors', 'Gig', 'UrlBuilder',
     'BlockingPromiseManager',
     function(
-        $scope, $uibModal, uiGridConstants, dialogs, contractors, Gig, UrlBuilder,
+        $scope, $state, uiGridConstants, dialogs, contractors, Gig, UrlBuilder,
         BlockingPromiseManager
     ) {
 
@@ -119,7 +119,7 @@ angular.module('GigKeeper').controller('gigs', [
         load();
 
         $scope.add = function() {
-            editDialog({});
+            $state.go('addGig');
         };
 
         /**
@@ -136,7 +136,7 @@ angular.module('GigKeeper').controller('gigs', [
                 }
             }
 
-            editDialog($scope.selected.entity);
+            $state.go('editGig', {id:$scope.selected.entity.id});
         };
 
         $scope.deleteSelected = function() {
@@ -157,31 +157,5 @@ angular.module('GigKeeper').controller('gigs', [
 
             });
         };
-
-        function editDialog(gig) {
-            var modalInstance = $uibModal.open({
-                ariaLabelledBy: 'modal-title',
-                ariaDescribedBy: 'modal-body',
-                templateUrl: '/template/views/gigEdit.html',
-                controller: 'GigEditController',
-                resolve: {
-                    gig: function() {
-                        return gig;
-                    },
-                    contractors: [
-                        'Contractor',
-                        function(Contractor) {
-                            return Contractor.data.index().$promise;
-                        }
-                    ]
-                }
-            });
-
-            modalInstance.result.then(function() {
-                load();
-            }, function() {
-
-            });
-        }
     }
 ]);
