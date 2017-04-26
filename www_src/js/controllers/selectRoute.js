@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('SelectRouteController', [
-    '$scope', '$uibModalInstance', 'NgMap', 'DirectionsResult',
-    function($scope, $uibModalInstance, NgMap, DirectionsResult) {
+    '$scope', '$uibModalInstance', 'NgMap', 'GoogleMaps', 'DirectionsResult',
+    function($scope, $uibModalInstance, NgMap, GoogleMaps, DirectionsResult) {
         /**
          * Prepare routes for use with NgMap.
          * 
@@ -49,8 +49,8 @@ angular.module('GigKeeper').controller('SelectRouteController', [
                         lng: (leg.start_location.lng + leg.end_location.lng) / 2
                     },
                     steps: steps,
-                    distance: calculateDistance(route),
-                    travelTime: calculateTravelTime(route),
+                    distance: GoogleMaps.calculateRouteDistance(route),
+                    travelTime: GoogleMaps.calculateRouteDuration(route),
                     waypoints: buildWaypoints(steps)
                 };
             });
@@ -98,32 +98,6 @@ angular.module('GigKeeper').controller('SelectRouteController', [
 
                 return newResult;
             });
-        }
-
-        /**
-         * Calculate a route's distance.
-         * 
-         * @param {object} route A route from the Google Directions API
-         * 
-         * @return {number} The route's distance in meters
-         */
-        function calculateDistance(route) {
-            return route.legs[0].steps.reduce(function (accumulator, step) {
-                return accumulator + step.distance.value;
-            }, 0);
-        }
-
-        /**
-         * Calculate a route's travel time.
-         * 
-         * @param {object} route A route from the Google Directions API
-         * 
-         * @return {number} The route's travel time in seconds
-         */
-        function calculateTravelTime(route) {
-            return route.legs[0].steps.reduce(function (accumulator, step) {
-                return accumulator + step.duration.value;
-            }, 0);
         }
 
         $scope.selection = 0;

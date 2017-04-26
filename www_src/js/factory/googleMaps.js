@@ -21,9 +21,9 @@
 angular.module('GigKeeper').factory('GoogleMaps', [
     '$resource', 'UrlBuilder',
     function($resource, UrlBuilder) {
-        var model = {};
+        var service = {};
 
-        model.data = $resource(UrlBuilder.build('/api/v1/map'), {}, {
+        service.data = $resource(UrlBuilder.build('/api/v1/map'), {}, {
             distanceTo: {
                 action: 'distanceTo',
                 method: 'GET',
@@ -36,6 +36,36 @@ angular.module('GigKeeper').factory('GoogleMaps', [
             }
         });
 
-        return model;
+        /**
+         * Calculate a route's distance.
+         * 
+         * @param {object} route A route from the Google Directions API
+         * 
+         * @return {number} The route's distance in meters
+         */
+        service.calculateRouteDistance = function (route) {
+            return route.legs.reduce(function (accumulator, leg) {
+                return accumulator + leg.steps.reduce(function (stepAccumulator, step) {
+                    return stepAccumulator + step.distance.value;
+                }, 0);
+            }, 0);
+        };
+
+        /**
+         * Calculate a route's travel time.
+         * 
+         * @param {object} route A route from the Google Directions API
+         * 
+         * @return {number} The route's travel time in seconds
+         */
+        service.calculateRouteDuration = function (route) {
+            return route.legs.reduce(function (accumulator, leg) {
+                return accumulator + leg.steps.reduce(function (stepAccumulator, step) {
+                    return stepAccumulator + step.duration.value;
+                }, 0);
+            }, 0);
+        };
+
+        return service;
     }
 ]);

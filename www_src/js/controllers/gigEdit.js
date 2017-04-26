@@ -31,32 +31,6 @@ angular.module('GigKeeper').controller('GigEditController', [
         }
 
         /**
-         * Calculate a route's distance.
-         * 
-         * @param {object} route A route from the Google Directions API
-         * 
-         * @return {number} The route's distance in meters
-         */
-        function calculateDistance(route) {
-            return route.legs[0].steps.reduce(function (accumulator, step) {
-                return accumulator + step.distance.value;
-            }, 0);
-        }
-
-        /**
-         * Calculate a route's travel time.
-         * 
-         * @param {object} route A route from the Google Directions API
-         * 
-         * @return {number} The route's travel time in seconds
-         */
-        function calculateTravelTime(route) {
-            return route.legs[0].steps.reduce(function (accumulator, step) {
-                return accumulator + step.duration.value;
-            }, 0);
-        }
-
-        /**
          * Update the form based on the user's selected route.
          * 
          * @param {object} route A route from the Google Directions API
@@ -64,8 +38,8 @@ angular.module('GigKeeper').controller('GigEditController', [
          * @return {void}
          */
         function selectRoute(route) {
-            $scope.form.distance = calculateDistance(route) / 1000 / 1.609344; //convert KM to miles
-            $scope.form.duration = calculateTravelTime(route) / 60; //convert seconds to minutes
+            $scope.form.distance = GoogleMaps.calculateRouteDistance(route) / 1000 / 1.609344; //convert KM to miles
+            $scope.form.duration = GoogleMaps.calculateRouteDuration(route) / 60; //convert seconds to minutes
         }
 
         $scope.contractors = contractors;
