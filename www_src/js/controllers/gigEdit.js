@@ -214,7 +214,7 @@ angular.module('GigKeeper').controller('GigEditController', [
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
                 templateUrl: '/template/dialogs/selectRoute.html',
-                size: 'lg',
+                size: 'xl',
                 controller: 'SelectRouteController',
                 resolve: {
                     DirectionsResult: function() {

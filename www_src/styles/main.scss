@@ -125,6 +125,16 @@ input[type=radio] {
   display: none !important;
 }
 
+.modal-xl {
+    @media (min-width: 992px) {
+        width: 900px;
+    }
+
+    @media (min-width: 1200px) {
+        width: 1100px;
+    }
+}
+
 @import 'includes/grid';
 @import 'includes/sidebar';
 @import 'includes/spinner';
