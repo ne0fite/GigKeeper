@@ -23,11 +23,19 @@
                 <div class="route-details">
                     <span class="route-stat">
                         <i class="fa fa-car"></i>
-                        {{route.distance / 1609.344 | number:1}} miles
+                        {{route.distance | metersToMiles | number:1}} miles
                     </span>
                     <span class="route-stat">
                         <i class="fa fa-clock-o"></i>
-                        {{route.travelTime / 60 | number:0}} minutes
+                        <span ng-if="(route.travelTime | secondsToElapsedTime | date:'d') != '0'">
+                            {{route.travelTime | secondsToElapsedTime | date:'d'}} day<span ng-if="(route.travelTime | secondsToElapsedTime | date:'d') != '1'">s</span>
+                        </span>
+                        <span ng-if="(route.travelTime | secondsToElapsedTime | date:'H') != '0'">
+                            {{route.travelTime | secondsToElapsedTime | date:'H'}} hour<span ng-if="(route.travelTime | secondsToElapsedTime | date:'H') != '1'">s</span>
+                        </span>
+                        <span ng-if="(route.travelTime | secondsToElapsedTime | date:'m') != '0'">
+                            {{route.travelTime | secondsToElapsedTime | date:'m'}} minute<span ng-if="(route.travelTime | secondsToElapsedTime | date:'m') != '1'">s</span>
+                        </span>
                     </span>
                     <a class="more-or-less" ng-click="route.showDirections = !route.showDirections">
                         <span ng-if="route.showDirections">Less...</span>
