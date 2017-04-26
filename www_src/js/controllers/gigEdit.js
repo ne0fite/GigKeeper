@@ -87,8 +87,8 @@ angular.module('GigKeeper').controller('GigEditController', [
                 if ($scope.form.endDate < $scope.form.startDate) {
                     $scope.form.endDate = $scope.form.startDate;
                 }
-                if ($rootScope.profile.profile.defaultDuration > 0) {
-                    $scope.form.endDate = new Date(newValue.getTime() + ($rootScope.profile.profile.defaultDuration * 60 * 1000));
+                if ($rootScope.user.profile.defaultDuration > 0) {
+                    $scope.form.endDate = new Date(newValue.getTime() + ($rootScope.user.profile.defaultDuration * 60 * 1000));
                 }
             }
         });

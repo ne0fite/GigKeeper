@@ -34,7 +34,7 @@ angular.module('GigKeeper').controller('home', [
 
                 var request = $http.post(UrlBuilder.build('/api/v1/login'), postData).then(function(response) {
                     if (response.status === 200) {
-                        $rootScope.profile = response.data;
+                        $rootScope.user = response.data;
                         $state.go('my.gigs');
                     } else {
                         $scope.errorMessage = response.data.message;
