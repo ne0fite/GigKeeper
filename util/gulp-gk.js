@@ -20,6 +20,9 @@
 
 var sqlizr = require("sqlizr");
 var Sequelize = require("sequelize");
+var Promise = require("bluebird");
+var fs = Promise.promisifyAll(require("fs"));
+var path = require("path");
 var config = require("../config/config.js");
 
 function initDb() {
@@ -41,6 +44,15 @@ function initDb() {
         sequelize: sequelize
     };
 }
+
+var seedTables = [
+    "profile",
+    "user",
+    "contractor",
+    "tag",
+    "gig",
+    "gig_tag"
+];
 
 module.exports = {
 
@@ -129,9 +141,60 @@ module.exports = {
         // send mail with defined transport object
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-                return console.log(error);
+                console.log(error);
+                return;
             }
             console.log("Message %s sent: %s", info.messageId, info.response);
+        });
+    },
+
+    dumpData: function(table) {
+
+        var db = initDb();
+
+        var tables;
+        if (table) {
+            tables = [ table ];
+        } else {
+            tables = seedTables;
+        }
+
+        
+        return Promise.each(tables, function(table) {
+
+            var queryOptions = {
+                raw: true,
+                nested: false
+            };
+
+            return db.models[table].findAll(queryOptions).then(function(data) {
+                var tableFile = path.join(__dirname, "/../server/data", table + ".json");
+                console.log("writing file", tableFile);
+                return fs.writeFileAsync(tableFile, JSON.stringify(data), { encoding: "utf8" });
+            });
+        });
+    },
+
+    seedData: function() {
+
+        var db = initDb();
+
+        var rawTableList = seedTables.map(function(tableName) {
+            return "\"" + tableName + "s\"";
+        }).join(", ");
+
+        console.log("truncating tables", rawTableList);
+        return db.sequelize.query("TRUNCATE " + rawTableList).then(function() {
+
+            return Promise.each(seedTables, function(table) {
+                
+                var tableFile = path.join(__dirname, "/../server/data", table + ".json");
+                console.log("seeding table", tableFile);
+                return fs.readFileAsync(tableFile, { encoding: "utf8" }).then(function(data) {
+                    console.log(data);
+                    return db.models[table].bulkCreate(JSON.parse(data));
+                });
+            });
         });
     }
 };

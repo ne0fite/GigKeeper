@@ -9,6 +9,10 @@
     "client",
     "browser"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ne0fite/GigKeeper.git"
+  },
   "homepage": "https://github.com/ne0fite/GigKeeper",
   "bugs": "https://github.com/ne0fite/GigKeeper/issues",
   "license": "GPL-3.0+",
@@ -40,8 +44,9 @@
     "inert": "^4.0.2",
     "joi": "^9.2.0",
     "lodash": "^4.16.6",
-    "mysql": "^2.12.0",
     "nodemailer": "^4.0.1",
+    "pg": "^6.1.5",
+    "pg-hstore": "^2.3.2",
     "qs": "^6.4.0",
     "request": "^2.81.0",
     "sequelize": "^3.25.0",

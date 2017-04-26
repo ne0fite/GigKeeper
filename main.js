@@ -33,11 +33,17 @@ server.connection({
     port: config.app.port
 });
 
-var sequelize = new Sequelize(config.db.name, config.db.user, config.db.pass, {
+var sequelizeOptions = {
     dialect: config.db.dialect,
     host: config.db.host,
     port: config.db.port
-});
+};
+
+if (!config.db.logging) {
+    sequelizeOptions.logging = false;
+}
+
+var sequelize = new Sequelize(config.db.name, config.db.user, config.db.pass, sequelizeOptions);
 
 server.register([
     Inert,

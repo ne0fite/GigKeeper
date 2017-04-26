@@ -203,13 +203,20 @@ gulp.task("default", ["serve"]);
 
 /*** Server tasks ***/
 
-gulp.task("db:dump", shell.task(
-    "mysqldump -u " + config.db.user +
-    " --password=" + config.db.pass +
-    " --host=" + config.db.host +
-    " --port=" + config.db.port +
-    " --add-drop-table --no-data " + config.db.name +
-    " > ./sql/GigKeeper-schema.sql"));
+gulp.task("db:dump:schema", shell.task("pg_dump " +
+    " -h " + config.db.host +
+    " -p " + config.db.port +
+    " -U " + config.db.user +
+    " -s " + config.db.name + 
+    " -f ./sql/GigKeeper-schema.sql"));
+
+gulp.task("db:dump:data", function() {
+    return gkutil.dumpData(options.table);
+});
+
+gulp.task("db:seed:data", function() {
+    return gkutil.seedData();
+});
 
 /**
  * Process sequelize migration.
@@ -235,3 +242,5 @@ gulp.task("profile:create", function() {
 gulp.task("smtp:test", function() {
     return gkutil.smtpTest(options.to, options.from);
 });
+
+gulp.task("test", shell.task("lab -e development -m 10000 -v"));

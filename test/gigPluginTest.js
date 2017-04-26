@@ -30,9 +30,9 @@ lab.experiment("gig", function () {
     var authCookie;
 
     var gigId;
-    var testContractorId = "70ecd040-2114-11e7-beea-0942c23fd4bb";
-    var testTagId1 = "e9bb4ee0-2234-11e7-9f58-01b67d31c03c";
-    var testTagId2 = "2d8da520-2238-11e7-814e-ff93d6fc09da";
+    var testContractorId = "b0b69ef0-2acd-11e7-878e-87d82f0d3cb5";
+    var testTagId1 = "c64bfb20-2acd-11e7-878e-87d82f0d3cb5";
+    var testTagId2 = "ce7ab520-2acd-11e7-878e-87d82f0d3cb5";
 
     lab.before(function (done) {
         setTimeout(function () {
@@ -79,7 +79,7 @@ lab.experiment("gig", function () {
                     name: null,
                     place_id: null
                 },
-                distance: chance.floating({min: 0, max: 100}),
+                distance: chance.floating({min: 0, max: 100, fixed: 2}),
                 duration: chance.integer({min: 0, max: 100}),
                 startDate: new Date(),
                 endDate: new Date(),
@@ -91,14 +91,13 @@ lab.experiment("gig", function () {
         };
 
         Utils.sendRequest(options).then(function(response) {
-            // console.log(response.payload);
             Code.expect(response.statusCode).to.equal(200);
             var responsePayload = JSON.parse(response.payload);
             gigId = responsePayload.id;
             Code.expect(responsePayload.name).to.equal(options.payload.name);
             Code.expect(responsePayload.place).to.equal(options.payload.place);
-            Code.expect(responsePayload.distance).to.equal(options.payload.distance);
-            Code.expect(responsePayload.duration).to.equal(options.payload.duration);
+            Code.expect(parseFloat(responsePayload.distance)).to.equal(options.payload.distance);
+            Code.expect(parseFloat(responsePayload.duration)).to.equal(options.payload.duration);
             Code.expect(new Date(responsePayload.startDate)).to.equal(options.payload.startDate);
             Code.expect(new Date(responsePayload.endDate)).to.equal(options.payload.endDate);
             Code.expect(responsePayload.contractorId).to.equal(options.payload.contractorId);
@@ -123,7 +122,7 @@ lab.experiment("gig", function () {
                     name: null,
                     place_id: null
                 },
-                distance: chance.floating({min: 0, max: 100}),
+                distance: chance.floating({min: 0, max: 100, fixed: 2}),
                 duration: chance.integer({min: 0, max: 100}),
                 startDate: new Date(),
                 endDate: new Date(),
@@ -143,8 +142,8 @@ lab.experiment("gig", function () {
             Code.expect(responsePayload.id).to.equal(gigId);
             Code.expect(responsePayload.name).to.equal(options.payload.name);
             Code.expect(responsePayload.place).to.equal(options.payload.place);
-            Code.expect(responsePayload.distance).to.equal(options.payload.distance);
-            Code.expect(responsePayload.duration).to.equal(options.payload.duration);
+            Code.expect(parseFloat(responsePayload.distance)).to.equal(options.payload.distance);
+            Code.expect(parseFloat(responsePayload.duration)).to.equal(options.payload.duration);
             Code.expect(new Date(responsePayload.startDate)).to.equal(options.payload.startDate);
             Code.expect(new Date(responsePayload.endDate)).to.equal(options.payload.endDate);
             Code.expect(responsePayload.contractorId).to.equal(options.payload.contractorId);

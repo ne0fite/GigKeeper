@@ -22,9 +22,16 @@ var fs = require("fs");
 var configJson;
 if (fs.existsSync(__dirname + "/config.json")) {
     configJson = require("./config.json");
+    if (!configJson.db) {
+        configJson.db = {
+            logging: false
+        };
+    }
 } else {
     configJson = {
-        db: {}
+        db: {
+            logging: false
+        }
     };
 }
 
@@ -34,23 +41,26 @@ module.exports = {
         password: process.env.DB_PASS || configJson.db.pass || "gigkeeper",
         database: process.env.DB_NAME || configJson.db.name || "gigkeeper",
         host: process.env.DB_HOST || configJson.db.host || "localhost",
-        port: process.env.DB_PORT || configJson.db.port || 3306,
-        dialect: configJson.db.dialect || "mysql"
+        port: process.env.DB_PORT || configJson.db.port || 5432,
+        dialect: process.env.DB_DIALECT || configJson.db.dialect || "postgres",
+        logging: process.env.DB_LOGGING || configJson.db.logging
     },
     stage: {
         username: process.env.DB_USER || configJson.db.user || "gigkeeper",
         password: process.env.DB_PASS || configJson.db.pass || "gigkeeper",
         database: process.env.DB_NAME || configJson.db.name || "gigkeeper",
         host: process.env.DB_HOST || configJson.db.host || "localhost",
-        port: process.env.DB_PORT || configJson.db.port || 3306,
-        dialect: configJson.db.dialect || "mysql"
+        port: process.env.DB_PORT || configJson.db.port || 5432,
+        dialect: process.env.DB_DIALECT || configJson.db.dialect || "postgres",
+        logging: process.env.DB_LOGGING || configJson.db.logging
     },
     production: {
         username: process.env.DB_USER || configJson.db.user || "gigkeeper",
         password: process.env.DB_PASS || configJson.db.pass || "gigkeeper",
         database: process.env.DB_NAME || configJson.db.name || "gigkeeper",
         host: process.env.DB_HOST || configJson.db.host || "localhost",
-        port: process.env.DB_PORT || configJson.db.port || 3306,
-        dialect: configJson.db.dialect || "mysql"
+        port: process.env.DB_PORT || configJson.db.port || 5432,
+        dialect: process.env.DB_DIALECT || configJson.db.dialect || "postgres",
+        logging: process.env.DB_LOGGING || configJson.db.logging
     }
 };

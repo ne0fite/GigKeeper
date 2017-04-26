@@ -59,7 +59,8 @@ module.exports = {
         dialect: dbconfig[env].dialect,
         name: dbconfig[env].database,
         user: dbconfig[env].username,
-        pass: dbconfig[env].password
+        pass: dbconfig[env].password,
+        logging: dbconfig[env].logging
     },
     smtp: {
         enabled: process.env.SMTP_ENABLED || configJson.smtp.enabled || false,
