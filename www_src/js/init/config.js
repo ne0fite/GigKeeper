@@ -36,7 +36,7 @@ angular.module('GigKeeper').config([
             name: 'home',
             url: '/',
             controller: 'home',
-            templateUrl: '/template/home.html',
+            templateUrl: '/template/views/home.html',
             public: true,
             resolve: {
                 $title: function() {
@@ -47,18 +47,18 @@ angular.module('GigKeeper').config([
             public: true,
             name: 'terms',
             url: '/terms',
-            templateUrl: '/template/terms.html'
+            templateUrl: '/template/views/terms.html'
         }).state({
             public: true,
             name: 'privacyPolicy',
             url: '/privacy-policy',
-            templateUrl: '/template/privacyPolicy.html'
+            templateUrl: '/template/views/privacyPolicy.html'
         }).state({
             public: true,
             name: 'register-invite',
             url: '/register/invite/:code',
             controller: 'registerInvite',
-            templateUrl: '/template/registerInvite.html',
+            templateUrl: '/template/views/registerInvite.html',
             resolve: {
                 invite: [
                     '$stateParams',
@@ -75,7 +75,7 @@ angular.module('GigKeeper').config([
             name: 'send-invite',
             url: '/profile/invite',
             controller: 'sendInvite',
-            templateUrl: '/template/sendInvite.html',
+            templateUrl: '/template/views/sendInvite.html',
             resolve: {
                 $title: function() {
                     return 'Send Invite';
@@ -85,7 +85,7 @@ angular.module('GigKeeper').config([
             name: 'gigs',
             url: '/gigs',
             controller: 'gigs',
-            templateUrl: '/template/gigs.html',
+            templateUrl: '/template/views/gigs.html',
             resolve: {
                 contractors: [
                     'Contractor',
@@ -101,7 +101,7 @@ angular.module('GigKeeper').config([
             name: 'contractors',
             url: '/contractors',
             controller: 'contractors',
-            templateUrl: '/template/contractors.html',
+            templateUrl: '/template/views/contractors.html',
             resolve: {
                 $title: function() {
                     return 'My Contractors';
@@ -111,7 +111,7 @@ angular.module('GigKeeper').config([
             name: 'tags',
             url: '/tags',
             controller: 'tags',
-            templateUrl: '/template/tags.html',
+            templateUrl: '/template/views/tags.html',
             resolve: {
                 $title: function() {
                     return 'My Tags';
@@ -121,7 +121,7 @@ angular.module('GigKeeper').config([
             name: 'settings',
             url: '/settings',
             controller: 'settings',
-            templateUrl: '/template/settings.html',
+            templateUrl: '/template/views/settings.html',
             resolve: {
                 settings: [
                     'Settings',
@@ -137,7 +137,7 @@ angular.module('GigKeeper').config([
             name: 'profile',
             url: '/profile',
             controller: 'profile',
-            templateUrl: '/template/profile.html',
+            templateUrl: '/template/views/profile.html',
             resolve: {
                 profile: [
                     'Profile', 

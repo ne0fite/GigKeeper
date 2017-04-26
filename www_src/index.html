@@ -27,7 +27,7 @@
 
 <body ng-app="GigKeeper" ng-strict-di>
 
-    <div ng-include="'/template/_nav.html'"></div>
+    <div ng-include="'/template/components/nav.html'"></div>
 
     <div class="container">
         <ui-view></ui-view>
@@ -57,7 +57,9 @@
         </div>
     </div>
 
-    <!--=include template/*.html -->
+    <!--=include template/components/*.html -->
+    <!--=include template/dialogs/*.html -->
+    <!--=include template/views/*.html -->
 
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3a1NJK6odYtl6bXINT7hOt7MtgNuTfLs&libraries=places"></script>
 
