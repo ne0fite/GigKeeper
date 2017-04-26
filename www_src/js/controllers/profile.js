@@ -23,7 +23,10 @@ angular.module('GigKeeper').controller('profile', [
     function($scope, $http, UrlBuilder, BlockingPromiseManager, Profile, profile) {
 
         $scope.form = {
-            email: profile.email
+            firstName: profile.firstName,
+            lastName: profile.lastName,
+            email: profile.email,
+            phone: profile.phone
         };
 
         $scope.submit = function(profileForm) {
@@ -33,7 +36,10 @@ angular.module('GigKeeper').controller('profile', [
             if (!profileForm.$invalid) {
 
                 var payload = {
+                    firstName: $scope.form.firstName,
+                    lastName: $scope.form.lastName,
                     email: $scope.form.email,
+                    phone: $scope.form.phone,
                     password: $scope.form.password || null,
                     passwordConfirm: $scope.form.passwordConfirm || null
                 };

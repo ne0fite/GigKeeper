@@ -1,0 +1,32 @@
+<script type="text/ng-template" id="/template/sendInvite.html">
+    <div class="page-header">
+        <h1>
+            Send Invite
+        </h1>
+    </div>
+
+    <form name="sendInviteForm" ng-submit="submit(sendInviteForm)" novalidate>
+
+        <div class="alert alert-success" ng-if="successMessage">{{ successMessage }}</div>
+        <div class="alert alert-danger" ng-if="errorMessage">{{ errorMessage }}</div>
+
+        <div class="form-group" ng-class="{ 'has-error': sendInviteForm.$submitted && sendInviteForm.email.$invalid }">
+            <label for="email">Email</label>
+            <input type="email" 
+                    id="email" 
+                    name="email" 
+                    ng-model="form.email" 
+                    class="form-control" 
+                    ng-email
+                    ng-required="true" />
+            <div ng-messages="sendInviteForm.email.$error" role="alert" ng-if="sendInviteForm.$submitted">
+                <p class="help-block" ng-message="required">Email is required</p>
+                <p class="help-block" ng-message="email">Email is invalid</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" id="send_button" class="btn btn-primary btn-lg">Send</button>
+        </div>
+    </form>
+</script>

@@ -51,6 +51,11 @@
                                     My Profile
                                 </a>
                             </li>
+                            <li ng-if="profile.scope == 'admin'">
+                                <a data-ui-sref="send-invite">
+                                    Invite
+                                </a>
+                            </li>
                             <li class="divider"></li>
                             <li>
                                 <a ng-click="logout()">
@@ -72,7 +77,11 @@
 
     <footer class="footer">
         <div class="container">
-            <p class="text-muted">GigKeeper &copy; <span ng-cloak>{{  copyrightDate | date:'yyyy' }}</span> Phoenix Bright Software, LLC</p>
+            <ul class="list-unstyled list-inline">
+                <li class="text-muted">GigKeeper &copy; <span ng-cloak>{{  copyrightDate | date:'yyyy' }}</span> Phoenix Bright Software, LLC</li>
+                <li class="text-muted"><a ui-sref="terms">Terms &amp; Conditions</a></li>
+                <li class="text-muted"><a ui-sref="privacyPolicy">Privacy Policy</a></li>
+            </ul>
         </div>
     </footer>
 

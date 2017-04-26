@@ -33,6 +33,7 @@ if (fs.existsSync(__dirname + "/config.json")) {
 configJson.app = configJson.app || {};
 configJson.app.cookie = configJson.app.cookie || {};
 configJson.db = configJson.db || {};
+configJson.smtp = configJson.smtp || {};
 configJson.google = configJson.google || {};
 
 var env = process.env.NODE_ENV || configJson.app.env || "development";
@@ -44,6 +45,7 @@ var env = process.env.NODE_ENV || configJson.app.env || "development";
 module.exports = {
     app: {
         env: env,
+        baseUrl: process.env.BASE_URL || configJson.app.baseUrl || "http://localhost:8000",
         host: process.env.SERVER_HOST || configJson.app.host || "localhost",
         port: process.env.SERVER_PORT || configJson.app.port || 8000,
         cookie: {
@@ -58,6 +60,13 @@ module.exports = {
         name: dbconfig[env].database,
         user: dbconfig[env].username,
         pass: dbconfig[env].password
+    },
+    smtp: {
+        enabled: process.env.SMTP_ENABLED || configJson.smtp.enabled || false,
+        singleAddress: process.env.SMTP_SINGLE_ADDRESS || configJson.smtp.singleAddress || null,
+        service: process.env.SMTP_SERVICE || configJson.smtp.service || "gmail",
+        user: process.env.SMTP_USER || configJson.smtp.user,
+        pass: process.env.SMTP_PASS || configJson.smtp.pass
     },
     google: {
         // no default for google API key!

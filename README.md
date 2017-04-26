@@ -29,9 +29,16 @@ The `config.json` file works well with local development. However, environment v
 <tr><td>DB_NAME</td><td>Database name</td><td>gigkeeper</td></tr>
 <tr><td>DB_USER</td><td>Database username</td><td>gigkeeper</td></tr>
 <tr><td>DB_PASS</td><td>Database password</td><td>gigkeeper</td></tr>
+<tr><td>SMTP_ENABLED</td><td>Set to true to enable sending email</td><td>false</td></tr>
+<tr><td>SMTP_SINGLE_ADDRESS</td><td>Set to an email address to send all emails to a single address</td><td></td></tr>
+<tr><td>SMTP_SERVICE</td><td>SMTP service supported by nodemailer</td><td>gmail</td></tr>
+<tr><td>SMTP_USER</td><td>SMTP username</td><td></td></tr>
+<tr><td>SMTP_PASS</td><td>SMTP password</td><td></td></tr>
 <tr><td>GOOGLE_MAPS_API_KEY</td><td>Google Maps API key</td><td></td></tr>
 </tbody>
 </table>
+
+See the list of nodemailer's [well know services](https://github.com/nodemailer/nodemailer/blob/master/lib/well-known/services.json) for the SMTP service.
 
 The cookie secret is a 32-character hash. Go to the [Online Random Hash Generator](http://md5.my-addr.com/online_random_md5_hash_generator-and-md5_random_hash.php) to generate a random MD5 hash.
 

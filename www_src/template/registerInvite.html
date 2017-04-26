@@ -1,0 +1,95 @@
+<script type="text/ng-template" id="/template/registerInvite.html">
+    <div class="page-header">
+        <h1>
+            Welcome to GigKeeper!
+        </h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <h3 class="panel-title">Create Account</h3>
+                </div>
+
+                <div class="panel-body">
+
+                    <form name="registerInviteForm" ng-submit="submit(registerInviteForm)" novalidate ng-if="invite.code">
+
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <div class="form-group" ng-class="{ 'has-error': registerInviteForm.$submitted && registerInviteForm.firstName.$invalid }">
+                                    <label for="firstName">First Name</label> <span class="text-muted">(optional)</span>
+                                    <input type="text" id="firstName" name="firstName" class="form-control" ng-model="form.firstName" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group" ng-class="{ 'has-error': registerInviteForm.$submitted && registerInviteForm.lastName.$invalid }">
+                                    <label for="lastName">Last Name</label> <span class="text-muted">(optional)</span>
+                                    <input type="text" id="lastName" name="lastName" class="form-control" ng-model="form.lastName" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group" ng-class="{ 'has-error': registerInviteForm.$submitted && registerInviteForm.email.$invalid }">
+                                    <label for="email">Email</label>
+                                    <input type="email" id="email" name="email" ng-model="form.email" class="form-control" ng-email ng-required="true" />
+                                    <div ng-messages="registerInviteForm.email.$error" role="alert" ng-if="registerInviteForm.$submitted">
+                                        <p class="help-block" ng-message="required">Email is required</p>
+                                        <p class="help-block" ng-message="email">Email is invalid</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group" ng-class="{ 'has-error': registerInviteForm.$submitted && registerInviteForm.phone.$invalid }">
+                                    <label for="phone">Phone</label> <span class="text-muted">(optional)</span>
+                                    <input type="tel" id="phone" name="phone" class="form-control" ng-model="form.phone" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" ng-class="{ 'has-error': registerInviteForm.$submitted && registerInviteForm.password.$invalid }">
+                                    <label for="password">Password</label>
+                                    <input type="password" id="password" name="password" ng-model="form.password" class="form-control" ng-required="true" />
+                                    <div ng-messages="registerInviteForm.password.$error" role="alert" ng-if="registerInviteForm.$submitted">
+                                        <p class="help-block" ng-message="required">Password is required</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group" ng-class="{ 'has-error': registerInviteForm.$submitted && registerInviteForm.passwordConfirm.$invalid }">
+                                    <label for="password_confirm">Confirm Password</label>
+                                    <input type="password" id="password_confirm" name="passwordConfirm" ng-model="form.passwordConfirm" class="form-control" ng-required="true" gk-compare-to="form.password" />
+                                    <div ng-messages="registerInviteForm.passwordConfirm.$error" role="alert" ng-if="registerInviteForm.$submitted">
+                                        <p class="help-block" ng-message="compareTo">Passwords do not match</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="text-muted">By clicking "Register" you agree to GigKeeper's <a ui-sref="terms" target="_blank">Terms &amp; Conditions</a>.</p>
+                                <button type="submit" id="register_button" class="btn btn-primary btn-lg btn-block">Register</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div ng-if="!invite.code" class="alert alert-danger">Invalid Invite Code</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</script>
