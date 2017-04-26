@@ -22,7 +22,7 @@ angular.module('GigKeeper').controller('SelectRouteController', [
     '$scope', '$uibModalInstance', 'NgMap', 'DirectionsResult',
     function($scope, $uibModalInstance, NgMap, DirectionsResult) {
         /**
-         * Prepare routes for use with NgMap. Routes with many waypoints are downsampled to 23 (Google's maximum).
+         * Prepare routes for use with NgMap.
          * 
          * @param {object} DirectionsResult A Google Maps DirectionsResult
          * 
@@ -34,14 +34,7 @@ angular.module('GigKeeper').controller('SelectRouteController', [
             return DirectionsResults.map(function (DirectionsResult) {
                 var route = DirectionsResult.routes[0];
                 var leg = route.legs[0];
-                var steps = leg.steps.slice(1); //skip the first step, because it begins at the origin
-
-                var stepSize = steps.length <= 23 ? 1 : steps.length / 23;
-                var stepIndices = [];
-                var i;
-                for(i = 0; i <= 23; ++i) {
-                    stepIndices.push(parseInt(stepSize * i));
-                }
+                var steps = leg.steps;
 
                 return {
                     summary: route.summary,
@@ -55,20 +48,39 @@ angular.module('GigKeeper').controller('SelectRouteController', [
                         lat: (leg.start_location.lat + leg.end_location.lat) / 2,
                         lng: (leg.start_location.lng + leg.end_location.lng) / 2
                     },
-                    steps: route.legs[0].steps,
+                    steps: steps,
                     distance: calculateDistance(route),
                     travelTime: calculateTravelTime(route),
-                    waypoints: steps.filter(function (element, index) {
-                        return steps.length <= 23 || stepIndices.indexOf(index) != -1;
-                    })
-                    .map(function (step) {
-                        return {
-                            location: step.start_location,
-                            stopover: false
-                        };
-                    })
+                    waypoints: buildWaypoints(steps)
                 };
             });
+        }
+
+        /**
+         * Build waypoints from a set of steps. Routes with too many waypoints are downsampled to 23 (Google's maximum).
+         * 
+         * @param {object[]} steps A route's steps
+         * 
+         * @return {object[]} Waypoints
+         */
+        function buildWaypoints(steps) {
+            var stepSize = (steps.length - 1) <= 23 ? 1 : (steps.length - 1) / 23;
+            var stepIndices = [];
+            var i;
+            for(i = 0; i <= 23; ++i) {
+                stepIndices.push(parseInt(stepSize * i));
+            }
+
+            return steps.slice(1)
+                .filter(function (element, index) {
+                    return steps.length <= 23 || stepIndices.indexOf(index) != -1;
+                })
+                .map(function (step) {
+                    return {
+                        location: step.start_location,
+                        stopover: false
+                    };
+                });
         }
 
         /**
