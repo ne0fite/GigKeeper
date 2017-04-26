@@ -12,12 +12,15 @@
                     waypoints="{{preparedRoutes[selection].waypoints}}"></directions>
         </map>
         <p>
-            <div ng-repeat="route in preparedRoutes">
-                <input type="radio" id="route-{{$index}}" name="route" ng-value="$index" ng-model="$parent.selection">
-                <label for="route-{{$index}}"
-                        ng-class="{'text-primary': $index == $parent.selection, 'text-muted': $index != $parent.selection}">
-                    {{route.summary}}
-
+            <div class="route" ng-repeat="route in preparedRoutes">
+                <div>
+                    <input type="radio" id="route-{{$index}}" name="route" ng-value="$index" ng-model="$parent.selection">
+                    <label for="route-{{$index}}"
+                            ng-class="{'text-primary': $index == $parent.selection, 'text-muted': $index != $parent.selection}">
+                        {{route.summary}}
+                    </label>
+                </div>
+                <div class="route-details">
                     <span class="route-stat">
                         <i class="fa fa-car"></i>
                         {{route.distance / 1609.344 | number:1}} miles
@@ -26,14 +29,12 @@
                         <i class="fa fa-clock-o"></i>
                         {{route.travelTime / 60 | number:0}} minutes
                     </span>
-                </label>
-                <a class="more-or-less" ng-click="route.showDirections = !route.showDirections">
-                    <span ng-if="route.showDirections">Less...</span>
-                    <span ng-if="!route.showDirections">More...</span>
-                </a>
+                    <a class="more-or-less" ng-click="route.showDirections = !route.showDirections">
+                        <span ng-if="route.showDirections">Less...</span>
+                        <span ng-if="!route.showDirections">More...</span>
+                    </a>
 
-                <div ng-if="route.showDirections">
-                    <ol>
+                    <ol class="directions" ng-if="route.showDirections">
                         <li ng-repeat="step in route.steps" ng-bind-html="$sce.trustAsHtml(step.html_instructions)"></li>
                     </ol>
                 </div>
