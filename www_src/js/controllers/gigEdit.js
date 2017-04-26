@@ -19,10 +19,10 @@
 'use strict';
 
 angular.module('GigKeeper').controller('GigEditController', [
-    '$rootScope', '$scope', '$uibModalInstance', '$uibModal', 'contractors', 'Tag', 'Gig', 'gig', 'UrlBuilder',
+    '$rootScope', '$scope', '$uibModalInstance', '$uibModal', '$filter', 'contractors', 'Tag', 'Gig', 'gig', 'UrlBuilder',
     'BlockingPromiseManager', 'GoogleMaps',
     function(
-        $rootScope, $scope, $uibModalInstance, $uibModal, contractors, Tag, Gig, gig, UrlBuilder,
+        $rootScope, $scope, $uibModalInstance, $uibModal, $filter, contractors, Tag, Gig, gig, UrlBuilder,
         BlockingPromiseManager, GoogleMaps
     ) {
 
@@ -38,7 +38,7 @@ angular.module('GigKeeper').controller('GigEditController', [
          * @return {void}
          */
         function selectRoute(route) {
-            $scope.form.distance = GoogleMaps.calculateRouteDistance(route) / 1000 / 1.609344; //convert KM to miles
+            $scope.form.distance = $filter('metersToMiles')(GoogleMaps.calculateRouteDistance(route));
             $scope.form.duration = GoogleMaps.calculateRouteDuration(route) / 60; //convert seconds to minutes
         }
 
