@@ -20,25 +20,27 @@
                     </map>
                     <div class="panel-footer">
                         <div class="route-details">
-                            <p class="route-stat" ng-init="travelTime = (route.travelTime | secondsToElapsedTime)">
-                                <i class="fa fa-clock-o"></i>
-                                <span ng-if="travelTime.weeks != 0"><!-- why didn't you take a plane??? -->
-                                    {{travelTime.weeks}} week<span ng-if="travelTime.weeks != 1">s</span>
-                                </span>
-                                <span ng-if="travelTime.days != 0">
-                                    {{travelTime.days}} day<span ng-if="travelTime.days != 1">s</span>
-                                </span>
-                                <span ng-if="travelTime.hours != 0">
-                                    {{travelTime.hours}} hour<span ng-if="travelTime.hours != 1">s</span>
-                                </span>
-                                <span ng-if="travelTime.minutes != 0">
-                                    {{travelTime.minutes}} minute<span ng-if="travelTime.minutes != 1">s</span>
-                                </span>
-                            </p>
-                            <p class="route-stat">
-                                <i class="fa fa-car"></i>
-                                {{route.distance | metersToMiles | number:1}} miles
-                            </p>
+                            <div class="row">
+                                <div class="col-xs-7 route-stat" ng-init="travelTime = (route.travelTime | secondsToElapsedTime)">
+                                    <i class="fa fa-clock-o"></i>
+                                    <span ng-if="travelTime.weeks != 0"><!-- why didn't you take a plane??? -->
+                                        {{travelTime.weeks}} week<span ng-if="travelTime.weeks != 1">s</span>
+                                    </span>
+                                    <span ng-if="travelTime.days != 0">
+                                        {{travelTime.days}} day<span ng-if="travelTime.days != 1">s</span>
+                                    </span>
+                                    <span ng-if="travelTime.hours != 0">
+                                        {{travelTime.hours}} hour<span ng-if="travelTime.hours != 1">s</span>
+                                    </span>
+                                    <span ng-if="travelTime.minutes != 0">
+                                        {{travelTime.minutes}} minute<span ng-if="travelTime.minutes != 1">s</span>
+                                    </span>
+                                </div>
+                                <div class="col-xs-5 route-stat">
+                                    <i class="fa fa-car"></i>
+                                    {{route.distance | metersToMiles | number:1}} miles
+                                </div>
+                            </div>
 
                             <ol class="directions" ng-if="route.showDirections">
                                 <li ng-repeat="step in route.steps" ng-bind-html="$sce.trustAsHtml(step.html_instructions)"></li>
