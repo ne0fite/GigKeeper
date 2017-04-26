@@ -20,10 +20,10 @@
 
 angular.module('GigKeeper').controller('GigEditController', [
     '$rootScope', '$scope', '$uibModalInstance', '$uibModal', 'contractors', 'Tag', 'Gig', 'gig', 'UrlBuilder',
-    'BlockingPromiseManager',
+    'BlockingPromiseManager', 'GoogleMaps',
     function(
         $rootScope, $scope, $uibModalInstance, $uibModal, contractors, Tag, Gig, gig, UrlBuilder,
-        BlockingPromiseManager
+        BlockingPromiseManager, GoogleMaps
     ) {
 
         function loadTags() {
@@ -140,7 +140,7 @@ angular.module('GigKeeper').controller('GigEditController', [
             var button = angular.element('#estimate_button');
             button.button('loading');
             
-            var request = Gig.data.directionsTo({placeId: $scope.form.place.place_id}).$promise
+            var request = GoogleMaps.data.directionsTo({placeId: $scope.form.place.place_id}).$promise
                 .then(function(response) {
                     selectRouteDialog(response);
                     button.button('reset');
