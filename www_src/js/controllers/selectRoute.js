@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('SelectRouteController', [
-    '$scope', '$uibModalInstance', 'DirectionsResult',
-    function($scope, $uibModalInstance, DirectionsResult) {
+    '$scope', '$uibModalInstance', 'NgMap', 'DirectionsResult',
+    function($scope, $uibModalInstance, NgMap, DirectionsResult) {
         function prepareRoutes(DirectionsResult) {
             var DirectionsResults = splitDirectionsResult(DirectionsResult);
 
@@ -33,6 +33,14 @@ angular.module('GigKeeper').controller('SelectRouteController', [
                     summary: route.summary,
                     origin: leg.start_location,
                     destination: leg.end_location,
+                    bounds: {
+                        ne: route.bounds.northeast,
+                        sw: route.bounds.southwest
+                    },
+                    center: {
+                        lat: (leg.start_location.lat + leg.end_location.lat) / 2,
+                        lng: (leg.start_location.lng + leg.end_location.lng) / 2
+                    },
                     waypoints: steps.map(function (step) {
                         return {
                             location: step.start_location,
@@ -71,5 +79,13 @@ angular.module('GigKeeper').controller('SelectRouteController', [
         $scope.cancel = function() {
             $uibModalInstance.dismiss('cancel');
         };
+
+        $uibModalInstance.rendered.then(function () {
+            setTimeout(function () {
+                var map = NgMap.getMap('select-route-map').$$state.value;
+                google.maps.event.trigger(map, 'resize');
+                map.setCenter($scope.preparedRoutes[$scope.selection].center);
+            }, 1000);
+        });
     }
 ]);

@@ -6,7 +6,7 @@
         </h3>
     </div>
     <div class="modal-body" id="modal-body">
-        <map zoom-to-inlude-markers="true">
+        <map id="select-route-map" zoom-to-inlude-markers="true">
             <directions origin="{{preparedRoutes[selection].origin}}"
                     destination="{{preparedRoutes[selection].destination}}"
                     waypoints="{{preparedRoutes[selection].waypoints}}"></directions>
