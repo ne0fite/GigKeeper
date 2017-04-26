@@ -29,6 +29,13 @@ angular.module('GigKeeper').controller('SelectRouteController', [
                 var leg = route.legs[0];
                 var steps = leg.steps.slice(1); //skip the first step, because it begins at the origin
 
+                var stepSize = steps.length <= 23 ? 1 : steps.length / 23;
+                var stepIndices = [];
+                var i;
+                for(i = 0; i <= 23; ++i) {
+                    stepIndices.push(parseInt(stepSize * i));
+                }
+
                 return {
                     summary: route.summary,
                     origin: leg.start_location,
@@ -41,7 +48,10 @@ angular.module('GigKeeper').controller('SelectRouteController', [
                         lat: (leg.start_location.lat + leg.end_location.lat) / 2,
                         lng: (leg.start_location.lng + leg.end_location.lng) / 2
                     },
-                    waypoints: steps.map(function (step) {
+                    waypoints: steps.filter(function (element, index) {
+                        return steps.length <= 23 || stepIndices.indexOf(index) != -1;
+                    })
+                    .map(function (step) {
                         return {
                             location: step.start_location,
                             stopover: false
