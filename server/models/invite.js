@@ -22,6 +22,24 @@ module.exports = function(sequelize, DataTypes) {
     return sequelize.define("invite", {
         id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV1, primaryKey: true, allowNull: false },
         email: { type: DataTypes.STRING, allowNull: false },
+        message: { type: DataTypes.TEXT, allowNull: true },
+        userId: { 
+            type: DataTypes.UUID, 
+            allowNull: false,
+            references: {
+                model: "user",
+                key: "id"
+            } 
+        },
+        registeredAt: { type: DataTypes.DATE, allowNull: true },
+        profileId: { 
+            type: DataTypes.UUID, 
+            allowNull: true,
+            references: {
+                model: "profile",
+                key: "id"
+            } 
+        },
         code: { type: DataTypes.STRING, allowNull: false }
     }, {
         indexes: [{ 
@@ -29,7 +47,18 @@ module.exports = function(sequelize, DataTypes) {
             fields: ["email", "code"] 
         }],
         classMethods: {
-
+            associate: function(models) {
+                models.invite.belongsTo(models.profile, {
+                    foreignKey: {
+                        allowNull: true
+                    }
+                });
+                models.invite.belongsTo(models.user, {
+                    foreignKey: {
+                        allowNull: false
+                    }
+                });
+            }
         }
     });
 };

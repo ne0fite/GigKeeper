@@ -59,16 +59,21 @@ Registration.prototype.createCode = function() {
  * @param {String} email
  * @return {Promise}
  */
-Registration.prototype.sendInvite = function(email) {
+Registration.prototype.sendInvite = function(payload, user) {
     var self = this;
 
     return self.db.sequelize.transaction(function(t) {
 
-        var code;
+        var invitePayload = {
+            email: payload.email,
+            message: payload.message,
+            code: null,
+            userId: user.id
+        };
 
         var userQuery = {
             where: {
-                email: email
+                email: payload.email
             }
         };
 
@@ -80,21 +85,16 @@ Registration.prototype.sendInvite = function(email) {
             // create random code
             return self.createCode();
         }).then(function(result) {
-            code = result;
+            invitePayload.code = result;
 
             // lookup an existing invite for the user
             var queryOptions = {
                 where: {
-                    email: email
+                    email: payload.email
                 }
             };
             return self.models.invite.findOne(queryOptions);
         }).then(function(result) {
-
-            var invitePayload = {
-                email: email,
-                code: code
-            };
 
             // if found, update, otherwise, create
             if (result) {
@@ -113,16 +113,16 @@ Registration.prototype.sendInvite = function(email) {
             // TODO export sender and subject strings - language file?
             var mailOptions = {
                 from: "swamsley@gmail.com",
-                to: email,
+                to: payload.email,
                 subject: "[Gig Keeper] Invitation",
             };
 
-            var context = {
-                email: email,
-                code: code
-            };
+            console.log("Seding invite from " + user.fullName);
+            invitePayload.user = user;
 
-            self.mailer.sendEmail(mailOptions, "invite", context);
+            self.mailer.sendEmail(mailOptions, "invite", invitePayload).catch(function(error) {
+                console.log("Failed to send invite email: " + error.message);
+            });
             
             return invite;
         });
@@ -184,7 +184,9 @@ Registration.prototype.createAccount = function(payload) {
                     phone: newUser.phone,
                 };
 
-                self.mailer.sendEmail(mailOptions, "registrationNotice", context);
+                self.mailer.sendEmail(mailOptions, "registrationNotice", context).catch(function(error) {
+                    console.log("Failed to send registration notification email: " + error.message);
+                });
 
                 return newUser;
             });

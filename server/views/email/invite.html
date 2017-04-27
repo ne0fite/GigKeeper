@@ -1,4 +1,8 @@
-<p>You have geen invited to sign up for GigKeeper!</p>
+<p>{{ user.fullName }} has invited to sign up for GigKeeper!</p>
+
+{{#if message }}
+<p>{{ message }}</p>
+{{/if}}
 
 <p>Your unique invite code is <strong>{{ code }}</strong>.</p>
 

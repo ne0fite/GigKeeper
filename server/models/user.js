@@ -29,6 +29,15 @@ module.exports = function(sequelize, DataTypes) {
         active: { type: DataTypes.BOOLEAN, allNull: false, defaultValue: false },
         scope: { type: DataTypes.STRING }
     }, {
+        getterMethods: {
+            fullName:  function() {
+                var fullName = [ this.get("firstName"), this.get("lastName") ].join(" ");
+                if (!fullName.trim()) {
+                    fullName = this.get("email");
+                }
+                return fullName;
+            }
+        },
         classMethods: {
             associate: function(models) {
                 models.user.belongsTo(models.profile, {

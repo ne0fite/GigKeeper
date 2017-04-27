@@ -23,6 +23,12 @@ angular.module('GigKeeper').factory('Registration', [
     function($resource, UrlBuilder) {
         return {
             data: $resource(UrlBuilder.build('/api/v1/register'), {}, {
+                index: {
+                    action: 'index',
+                    method: 'GET',
+                    url: UrlBuilder.build('/api/v1/register/invite'),
+                    isArray: true
+                },
                 invite: {
                     action: 'invite',
                     method: 'GET',

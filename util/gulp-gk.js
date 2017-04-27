@@ -48,6 +48,7 @@ function initDb() {
 var seedTables = [
     "profile",
     "user",
+    "invite",
     "contractor",
     "tag",
     "gig",

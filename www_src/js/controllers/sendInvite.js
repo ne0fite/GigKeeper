@@ -19,11 +19,55 @@
 'use strict';
 
 angular.module('GigKeeper').controller('sendInvite', [
-    '$scope', '$state', 'Registration',
-    function($scope, $state, Registration) {
+    '$scope', '$state', 'Registration', 'invites',
+    function($scope, $state, Registration, invites) {
 
         $scope.form = {
-            email: null
+            email: null,
+            message: null
+        };
+
+        $scope.gridOptions = {
+            enableFiltering: true,
+            enableGridMenu: true,
+            enableRowSelection: false,
+            enableSelectAll: false,
+            multiSelect: false,
+            enableRowHeaderSelection: false,
+            enableSorting: true,
+            noUnselect: true,
+            columnDefs: [{
+                name: 'Email',
+                field: 'email',
+                type: 'string'
+            }, {
+                name: 'Code',
+                field: 'code',
+                type: 'string',
+                enableFiltering: false
+            }, {
+                name: 'Sent By',
+                field: 'user',
+                type: 'string',
+                visible: false,
+                cellFilter: 'userNameDisplay:"' + $scope.user.id + '"'
+            }, {
+                name: 'Message',
+                field: 'message',
+                type: 'string',
+                visible: false
+            }, {
+                name: 'Sent Date',
+                field: 'createdAt',
+                type: 'date',
+                cellFilter: 'date:"MM/dd/yyyy hh:mm a"'
+            }, {
+                name: 'Registered',
+                field: 'registeredAt',
+                type: 'date',
+                cellFilter: 'date:"MM/dd/yyyy hh:mm a"'
+            }],
+            data: invites
         };
 
         $scope.submit = function(sendInviteForm) {
@@ -34,11 +78,12 @@ angular.module('GigKeeper').controller('sendInvite', [
                 button.button('loading');
 
                 var payload = {
-                    email: $scope.form.email
+                    email: $scope.form.email,
+                    message: $scope.form.message
                 };
 
-                var request = Registration.data.sendInvite({ }, payload).$promise;
-                
+                var request = Registration.data.sendInvite({}, payload).$promise;
+
                 request.then(function(result) {
 
                     if (!result.error) {
@@ -46,7 +91,10 @@ angular.module('GigKeeper').controller('sendInvite', [
                     } else {
                         $scope.errorMessage = result.message;
                     }
-                    
+                }).then(function() {
+                    return Registration.data.index().$promise;
+                }).then(function(invites) {
+                    $scope.gridOptions.data = invites;
                     button.button('reset');
                 }).catch(function(error) {
                     $scope.errorMessage = error.message;
