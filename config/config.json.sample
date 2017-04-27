@@ -6,7 +6,7 @@
         "port": 8000,
         "cookie": {
             "name": "gigkeeper-session",
-            "secret": "your_secret_string"
+            "secret": "<your_secret_string>"
         }
     },
     "db": {
@@ -15,17 +15,18 @@
         "dialect": "postgres",
         "name": "gigkeeper",
         "user": "gigkeeper",
-        "pass": "your_gigkeeper_password",
+        "pass": "<your_gigkeeper_password>",
         "logging": true
     },
     "smtp": {
         "enabled": false,
-        "singleAddress": "<your_email_address>",
+        "fromAddress": "<your_sender_email_address>",
+        "singleAddress": "<your_email_address_or_false>",
         "service": "gmail",
         "user": "<your_email_username>",
-        "pass": "<your_email_password"
+        "pass": "<your_email_password>"
     },
     "google": {
-        "apiKey": "your_api_key"
+        "apiKey": "<your_api_key>"
     }
 }

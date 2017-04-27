@@ -21,6 +21,7 @@
 var Chance = require("chance");
 var chance = new Chance();
 var Mailer = require("./mailer.js");
+var config = require("../../config/config.js");
 
 module.exports = Registration;
 
@@ -112,7 +113,7 @@ Registration.prototype.sendInvite = function(payload, user) {
 
             // TODO export sender and subject strings - language file?
             var mailOptions = {
-                from: "swamsley@gmail.com",
+                from: config.smtp.fromAddress,
                 to: payload.email,
                 subject: "[Gig Keeper] Invitation",
             };
