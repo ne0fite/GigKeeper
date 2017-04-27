@@ -112,7 +112,7 @@ angular.module('GigKeeper').controller('gigs', [
             }).catch(function(err) {
                 $scope.alerts.push({
                     msg: err.message,
-                    type: 'error'
+                    type: 'danger'
                 });
             });
 
@@ -154,7 +154,7 @@ angular.module('GigKeeper').controller('gigs', [
                 }).catch(function(error) {
                     $scope.alerts.push({
                         msg: error.message,
-                        type: 'error'
+                        type: 'danger'
                     });
                 });
 

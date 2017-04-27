@@ -61,7 +61,7 @@ angular.module('GigKeeper').run([
             }).catch(function(error) {
                 $rootScope.alerts.push({
                     msg: error.message,
-                    type: 'error'
+                    type: 'danger'
                 });
             });
 

@@ -34,6 +34,7 @@ The `config.json` file works well with local development. However, environment v
 <tr><td>DB_PASS</td><td>Database password</td><td>gigkeeper</td></tr>
 <tr><td>DB_LOGGING</td><td>Set to true to log SQL commands to the console</td><td>false</td></tr>
 <tr><td>SMTP_ENABLED</td><td>Set to true to enable sending email</td><td>false</td></tr>
+<tr><td>SMTP_FROM_ADDRESS</td><td>Email address that all system emails will come from</td><td></td></tr>
 <tr><td>SMTP_SINGLE_ADDRESS</td><td>Set to an email address to send all emails to a single address</td><td></td></tr>
 <tr><td>SMTP_SERVICE</td><td>SMTP service supported by nodemailer</td><td>gmail</td></tr>
 <tr><td>SMTP_USER</td><td>SMTP username</td><td></td></tr>
