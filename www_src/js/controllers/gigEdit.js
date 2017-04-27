@@ -19,20 +19,15 @@
 'use strict';
 
 angular.module('GigKeeper').controller('GigEditController', [
-    '$rootScope', '$scope', '$uibModal', '$filter',  '$stateParams', '$state','contractors', 'gig', 'Tag', 'Gig', 'UrlBuilder',
+    '$rootScope', '$scope', '$uibModal', '$filter', '$title', '$stateParams', '$state','contractors', 'gig', 'Tag', 'Gig', 'UrlBuilder',
     'BlockingPromiseManager', 'GoogleMaps', 'dialogs',
     function(
-        $rootScope, $scope, $uibModal, $filter, $stateParams, $state, contractors, gig, Tag, Gig, UrlBuilder,
+        $rootScope, $scope, $uibModal, $filter, $title, $stateParams, $state, contractors, gig, Tag, Gig, UrlBuilder,
         BlockingPromiseManager, GoogleMaps, dialogs
     ) {
-        /**
-         * Populate the tag dropdown.
-         * 
-         * @return {void}
-         */
-        function loadTags() {
-            $scope.tagDropdownOptions = Tag.getDropdownOptions();
-        }
+        $scope.title = $title;
+        
+        $scope.tagDropdownOptions = Tag.getDropdownOptions();
 
         /**
          * Update the form based on the user's selected route.
@@ -253,9 +248,5 @@ angular.module('GigKeeper').controller('GigEditController', [
                 selectRoute(route);
             });
         }
-
-
-
-        loadTags();
     }
 ]);  

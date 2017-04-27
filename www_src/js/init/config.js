@@ -125,9 +125,11 @@ angular.module('GigKeeper').config([
             templateUrl: '/template/views/gigEdit.html',
             resolve: {
                 gig: [
-                    '$stateParams', 'Gig',
-                    function($stateParams, Gig) {
-                        return Gig.data.read({ id: $stateParams.id });
+                    '$stateParams', 'Gig', 'BlockingPromiseManager',
+                    function($stateParams, Gig, BlockingPromiseManager) {
+                        var request = Gig.data.read({ id: $stateParams.id }).$promise;
+                        BlockingPromiseManager.add(request);
+                        return request;
                     }
                 ],
                 contractors: [

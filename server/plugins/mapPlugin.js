@@ -18,7 +18,6 @@
 
 var Boom = require("boom");
 var Joi = require("joi");
-var Promise = require("bluebird");
 
 var place = require("../lib/place")();
 var directions = require("../lib/directions")();
