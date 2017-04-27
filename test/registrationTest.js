@@ -28,11 +28,15 @@ var Registration = require("../server/lib/registration.js");
 
 lab.experiment("registration", function () {
     var registration;
+    var db;
+    var models;
 
     lab.before(function (done) {
         setTimeout(function () {
             server.initialize(function () {
                 registration = new Registration(server);
+                db = server.plugins["hapi-sequelize"].gigkeeperdb;
+                models = db.sequelize.models;
                 done();
             });
         }, 1000);
@@ -50,13 +54,32 @@ lab.experiment("registration", function () {
 
     lab.test("Send Invite", function(done) {
 
-        var email = chance.email();
+        var invitePayload = {
+            email: chance.email(),
+            message: chance.sentence({ words: 10 })
+        };
 
-        registration.sendInvite(email).then(function(invite) {
+        var userQuery = {
+            where: {
+                email: "test@example.com"
+            }
+        };
+
+        var user;
+
+        models.user.findOne(userQuery).then(function(result) {
+            Code.expect(result).to.not.be.null();
+
+            user = result;
+
+            return registration.sendInvite(invitePayload, user);
+        }).then(function(invite) {
             
             Code.expect(invite).to.not.be.undefined();
             Code.expect(invite).to.not.be.null();
-            Code.expect(invite.email).to.equal(email);
+            Code.expect(invite.email).to.equal(invitePayload.email);
+            Code.expect(invite.message).to.equal(invitePayload.message);
+            Code.expect(invite.userId).to.equal(user.id);
             Code.expect(invite.code).to.not.be.null();
             Code.expect(invite.code.length).to.equal(6);
 

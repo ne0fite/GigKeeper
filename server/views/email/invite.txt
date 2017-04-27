@@ -1,6 +1,7 @@
-You have geen invited to sign up for GigKeeper!
+{{ user.fullName }} has invited to sign up for GigKeeper!
+
+{{#if message }}{{ message }}{{/if}}
 
 Your unique invite code is {{ code }}.
 
-To sign up, go to {{ baseUrl }}/#!/register/invite/{{ code }}
-and complete the Registration form.
+To sign up, go to {{ baseUrl }}/#!/register/invite/{{ code }} and complete the Registration form.</p>

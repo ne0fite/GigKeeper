@@ -38,6 +38,7 @@
     "bluebird": "^3.4.6",
     "boom": "^4.2.0",
     "es6-promise": "^4.1.0",
+    "handlebars-intl": "^1.1.2",
     "hapi": "^15.2.0",
     "hapi-auth-cookie": "^6.1.1",
     "hapi-sequelize": "^3.0.4",
@@ -49,7 +50,9 @@
     "pg-hstore": "^2.3.2",
     "qs": "^6.4.0",
     "request": "^2.81.0",
+    "secure-random": "^1.1.1",
     "sequelize": "^3.25.0",
+    "sha.js": "^2.4.8",
     "sqlizr": "^1.2.0"
   },
   "devDependencies": {

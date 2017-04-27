@@ -66,7 +66,10 @@ angular.module('GigKeeper').controller('contractors', [
             var request = Contractor.data.index().$promise.then(function(contractors) {
                 $scope.gridOptions.data = contractors;
             }).catch(function(err) {
-                console.error(err);
+                $scope.alerts.push({
+                    msg: err.message,
+                    type: 'error'
+                });
             });
 
             BlockingPromiseManager.add(request);
@@ -105,7 +108,10 @@ angular.module('GigKeeper').controller('contractors', [
                     $scope.selected = null;
                     load();
                 }).catch(function(error) {
-                    console.error(error);
+                    $scope.alerts.push({
+                        msg: error.message,
+                        type: 'error'
+                    });
                 });
 
                 BlockingPromiseManager.add(request);

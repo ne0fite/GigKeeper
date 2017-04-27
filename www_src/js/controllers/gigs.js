@@ -110,7 +110,10 @@ angular.module('GigKeeper').controller('gigs', [
             var request = Gig.data.index().$promise.then(function(gigs) {
                 $scope.gridOptions.data = gigs;
             }).catch(function(err) {
-                console.error(err);
+                $scope.alerts.push({
+                    msg: err.message,
+                    type: 'error'
+                });
             });
 
             BlockingPromiseManager.add(request);
@@ -149,7 +152,10 @@ angular.module('GigKeeper').controller('gigs', [
                     $scope.selected = null;
                     load();
                 }).catch(function(error) {
-                    console.error(error);
+                    $scope.alerts.push({
+                        msg: error.message,
+                        type: 'error'
+                    });
                 });
 
                 BlockingPromiseManager.add(request);

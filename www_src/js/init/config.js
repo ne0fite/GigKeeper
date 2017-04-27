@@ -55,6 +55,28 @@ angular.module('GigKeeper').config([
             templateUrl: '/template/views/privacyPolicy.html'
         }).state({
             public: true,
+            name: 'forgotPassword',
+            url: '/forgot-password',
+            controller: 'forgotPassword',
+            templateUrl: '/template/views/forgotPassword.html',
+            resolve: {
+                $title: function() {
+                    return 'Forgot Password';
+                }
+            }
+        }).state({
+            public: true,
+            name: 'resetPassword',
+            url: '/reset-password/{token}',
+            controller: 'resetPassword',
+            templateUrl: '/template/views/resetPassword.html',
+            resolve: {
+                $title: function() {
+                    return 'Reset Password';
+                }
+            }
+        }).state({
+            public: true,
             name: 'register-invite',
             url: '/register/invite/:code',
             controller: 'registerInvite',
@@ -77,6 +99,12 @@ angular.module('GigKeeper').config([
             controller: 'sendInvite',
             templateUrl: '/template/views/sendInvite.html',
             resolve: {
+                invites: [
+                    'Registration',
+                    function(Registration) {
+                        return Registration.data.index().$promise;
+                    }
+                ],
                 $title: function() {
                     return 'Send Invite';
                 }

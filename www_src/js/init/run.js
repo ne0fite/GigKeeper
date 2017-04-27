@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').run([
-    '$rootScope', '$state', '$http', '$sce', 'UrlBuilder', 'BlockingPromiseManager',
-    function($rootScope, $state, $http, $sce, UrlBuilder, BlockingPromiseManager) {
+    '$rootScope', '$state', '$sce', 'Security', 'UrlBuilder', 'BlockingPromiseManager',
+    function($rootScope, $state, $sce, Security, UrlBuilder, BlockingPromiseManager) {
 
         $rootScope.copyrightDate = new Date();
         
@@ -34,9 +34,11 @@ angular.module('GigKeeper').run([
 
             if (!toState.public) {
 
-                var request = $http.get(UrlBuilder.build('/api/v1/user/profile')).then(function(response) {
-                    if (response.data.active) {
-                        $rootScope.user = response.data;
+                var request = Security.data.profile().$promise;
+
+                request.then(function(user) {
+                    if (user.active) {
+                        $rootScope.user = user;
                     } else {
                         $rootScope.user = null;
                         event.preventDefault();
@@ -52,12 +54,15 @@ angular.module('GigKeeper').run([
         });
 
         $rootScope.logout = function() {
-            var request = $http.post(UrlBuilder.build('/api/v1/logout')).then(function(response) { // eslint-disable-line no-unused-vars
+            var request = Security.data.logout().$promise;
+            request.then(function(response) { // eslint-disable-line no-unused-vars
                 $rootScope.user = null;
                 $state.go('home');
             }).catch(function(error) {
-                // TODO: flash error message
-                console.log(error);
+                $rootScope.alerts.push({
+                    msg: error.message,
+                    type: 'error'
+                });
             });
 
             BlockingPromiseManager.add(request);

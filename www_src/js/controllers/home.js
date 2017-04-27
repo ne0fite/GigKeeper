@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('home', [
-    '$rootScope', '$scope', '$state', '$http', 'UrlBuilder', 'BlockingPromiseManager',
-    function($rootScope, $scope, $state, $http, UrlBuilder, BlockingPromiseManager) {
+    '$rootScope', '$scope', '$state', 'Security', 'UrlBuilder', 'BlockingPromiseManager',
+    function($rootScope, $scope, $state, Security, UrlBuilder, BlockingPromiseManager) {
 
         $scope.submitLoginForm = function(loginForm) {
             $scope.errorMessage = null;
@@ -32,12 +32,14 @@ angular.module('GigKeeper').controller('home', [
                     password: $scope.password
                 };
 
-                var request = $http.post(UrlBuilder.build('/api/v1/login'), postData).then(function(response) {
-                    if (response.status === 200) {
-                        $rootScope.user = response.data;
-                        $state.go('gigs');
+                var request = Security.data.login(postData).$promise;
+
+                request.then(function(user) {
+                    if (user.error) {
+                        $scope.errorMessage = user.message;
                     } else {
-                        $scope.errorMessage = response.data.message;
+                        $rootScope.user = user;
+                        $state.go('gigs');
                     }
                 }).catch(function(error) {
                     $scope.errorMessage = error.message;

@@ -18,31 +18,35 @@
 
 'use strict';
 
-angular.module('GigKeeper').factory('Registration', [
+angular.module('GigKeeper').factory('Security', [
     '$resource', 'UrlBuilder',
     function($resource, UrlBuilder) {
         return {
-            data: $resource(UrlBuilder.build('/api/v1/register'), {}, {
-                index: {
-                    action: 'index',
-                    method: 'GET',
-                    url: UrlBuilder.build('/api/v1/register/invite'),
-                    isArray: true
-                },
-                invite: {
-                    action: 'invite',
-                    method: 'GET',
-                    url: UrlBuilder.build('/api/v1/register/invite/:code')
-                },
-                sendInvite: {
-                    action: 'sendInvite',
+            data: $resource(UrlBuilder.build('/api/v1/security'), {}, {
+                login: {
+                    action: 'login',
                     method: 'POST',
-                    url: UrlBuilder.build('/api/v1/register/invite')
+                    url: UrlBuilder.build('/api/v1/login')
                 },
-                registerInvite: {
-                    action: 'registerInvite',
+                logout: {
+                    action: 'logout',
                     method: 'POST',
-                    url: UrlBuilder.build('/api/v1/register/invite/:code')
+                    url: UrlBuilder.build('/api/v1/logout')
+                },
+                profile: {
+                    action: 'profile',
+                    method: 'GET',
+                    url: UrlBuilder.build('/api/v1/user/profile')
+                },
+                requestPasswordReset: {
+                    action: 'requestPasswordReset',
+                    method: 'POST',
+                    url: UrlBuilder.build('/api/v1/requestPasswordReset')
+                },
+                resetPassword: {
+                    action: 'resetPassword',
+                    method: 'POST',
+                    url: UrlBuilder.build('/api/v1/resetPassword')
                 }
             })
         };
