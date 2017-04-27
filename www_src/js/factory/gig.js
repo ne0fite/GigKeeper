@@ -32,6 +32,11 @@ angular.module('GigKeeper').factory('Gig', [
                     action: 'create',
                     method: 'POST'
                 },
+                read: {
+                    action: 'read',
+                    method: 'GET',
+                    url: UrlBuilder.build('/api/v1/gig/:id')
+                },
                 update: {
                     action: 'update',
                     method: 'POST',
