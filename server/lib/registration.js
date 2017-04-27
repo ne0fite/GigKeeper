@@ -118,10 +118,10 @@ Registration.prototype.sendInvite = function(payload, user) {
                 subject: "[Gig Keeper] Invitation",
             };
 
-            console.log("Seding invite from " + user.fullName);
             invitePayload.user = user;
 
             self.mailer.sendEmail(mailOptions, "invite", invitePayload).catch(function(error) {
+                // TODO logging component
                 console.log("Failed to send invite email: " + error.message);
             });
             
@@ -186,6 +186,7 @@ Registration.prototype.createAccount = function(payload) {
                 };
 
                 self.mailer.sendEmail(mailOptions, "registrationNotice", context).catch(function(error) {
+                    // TODO logging component
                     console.log("Failed to send registration notification email: " + error.message);
                 });
 

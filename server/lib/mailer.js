@@ -21,6 +21,8 @@
 var path = require("path");
 var fs = require("fs");
 var Handlebars = require("handlebars");
+var HandlebarsIntl = require("handlebars-intl");
+HandlebarsIntl.registerWith(Handlebars);
 var Promise = require("bluebird");
 var config = require("../../config/config.js");
 
@@ -30,6 +32,7 @@ module.exports = Mailer;
 
 function Mailer() {
 
+    // configure the transporer from system config
     this.transporter = nodemailer.createTransport({
         service: config.smtp.service,
         auth: {
@@ -38,8 +41,17 @@ function Mailer() {
         }
     });
 
+    // the template base path
     this.templateBasePath = path.join(__dirname, "../views/email");
 
+    /**
+     * Load the contents of a named template. The template is resolved
+     * by appending the type as the extension and loading it from the
+     * base template path.
+     * @param {String} templateName base name of template
+     * @param {String} type template type extension (html, txt, etc.)
+     * @return {Promise<String>} promise of the contents as a string, or null if not found
+     */
     this.getTemplateSource = function(templateName, type) {
         var self = this;
 
@@ -60,6 +72,32 @@ function Mailer() {
                 }
             });
         });
+    };
+
+    // intl data for rendering handlebar templates
+    this.intlData = {
+        locales: "en-US",
+        formats: {
+            date: {
+                short: {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                }
+            },
+            time: {
+                hhmm: {
+                    hour: "numeric",
+                    minute: "numeric"
+                }
+            },
+            relative: {
+                hours: {
+                    units: "hour",
+                    style: "numeric"
+                }
+            }
+        }
     };
 }
 
@@ -97,14 +135,25 @@ Mailer.prototype.sendEmail = function(mailOptions, templateName, context) {
     }).then(function(data) {
         htmlTemplate = data;
 
+        // compile the text message from the template, context, and intl data
         if (textTemplate) {
-            mailOptions.text = Handlebars.compile(textTemplate)(context);
-        }
-        if (htmlTemplate) {
-            mailOptions.html = Handlebars.compile(htmlTemplate)(context);
+            mailOptions.text = Handlebars.compile(textTemplate)(context, {
+                data: {
+                    intl: self.intlData
+                }
+            });
         }
 
-        // reject if now templates were found
+        // compile the html message from the template, context, and intl data
+        if (htmlTemplate) {
+            mailOptions.html = Handlebars.compile(htmlTemplate)(context, {
+                data: {
+                    intl: self.intlData
+                }
+            });
+        }
+
+        // reject if no templates were found
         if (!mailOptions.html && mailOptions.text) {
             return Promise.reject(new Error("No text or html templates found for " + templateName));
         } else {

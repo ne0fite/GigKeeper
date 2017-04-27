@@ -64,6 +64,7 @@ module.exports = {
     },
     smtp: {
         enabled: process.env.SMTP_ENABLED || configJson.smtp.enabled || false,
+        fromAddress: process.env.SMTP_FROM_ADDRESS || configJson.smtp.fromAddress || null,
         singleAddress: process.env.SMTP_SINGLE_ADDRESS || configJson.smtp.singleAddress || null,
         service: process.env.SMTP_SERVICE || configJson.smtp.service || "gmail",
         user: process.env.SMTP_USER || configJson.smtp.user,

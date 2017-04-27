@@ -26,8 +26,10 @@ module.exports = function(sequelize, DataTypes) {
         firstName: { type: DataTypes.STRING, allowNull: true },
         lastName: { type: DataTypes.STRING, allowNull: true },
         phone: { type: DataTypes.STRING, allowNull: true },
-        active: { type: DataTypes.BOOLEAN, allNull: false, defaultValue: false },
-        scope: { type: DataTypes.STRING }
+        active: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
+        scope: { type: DataTypes.STRING },
+        resetToken: { type: DataTypes.CHAR(64), allowNull: true },
+        resetTokenExpiresAt: { type: DataTypes.DATE, allowNull: true }
     }, {
         getterMethods: {
             fullName:  function() {
