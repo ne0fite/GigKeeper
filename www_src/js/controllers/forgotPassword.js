@@ -19,11 +19,11 @@
 'use strict';
 
 angular.module('GigKeeper').controller('forgotPassword', [
-    '$scope', '$state', 'Security',
-    function($scope, $state, Security) {
+    '$scope', '$state', '$stateParams', 'Security',
+    function($scope, $state, $stateParams, Security) {
 
         $scope.form = {
-            email: null
+            email: typeof $stateParams.email == 'undefined' ? null : $stateParams.email
         };
 
         $scope.submit = function(forgotPasswordForm) {

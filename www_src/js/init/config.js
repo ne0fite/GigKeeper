@@ -66,6 +66,17 @@ angular.module('GigKeeper').config([
             }
         }).state({
             public: true,
+            name: 'forgotPasswordWithEmail',
+            url: '/forgot-password/{email}',
+            controller: 'forgotPassword',
+            templateUrl: '/template/views/forgotPassword.html',
+            resolve: {
+                $title: function() {
+                    return 'Forgot Password';
+                }
+            }
+        }).state({
+            public: true,
             name: 'resetPassword',
             url: '/reset-password/{token}',
             controller: 'resetPassword',
