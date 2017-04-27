@@ -116,7 +116,11 @@ CREATE TABLE invites (
     email character varying(255) NOT NULL,
     code character varying(255) NOT NULL,
     "createdAt" timestamp with time zone NOT NULL,
-    "updatedAt" timestamp with time zone NOT NULL
+    "updatedAt" timestamp with time zone NOT NULL,
+    message text,
+    "userId" uuid NOT NULL,
+    "registeredAt" timestamp with time zone,
+    "profileId" uuid
 );
 
 
@@ -300,6 +304,22 @@ ALTER TABLE ONLY gigs
 
 ALTER TABLE ONLY gigs
     ADD CONSTRAINT "gigs_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES profiles(id) ON UPDATE CASCADE;
+
+
+--
+-- Name: invites invites_profileId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: gigkeeper
+--
+
+ALTER TABLE ONLY invites
+    ADD CONSTRAINT "invites_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES profiles(id);
+
+
+--
+-- Name: invites invites_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: gigkeeper
+--
+
+ALTER TABLE ONLY invites
+    ADD CONSTRAINT "invites_userId_fkey" FOREIGN KEY ("userId") REFERENCES users(id);
 
 
 --

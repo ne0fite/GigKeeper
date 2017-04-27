@@ -28,6 +28,38 @@ var registrationPlugin = {
 
         server.route({
             method: "GET",
+            path: "/api/v1/register/invite",
+            config: {
+                cors: {
+                    origin: ["*"]
+                }
+            },
+            handler: function(request, reply) {
+
+                var db = server.plugins["hapi-sequelize"].gigkeeperdb;
+                var models = db.sequelize.models;
+
+                var queryOptions = {
+                    include: [{
+                        model: models.user,
+                        required: true,
+                        where: {
+                            profileId: request.auth.credentials.profileId
+                        }
+                    }],
+                    order: [ [ "createdAt", "asc" ] ]
+                };
+
+                models.invite.findAll(queryOptions).then(function(invites) {
+                    reply(invites);
+                }).catch(function(error) {
+                    reply(Boom.badRequest(error));
+                });
+            }
+        });
+
+        server.route({
+            method: "GET",
             path: "/api/v1/register/invite/{code}",
             config: {
                 cors: {
@@ -45,13 +77,13 @@ var registrationPlugin = {
                 var db = server.plugins["hapi-sequelize"].gigkeeperdb;
                 var models = db.sequelize.models;
 
-                var options = {
+                var queryOptions = {
                     where: {
                         code: request.params.code
                     }
                 };
 
-                models.invite.findOne(options).then(function(invite) {
+                models.invite.findOne(queryOptions).then(function(invite) {
                     reply(invite);
                 }).catch(function(err) {
                     reply(Boom.badImplementation(err));
@@ -68,7 +100,8 @@ var registrationPlugin = {
                 },
                 validate: {
                     payload: {
-                        email: Joi.string().email().required()
+                        email: Joi.string().email().required(),
+                        message: Joi.string().optional().allow(null, "")
                     }
                 },
                 auth: {
@@ -79,7 +112,7 @@ var registrationPlugin = {
             handler: function(request, reply) {
 
                 var registration = new Registration(server);
-                return registration.sendInvite(request.payload.email).then(function(invite) {
+                return registration.sendInvite(request.payload, request.auth.credentials).then(function(invite) {
                     reply(invite);
                 }).catch(function(error) {
                     reply(Boom.badRequest(error));
@@ -120,7 +153,7 @@ var registrationPlugin = {
                 var db = server.plugins["hapi-sequelize"].gigkeeperdb;
                 var models = db.sequelize.models;
 
-                var options = {
+                var queryOptions = {
                     where: {
                         code: request.params.code
                     }
@@ -128,19 +161,30 @@ var registrationPlugin = {
 
                 var invite;
                 var newUser;
-                models.invite.findOne(options).then(function(result) {
+
+                // validate the invitation code by looking it up by code
+                models.invite.findOne(queryOptions).then(function(result) {
                     invite = result;
 
                     if (!invite) {
                         throw new Error("Invalid Invite Code");
                     }
 
+                    // register the user with the payload
                     var registration = new Registration(server);
                     return registration.createAccount(request.payload);
                 }).then(function(result) {
                     newUser = result;
-                    return invite.destroy();
+
+                    // update the invitation with registration date and profile ID
+                    var invitePayload = {
+                        registeredAt: new Date(),
+                        profileId: newUser.profileId
+                    };
+                    return invite.update(invitePayload);
                 }).then(function() {
+
+                    // look up the new user
                     var queryOptions = {
                         where: {
                             id: newUser.id
@@ -152,8 +196,9 @@ var registrationPlugin = {
                     };
                     return models.user.findOne(queryOptions);
                 }).then(function(user) {
+
+                    // add the user to the auth credentials to log the user in
                     var clean = user.get({ plain: true });
-                    //clean.profile = user.profile.get({ plain: true });
                     delete clean.password;
 
                     request.cookieAuth.set(clean);
