@@ -154,8 +154,8 @@ var tagPlugin = {
                         throw new Error("Contractor not found");
                     }
                     return tag.destroy();
-                }).then(function(result) {
-                    reply(result);
+                }).then(function() {
+                    reply();
                 }).catch(function(err) {
                     return reply(Boom.badRequest(err));
                 });

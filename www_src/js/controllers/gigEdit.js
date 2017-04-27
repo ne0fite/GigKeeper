@@ -19,10 +19,10 @@
 'use strict';
 
 angular.module('GigKeeper').controller('GigEditController', [
-    '$rootScope', '$scope', '$uibModal', '$filter',  '$stateParams', '$state','contractors', 'Tag', 'Gig', 'UrlBuilder',
+    '$rootScope', '$scope', '$uibModal', '$filter',  '$stateParams', '$state','contractors', 'gig', 'Tag', 'Gig', 'UrlBuilder',
     'BlockingPromiseManager', 'GoogleMaps', 'dialogs',
     function(
-        $rootScope, $scope, $uibModal, $filter, $stateParams, $state, contractors, Tag, Gig, UrlBuilder,
+        $rootScope, $scope, $uibModal, $filter, $stateParams, $state, contractors, gig, Tag, Gig, UrlBuilder,
         BlockingPromiseManager, GoogleMaps, dialogs
     ) {
         /**
@@ -32,33 +32,6 @@ angular.module('GigKeeper').controller('GigEditController', [
          */
         function loadTags() {
             $scope.tagDropdownOptions = Tag.getDropdownOptions();
-        }
-
-        /**
-         * Load the gig from the server.
-         * 
-         * @param {string} id A valid gig ID
-         *  
-         * @return {void}
-         */
-        function loadGig(id) {
-            Gig.data.read({id: id}).$promise.then(function (result) {
-                gig = result;
-                gig.tags = gig.tags ? gig.tags : [];
-                $scope.form = {
-                    name: gig.name,
-                    place: angular.fromJson(gig.place),
-                    distance: gig.distance,
-                    duration: gig.duration,
-                    startDate: new Date(gig.startDate),
-                    endDate: new Date(gig.endDate),
-                    contractorId: gig.contractorId,
-                    tags: gig.tags,
-                    notes: gig.notes
-                };
-            }, function (error) {
-                $scope.alerts.push({msg: error.message});
-            });
         }
 
         /**
@@ -73,8 +46,18 @@ angular.module('GigKeeper').controller('GigEditController', [
             $scope.form.duration = GoogleMaps.calculateRouteDuration(route) / 60; //convert seconds to minutes
         }
 
-        var id = typeof $stateParams.id == 'undefined' ? null : $stateParams.id;
-        var gig = id ? loadGig(id) : {};
+        gig.tags = gig.tags ? gig.tags : [];
+        $scope.form = {
+            name: gig.name,
+            place: angular.fromJson(gig.place),
+            distance: gig.distance,
+            duration: gig.duration,
+            startDate: new Date(gig.startDate),
+            endDate: new Date(gig.endDate),
+            contractorId: gig.contractorId,
+            tags: gig.tags,
+            notes: gig.notes
+        };
 
         $scope.contractors = contractors;
 

@@ -255,8 +255,8 @@ var gigPlugin = {
                         throw new Error("Gig not found");
                     }
                     return gig.destroy();
-                }).then(function(result) {
-                    reply(result);
+                }).then(function() {
+                    reply();
                 }).catch(function(err) {
                     return reply(Boom.badRequest(err));
                 });

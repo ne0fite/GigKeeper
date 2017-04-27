@@ -170,8 +170,8 @@ var contractorPlugin = {
                         throw new Error("Contractor not found");
                     }
                     return contractor.destroy();
-                }).then(function(result) {
-                    reply(result);
+                }).then(function() {
+                    reply();
                 }).catch(function(err) {
                     return reply(Boom.badRequest(err));
                 });

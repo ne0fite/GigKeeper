@@ -103,6 +103,11 @@ angular.module('GigKeeper').config([
             controller: 'GigEditController',
             templateUrl: '/template/views/gigEdit.html',
             resolve: {
+                gig: [
+                    function() {
+                        return {};
+                    }
+                ],
                 contractors: [
                     'Contractor',
                     function(Contractor) {
@@ -119,6 +124,12 @@ angular.module('GigKeeper').config([
             controller: 'GigEditController',
             templateUrl: '/template/views/gigEdit.html',
             resolve: {
+                gig: [
+                    '$stateParams', 'Gig',
+                    function($stateParams, Gig) {
+                        return Gig.data.read({ id: $stateParams.id });
+                    }
+                ],
                 contractors: [
                     'Contractor',
                     function(Contractor) {
