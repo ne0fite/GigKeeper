@@ -53,6 +53,10 @@ module.exports = {
             secret: process.env.COOKIE_SECRET || configJson.app.cookie.secret || "tempdevcookieneedstobecreated123"
         }
     },
+    api: {
+        host: process.env.API_HOST || configJson.app.host || "localhost",
+        port: process.env.API_PORT || configJson.app.port || 8000,
+    },
     db: {
         host: dbconfig[env].host,
         port: dbconfig[env].port,
