@@ -103,9 +103,9 @@
                         ng-model="form.duration" />
             </div>
             <div class="col-md-4 form-group" ng-if="form.place && user.profile.homeBasePlace">
-                <label class="block">&nbsp;</label>
+                <label class="visible-md-block visible-lg-block">&nbsp;</label>
                 <button type="button"
-                    class="btn btn-default btn-estimate"
+                    class="btn btn-primary btn-estimate"
                     id="estimate_button"
                     ng-click="estimateDistance($event)"
                     data-loading-text="<i class='fa fa-spinner fa-spin'></i> Estimating...">
