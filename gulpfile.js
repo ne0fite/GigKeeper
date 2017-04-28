@@ -53,7 +53,7 @@ var options = minimist(process.argv.slice(2), {
 
 /**
  * Outputs Gulp errors to the console.
- * 
+ *
  * @param  {object} err The error
  * @return {void}
  */
@@ -63,7 +63,7 @@ function onError(err) {
 
 /**
  * Ensure that all of the necessary directories exist.
- * 
+ *
  * @return {void}
  */
 function makeDirs() {
@@ -79,27 +79,27 @@ function makeDirs() {
 
 /**
  * Only perform the operation in the dev environment.
- * 
+ *
  * @param  {object} operation The Gulp operation to be performed
- * 
+ *
  * @return {object}           The provided operation or noop
  */
 function ifDev(operation) {
     var isDev = options.env == "development";
-    
+
     return isDev ? operation : noop();
 }
 
 /**
  * Only perform the operation in the prod environment.
- * 
+ *
  * @param  {object} operation The Gulp operation to be performed
- * 
+ *
  * @return {object}           The provided operation or noop
  */
 function ifProd(operation) {
     var isProd = options.env != "development";
-    
+
     return isProd ? operation : noop();
 }
 
@@ -200,20 +200,20 @@ gulp.task("build", ["config", "html", "sass", "scripts", "images"]);
 
 gulp.task("default", ["serve"]);
 
-gulp.task("archive", function() {
+gulp.task("archive", ["build"], function() {
 
     var filename = "gigkeeper.zip";
 
     gulp.src([ ".ebextensions",
-               ".bowerrc", 
-               "bower.json", 
-               "config/**/*", 
-               "LICENSE.md", 
-               "main.js", 
-               "package.json", 
-               "README.md", 
-               "server/**/*", 
-               "www/**/*", 
+               ".bowerrc",
+               "bower.json",
+               "config/**/*",
+               "LICENSE.md",
+               "main.js",
+               "package.json",
+               "README.md",
+               "server/**/*",
+               "www/**/*",
                "!www/bower_components/**/*",
                "!config/config.json" ], { base: "./" })
         .pipe(zip(filename))
@@ -226,7 +226,7 @@ gulp.task("db:dump:schema", shell.task("pg_dump " +
     " -h " + config.db.host +
     " -p " + config.db.port +
     " -U " + config.db.user +
-    " -s " + config.db.name + 
+    " -s " + config.db.name +
     " -f ./sql/GigKeeper-schema.sql"));
 
 gulp.task("db:dump:data", function() {
