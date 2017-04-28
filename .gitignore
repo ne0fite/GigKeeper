@@ -1,6 +1,11 @@
-build/*
+dist/*
 node_modules
 www
 .vscode
 config/config.json
 www_src/appConfig.js
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

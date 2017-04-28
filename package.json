@@ -74,6 +74,7 @@
     "gulp-shell": "^0.6.3",
     "gulp-sourcemaps": "^2.6.0",
     "gulp-uglify": "^2.1.2",
+    "gulp-zip": "^4.0.0",
     "jshint": "^2.9.4",
     "jshint-stylish": "^2.2.1",
     "lab": "^13.0.2",

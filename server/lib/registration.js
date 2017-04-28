@@ -173,8 +173,8 @@ Registration.prototype.createAccount = function(payload) {
 
                 // TODO export sender and subject strings - language file?
                 var mailOptions = {
-                    from: "swamsley@gmail.com",
-                    to: "swamsley@gamil.com",
+                    from: config.smtp.fromAddress,
+                    to: config.smtp.fromAddress,
                     subject: "[Gig Keeper] New Account Created",
                 };
 
