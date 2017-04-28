@@ -163,5 +163,23 @@ angular.module('GigKeeper').controller('gigs', [
 
             });
         };
+
+        /**
+         * Export the user's gigs.
+         * 
+         * @return {void}
+         */
+        $scope.export = function () {
+            Gig.export()
+                .then(
+                    function (result) {
+                        var filename = result.headers()['content-disposition'].match(/filename="([^"]*)"/)[1];
+                        var type = result.headers()['content-type'];
+                        var file = new File(result.data, filename, {type: type});
+                        
+                        window.saveAs(file); //save with FileSaver library
+                    }
+                );
+        };
     }
 ]);

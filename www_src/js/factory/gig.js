@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').factory('Gig', [
-    '$resource', 'UrlBuilder',
-    function($resource, UrlBuilder) {
+    '$resource', '$http', 'UrlBuilder',
+    function($resource, $http, UrlBuilder) {
         return {
             data: $resource(UrlBuilder.build('/api/v1/gig'), {}, {
                 index: {
@@ -94,6 +94,9 @@ angular.module('GigKeeper').factory('Gig', [
                     dataTextField: 'name',
                     dataValueField: 'id'
                 };
+            },
+            export: function () {
+                return $http.get(UrlBuilder.build('/api/v1/gig/export'));
             }
         };
     }
