@@ -157,7 +157,7 @@ angular.module('GigKeeper').controller('gigs', [
                 });
 
                 BlockingPromiseManager.add(request);
-            }, function() {window
+            }, function() {
 
             });
         };
