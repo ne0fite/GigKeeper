@@ -399,7 +399,7 @@ var gigPlugin = {
                     ];
 
                     return reply(sheeter.toXLSX(sheets))
-                        .type("application/binary")
+                        .type("application/vnd.ms-excel")
                         .header("Content-Disposition", "attachment; filename=\"gigs.xlsx\"");
                 }).catch(function(err) {
                     return reply(Boom.badRequest(err));
