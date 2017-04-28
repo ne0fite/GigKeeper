@@ -83,7 +83,10 @@ var gigPlugin = {
                     where: {
                         id: request.params.id,
                         profileId: request.auth.credentials.profileId
-                    }
+                    },
+                    include: [{
+                        model: models.tag
+                    }]
                 };
 
                 models.gig.findOne(queryOptions).then(function(result) {
