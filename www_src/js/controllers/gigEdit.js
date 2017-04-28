@@ -1,17 +1,17 @@
 /**
  * @license
  * Copyright (C) 2017 Phoenix Bright Software, LLC
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -26,14 +26,14 @@ angular.module('GigKeeper').controller('GigEditController', [
         BlockingPromiseManager, GoogleMaps, dialogs
     ) {
         $scope.title = $title;
-        
+
         $scope.tagDropdownOptions = Tag.getDropdownOptions();
 
         /**
          * Update the form based on the user's selected route.
-         * 
+         *
          * @param {object} route A route from the Google Directions API
-         * 
+         *
          * @return {void}
          */
         function selectRoute(route) {
@@ -81,17 +81,19 @@ angular.module('GigKeeper').controller('GigEditController', [
             format: 'n0'
         };
 
-        $scope.$watch('form.startDate', function(newValue, oldValue) {
-            var defaultDuration = $rootScope.user.profile.defaultDuration;
+        BlockingPromiseManager.then(function () { //we have to wait for the user's profile to load
+            $scope.$watch('form.startDate', function(newValue, oldValue) {
+                var defaultDuration = $rootScope.user.profile.defaultDuration;
 
-            if (newValue != oldValue && newValue) {
-                if ($scope.form.endDate < $scope.form.startDate) {
-                    $scope.form.endDate = $scope.form.startDate;
+                if (newValue != oldValue && newValue) {
+                    if ($scope.form.endDate < $scope.form.startDate) {
+                        $scope.form.endDate = $scope.form.startDate;
+                    }
+                    if ($rootScope.user.profile.defaultDuration > 0) {
+                        $scope.form.endDate = new Date(newValue.getTime() + defaultDuration * 60 * 1000);
+                    }
                 }
-                if ($rootScope.user.profile.defaultDuration > 0) {
-                    $scope.form.endDate = new Date(newValue.getTime() + defaultDuration * 60 * 1000);
-                }
-            }
+            });
         });
 
         $scope.$watch('form.endDate', function(newValue, oldValue) {
@@ -104,9 +106,9 @@ angular.module('GigKeeper').controller('GigEditController', [
 
         /**
          * Estimate the distance to the specified location
-         * 
+         *
          * @param  {object} $event The Angular event object
-         * 
+         *
          * @return {void}
          */
         $scope.estimateDistance = function ($event) {
@@ -114,7 +116,7 @@ angular.module('GigKeeper').controller('GigEditController', [
 
             var button = angular.element('#estimate_button');
             button.button('loading');
-            
+
             var request = GoogleMaps.data.directionsTo({placeId: $scope.form.place.place_id}).$promise
                 .then(function(response) {
                     selectRouteDialog(response);
@@ -136,9 +138,9 @@ angular.module('GigKeeper').controller('GigEditController', [
 
         /**
          * Save the gig.
-         * 
+         *
          * @param {object} gigForm The editor's form object
-         * 
+         *
          * @return {void}
          */
         $scope.submit = function(gigForm) {
@@ -182,7 +184,7 @@ angular.module('GigKeeper').controller('GigEditController', [
 
         /**
          * Go back to the gig list. Require user confirmation if there are changes.
-         * 
+         *
          * @return {void}
          */
         $scope.cancel = function() {
@@ -197,12 +199,12 @@ angular.module('GigKeeper').controller('GigEditController', [
                 $state.go('gigs');
             }
         };
-        
+
         /**
          * Open the tag editor dialog, and refresh the list on success.
-         * 
+         *
          * @param  {object} $event The Angular event object
-         * 
+         *
          * @return {void}
          */
         $scope.addTag = function($event) {
@@ -215,7 +217,7 @@ angular.module('GigKeeper').controller('GigEditController', [
                     //clean the result to prevent an error
                     delete result.$promise;
                     delete result.$resolved;
-                    
+
                     $scope.tagDropdownOptions.dataSource.add(result);
                     $scope.form.tags.push(result);
                 },
@@ -225,9 +227,9 @@ angular.module('GigKeeper').controller('GigEditController', [
 
         /**
          * Open a dialog that allows the user to select a route.
-         * 
+         *
          * @param {object} DirectionsResult The result of a successful request to the Google Directions API
-         * 
+         *
          * @return {void}
          */
         function selectRouteDialog(DirectionsResult) {
@@ -249,4 +251,4 @@ angular.module('GigKeeper').controller('GigEditController', [
             });
         }
     }
-]);  
+]);
