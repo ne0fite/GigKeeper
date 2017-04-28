@@ -22,9 +22,6 @@ html {
 }
 
 body {
-    /* Margin bottom by footer height */
-    margin-bottom: 60px;
-
     > .container {
         padding-top: 60px;
         padding-bottom: 15px;
@@ -33,12 +30,9 @@ body {
 
 footer {
     position: absolute;
-    bottom: 0;
+    top: 100%;
     width: 100%;
-    /* Set the fixed height of the footer here */
-    height: 60px;
     background-color: #f5f5f5;
-    margin-top: 10px;
 
     > .container {
         padding-right: 15px;
