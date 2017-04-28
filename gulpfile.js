@@ -24,7 +24,8 @@ var gulp = require("gulp"),
     gkutil = require("./util/gulp-gk.js"),
     config = require("./config/config.js"),
     fs = require("fs"),
-    zip = require("gulp-zip");
+    zip = require("gulp-zip"),
+    clean = require("gulp-clean");
 
 var globs = {
         config: "config/config.json",
@@ -200,22 +201,27 @@ gulp.task("build", ["config", "html", "sass", "scripts", "images"]);
 
 gulp.task("default", ["serve"]);
 
-gulp.task("archive", ["build"], function() {
+gulp.task("dist:clean", function() {
+    gulp.src("dist/*", { read: false })
+        .pipe(clean());
+});
+
+gulp.task("dist:build", ["build", "dist:clean"], function() {
 
     var filename = "gigkeeper.zip";
 
     gulp.src([ ".ebextensions",
-               ".bowerrc",
-               "bower.json",
-               "config/**/*",
-               "LICENSE.md",
-               "main.js",
-               "package.json",
-               "README.md",
-               "server/**/*",
-               "www/**/*",
-               "!www/bower_components/**/*",
-               "!config/config.json" ], { base: "./" })
+        ".bowerrc",
+        "bower.json",
+        "config/**/*",
+        "LICENSE.md",
+        "main.js",
+        "package.json",
+        "README.md",
+        "server/**/*",
+        "www/**/*",
+        "!www/bower_components/**/*",
+        "!config/config.json" ], { base: "./" })
         .pipe(zip(filename))
         .pipe(gulp.dest("dist"));
 });
