@@ -10,19 +10,19 @@
         <button class="btn btn-default pull-left" ng-click="add()"><i class="fa fa-plus"></i> Add New</button>
         <button class="btn btn-default pull-left" ng-click="editSelected()" ng-disabled="!selected">
             <i class="fa fa-edit"></i>
-            Edit Selected
+            Edit
             </button>
         <button class="btn btn-danger pull-right" ng-click="deleteSelected()" ng-disabled="!selected">
             <i class="fa fa-trash"></i>
-            Delete Selected
+            Delete
         </button>
         <div class="clearfix"></div>
     </div>
 
     <div ui-grid="gridOptions" ui-grid-selection ng-dblclick="editSelected($event)"></div>
-    
+
     <div class="action-buttons">
-        <button class="btn btn-primary pull-right" ng-click="export()">
+        <button class="btn btn-primary pull-right" ng-click="export()" ng-if="gridOptions.data.length">
             <i class="fa fa-download"></i>
             Download
         </button>
