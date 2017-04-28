@@ -173,7 +173,9 @@ CREATE TABLE users (
     scope character varying(255),
     "createdAt" timestamp with time zone NOT NULL,
     "updatedAt" timestamp with time zone NOT NULL,
-    "profileId" uuid NOT NULL
+    "profileId" uuid NOT NULL,
+    "resetToken" character(64),
+    "resetTokenExpiresAt" timestamp with time zone
 );
 
 

@@ -32,6 +32,7 @@ if (fs.existsSync(__dirname + "/config.json")) {
 // create missing properties
 configJson.app = configJson.app || {};
 configJson.app.cookie = configJson.app.cookie || {};
+configJson.api = configJson.api || {};
 configJson.db = configJson.db || {};
 configJson.smtp = configJson.smtp || {};
 configJson.google = configJson.google || {};
@@ -53,6 +54,10 @@ module.exports = {
             secret: process.env.COOKIE_SECRET || configJson.app.cookie.secret || "tempdevcookieneedstobecreated123"
         }
     },
+    api: {
+        host: process.env.API_HOST || configJson.api.host || "localhost",
+        port: process.env.API_PORT || configJson.api.port || 8000
+    },
     db: {
         host: dbconfig[env].host,
         port: dbconfig[env].port,
@@ -63,7 +68,7 @@ module.exports = {
         logging: dbconfig[env].logging
     },
     smtp: {
-        enabled: process.env.SMTP_ENABLED || configJson.smtp.enabled || false,
+        enabled: process.env.SMTP_ENABLED == "true" || configJson.smtp.enabled || false,
         fromAddress: process.env.SMTP_FROM_ADDRESS || configJson.smtp.fromAddress || null,
         singleAddress: process.env.SMTP_SINGLE_ADDRESS || configJson.smtp.singleAddress || null,
         service: process.env.SMTP_SERVICE || configJson.smtp.service || "gmail",

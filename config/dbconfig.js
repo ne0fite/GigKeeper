@@ -43,7 +43,7 @@ module.exports = {
         host: process.env.DB_HOST || configJson.db.host || "localhost",
         port: process.env.DB_PORT || configJson.db.port || 5432,
         dialect: process.env.DB_DIALECT || configJson.db.dialect || "postgres",
-        logging: process.env.DB_LOGGING || configJson.db.logging
+        logging: process.env.DB_LOGGING == "true" || configJson.db.logging
     },
     stage: {
         username: process.env.DB_USER || configJson.db.user || "gigkeeper",
@@ -52,7 +52,7 @@ module.exports = {
         host: process.env.DB_HOST || configJson.db.host || "localhost",
         port: process.env.DB_PORT || configJson.db.port || 5432,
         dialect: process.env.DB_DIALECT || configJson.db.dialect || "postgres",
-        logging: process.env.DB_LOGGING || configJson.db.logging
+        logging: process.env.DB_LOGGING == "true" || configJson.db.logging
     },
     production: {
         username: process.env.DB_USER || configJson.db.user || "gigkeeper",
@@ -61,6 +61,6 @@ module.exports = {
         host: process.env.DB_HOST || configJson.db.host || "localhost",
         port: process.env.DB_PORT || configJson.db.port || 5432,
         dialect: process.env.DB_DIALECT || configJson.db.dialect || "postgres",
-        logging: process.env.DB_LOGGING || configJson.db.logging
+        logging: process.env.DB_LOGGING == "true" || configJson.db.logging
     }
 };

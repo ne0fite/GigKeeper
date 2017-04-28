@@ -2,13 +2,6 @@
   "name": "gigkeeper",
   "version": "0.0.1",
   "description": "Gig management to track mileage and calendar entries for gigs",
-  "keywords": [
-    "util",
-    "functional",
-    "server",
-    "client",
-    "browser"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/ne0fite/GigKeeper.git"
@@ -29,15 +22,22 @@
     }
   ],
   "main": "main.js",
+  "scripts": {
+    "prestart": "./node_modules/.bin/bower install",
+    "start": "node main.js"
+  },
   "engines": {
-    "node": "6.9.4"
+    "node": "6.10.0"
   },
   "dependencies": {
     "@google/maps": "^0.3.1",
     "bcrypt": "^0.8.7",
     "bluebird": "^3.4.6",
     "boom": "^4.2.0",
+    "bower": "^1.8.0",
+    "chance": "^1.0.6",
     "es6-promise": "^4.1.0",
+    "handlebars": "^4.0.6",
     "handlebars-intl": "^1.1.2",
     "hapi": "^15.2.0",
     "hapi-auth-cookie": "^6.1.1",
@@ -57,7 +57,6 @@
     "xlsx": "^0.9.12"
   },
   "devDependencies": {
-    "chance": "^1.0.6",
     "code": "^4.0.0",
     "gulp": "^3.9.1",
     "gulp-angular-htmlify": "^2.3.0",
@@ -76,6 +75,7 @@
     "gulp-shell": "^0.6.3",
     "gulp-sourcemaps": "^2.6.0",
     "gulp-uglify": "^2.1.2",
+    "gulp-zip": "^4.0.0",
     "jshint": "^2.9.4",
     "jshint-stylish": "^2.2.1",
     "lab": "^13.0.2",

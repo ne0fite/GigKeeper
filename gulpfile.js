@@ -23,7 +23,8 @@ var gulp = require("gulp"),
     noop = require("gulp-noop"),
     gkutil = require("./util/gulp-gk.js"),
     config = require("./config/config.js"),
-    fs = require("fs");
+    fs = require("fs"),
+    zip = require("gulp-zip");
 
 var globs = {
         config: "config/config.json",
@@ -112,8 +113,8 @@ gulp.task("config", function() {
         appConfigString = "var appConfig = ";
 
     appConfig.api = {
-        host: config.app.host,
-        port: config.app.port
+        host: config.api.host,
+        port: config.api.port
     };
 
     appConfigString += JSON.stringify(appConfig) + ";";
@@ -199,7 +200,25 @@ gulp.task("build", ["config", "html", "sass", "scripts", "images"]);
 
 gulp.task("default", ["serve"]);
 
+gulp.task("archive", function() {
 
+    var filename = "gigkeeper.zip";
+
+    gulp.src([ ".ebextensions",
+               ".bowerrc", 
+               "bower.json", 
+               "config/**/*", 
+               "LICENSE.md", 
+               "main.js", 
+               "package.json", 
+               "README.md", 
+               "server/**/*", 
+               "www/**/*", 
+               "!www/bower_components/**/*",
+               "!config/config.json" ], { base: "./" })
+        .pipe(zip(filename))
+        .pipe(gulp.dest("dist"));
+});
 
 /*** Server tasks ***/
 
