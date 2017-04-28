@@ -5,7 +5,7 @@
             {{ title }}
         </h1>
     </div>
-    
+
     <form name="gigForm" ng-submit="submit(gigForm)" novalidate>
 
         <div class="alert alert-danger" ng-if="errorMessage">{{ errorMessage }}</div>
@@ -14,10 +14,10 @@
         <div class="form-group" ng-class="{ 'has-error': gigForm.$submitted && gigForm.contractorId.$invalid }">
             <label for="contractorId">Contractor</label>
             <div>
-                <select id="contractorId" 
-                        name="contractorId" 
+                <select id="contractorId"
+                        name="contractorId"
                         class="form-control"
-                        ng-model="form.contractorId" 
+                        ng-model="form.contractorId"
                         required>
                     <option value="">Select a Contractor</option>
                     <option ng-repeat="contractor in contractors track by contractor.id" ng-value="contractor.id">
@@ -32,12 +32,12 @@
 
         <div class="form-group" ng-class="{ 'has-error': gigForm.$submitted && gigForm.name.$invalid }">
             <label for="gig_name">Description</label>
-            <input type="text" 
-                    name="name" 
+            <input type="text"
+                    name="name"
                     kendo-combo-box
                     options="descriptionsComboOptions"
-                    ng-model="form.name" 
-                    id="gig_name" 
+                    ng-model="form.name"
+                    id="gig_name"
                     style="width: 100%;"
                     required />
             <div ng-messages="gigForm.name.$error" role="alert" ng-if="gigForm.$submitted">
@@ -47,20 +47,20 @@
 
         <div class="form-group" ng-class="{ 'has-error': gigForm.$submitted && gigForm.place.$invalid }">
             <label for="place">Location</label>
-            <input type="text" 
-                    id="place" 
-                    name="place" 
+            <input type="text"
+                    id="place"
+                    name="place"
                     class="form-control"
-                    g-places-autocomplete 
+                    g-places-autocomplete
                     data-force-selection="true"
                     ng-model="form.place"
-                    autocomplete="off" 
+                    autocomplete="off"
                     required />
             <div ng-messages="gigForm.name.$error" role="alert" ng-if="gigForm.$submitted">
                 <p class="help-block" ng-message="required">Choose a location</p>
             </div>
         </div>
-        
+
         <div class="form-group" ng-class="{ 'has-error': gigForm.$submitted && gigForm.startDate.$invalid }">
             <label for="startDate">Start</label>
             <div style="width: 100%;">
@@ -88,25 +88,26 @@
         <div class="row">
             <div class="col-md-4 form-group">
                 <div><label for="distance">Distance (miles)</label></div>
-                <input name="distance" 
-                        id="distance" 
+                <input name="distance"
+                        id="distance"
                         kendo-numeric-text-box
                         options="distanceOptions"
                         ng-model="form.distance" />
             </div>
             <div class="col-md-4 form-group">
                 <div><label for="duration">Travel Time (minutes)</label></div>
-                <input name="duration" 
-                        id="duration" 
+                <input name="duration"
+                        id="duration"
                         kendo-numeric-text-box
                         options="durationOptions"
                         ng-model="form.duration" />
             </div>
             <div class="col-md-4 form-group" ng-if="form.place && user.profile.homeBasePlace">
                 <label class="block">&nbsp;</label>
-                <button class="btn btn-default btn-estimate" 
-                    id="estimate_button" 
-                    ng-click="estimateDistance($event)" 
+                <button type="button"
+                    class="btn btn-default btn-estimate"
+                    id="estimate_button"
+                    ng-click="estimateDistance($event)"
                     data-loading-text="<i class='fa fa-spinner fa-spin'></i> Estimating...">
                     <i class="fa fa-car"></i> Estimate
                 </button>
@@ -122,8 +123,8 @@
             </a>
             <select id="tags"
                     name="tags"
-                    kendo-multi-select 
-                    options="tagDropdownOptions" 
+                    kendo-multi-select
+                    options="tagDropdownOptions"
                     k-ng-model="form.tags"></select>
         </div>
 
@@ -133,15 +134,15 @@
         </div>
 
         <div class="form-group text-right">
-            <button class="btn btn-primary" 
-                    id="save_button" 
-                    type="submit" 
+            <button class="btn btn-primary"
+                    id="save_button"
+                    type="submit"
                     data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving...">
                     <i class="fa fa-check"></i> Save
             </button>
-            <button class="btn btn-warning" 
-                    id="cancel_button" 
-                    type="button" 
+            <button class="btn btn-warning"
+                    id="cancel_button"
+                    type="button"
                     ng-click="cancel()">
                     <i class="fa fa-times"></i> Cancel
             </button>
