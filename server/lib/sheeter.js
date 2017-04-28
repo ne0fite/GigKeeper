@@ -1,17 +1,17 @@
 /**
  * @license
  * Copyright (C) 2017 Phoenix Bright Software, LLC
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -21,39 +21,39 @@
 var XLSX = require("xlsx");
 
 /**
- * This service encapsulates spreadsheet generation functionality. Sorry for the sheety jokes.
+ * This service encapsulates spreadsheet generation functionality. I make no apologies for my sheety sense of humor.
  * Some parts are loosely based on this demo: http://sheetjs.com/demos/writexlsx.html
- * 
+ *
  * @return {function}
  */
-module.exports = function() {
+module.exports = (function() {
     var model = {};
-    
+
     /**
      * Converts a date string to a numeric Excel date.
-     * 
+     *
      * @param {string} date A date string that Date knows how to handle
-     * 
+     *
      * @return {number} The date's numeric representation in Excel
      */
     function dateToExcel(date) {
         var epoch = Date.parse(date);
-        
+
         return (epoch - new Date(Date.UTC(1899, 11, 30))) / (24 * 60 * 60 * 1000);
     }
 
     /**
      * Turn an array full of data into an object that conforms to the js-xlsx input spec.
      * https://github.com/SheetJS/js-xlsx
-     * 
-     * @param {array} data 
-     * 
+     *
+     * @param {array} data
+     *
      * @return {object} A sheet object
      */
     function arrayToSheet(data) {
         var sheet = {};
         var i, j, row, cell;
-        
+
         //the range object contains the spreadsheet's dimensions (TBD)
         var range = {
             s: {
@@ -78,7 +78,7 @@ module.exports = function() {
                 range.s.c = range.s.c > j ? j : range.s.c;
                 range.e.r = range.e.r < i ? i : range.e.r;
                 range.e.c = range.e.c < j ? j : range.e.c;
-                
+
                 cell = {
                     t: "s",     //type (default to string)
                     v: row[j]   //value
@@ -87,6 +87,8 @@ module.exports = function() {
                 if(cell.v === null) {
                     continue;
                 }
+
+                var cellReference = XLSX.utils.encode_cell({c: j, r: i});
 
                 //determine the cell's type, and encode it if necessary
                 if(typeof cell.v === "number") {
@@ -101,10 +103,10 @@ module.exports = function() {
                     cell.v = dateToExcel(cell.v);
                 }
 
-                row[j] = cell;
+                sheet[cellReference] = cell;
             }
         }
-        
+
         if(range.s.c < 10000000) {
             sheet["!ref"] = XLSX.utils.encode_range(range);
         }
@@ -115,7 +117,7 @@ module.exports = function() {
     /**
      * Generate an XLSX document from the provided array. Requires that all objects in the array have the same keys and
      * length. The sheets should conform to this structure:
-     * 
+     *
      * [
      *     {
      *         name: "Your Sheet Name",
@@ -124,12 +126,12 @@ module.exports = function() {
      *         ]
      *     }
      * ]
-     * 
+     *
      * @param {object[]} sheets The data to put into the spreadsheet
-     * 
-     * @return {object} The workbook
+     *
+     * @return {object} The workbook Buffer
      */
-    model.toXLSX = function (sheets) {
+    model.toXLSX = (sheets) => {
         if(!sheets.length) {
             throw new Error("There is no data to export.");
         }
@@ -139,26 +141,29 @@ module.exports = function() {
             Sheets: []
         };
 
-        sheets.forEach(function (freshSheet) {
+        sheets.forEach((freshSheet) => {
             var headings = Object.keys(freshSheet.data[0]);
-            var preparedData = freshSheet.data.map(function (row) {
-                return Object.keys(row).map(function (key) {
+            var preparedData = freshSheet.data.map((row) => {
+                return Object.keys(row).map((key) => {
                     return row[key];
                 });
             });
             preparedData.unshift(headings);
+
             var sheet = arrayToSheet(preparedData);
 
             workbook.SheetNames.push(freshSheet.name);
-            workbook.Sheets.push(sheet);
+            workbook.Sheets[freshSheet.name] = sheet;
         });
 
-        return XLSX.write(workbook, {
+        var xlsx = XLSX.write(workbook, {
             bookType: "xlsx",
             bookSST: true,
             type: "binary"
         });
+
+        return xlsx instanceof Buffer ? xlsx : new Buffer(xlsx, "binary");
     };
 
     return model;
-};
+})();
