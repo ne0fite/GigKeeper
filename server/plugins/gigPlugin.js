@@ -1,17 +1,17 @@
 /**
  * @license
  * Copyright (C) 2017 Phoenix Bright Software, LLC
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -21,6 +21,7 @@ var Joi = require("joi");
 var Promise = require("bluebird");
 
 var place = require("../lib/place")();
+var sheeter = require("../lib/sheeter");
 
 var gigPlugin = {
 
@@ -327,7 +328,7 @@ var gigPlugin = {
                     if (!gig) {
                         throw new Error("Gig not found");
                     }
-                    
+
                     if (!gig.place) {
                         throw new Error("Gig does not have a location");
                     }
@@ -335,10 +336,71 @@ var gigPlugin = {
                     placeId1 = request.auth.credentials.profile.homeBasePlace.place_id;
                     placeId2 = gig.place.place_id;
                     distance = place.distance(placeId1, placeId2);
-                    
+
                     return distance.asPromise();
                 }).then(function(result) {
                     reply(result.json);
+                }).catch(function(err) {
+                    return reply(Boom.badRequest(err));
+                });
+            }
+        });
+
+        server.route({
+            method: "GET",
+            path: "/api/v1/gig/export",
+            config: {
+                cors: {
+                    origin: ["*"]
+                }
+            },
+            handler: function(request, reply) {
+
+                var db = server.plugins["hapi-sequelize"].gigkeeperdb;
+                var models = db.sequelize.models;
+
+                var queryOptions = {
+                    where: {
+                        profileId: request.auth.credentials.profileId
+                    },
+                    include: [{
+                        model: models.contractor,
+                        required: true
+                    }, {
+                        model: models.tag
+                    }],
+                    order: [ [ "startDate", "desc" ]]
+                };
+
+                models.gig.findAll(queryOptions).then((gigs) => {
+                    var preparedGigs = gigs.map((gigInstance) => {
+                        var gig = gigInstance.get({plain: true});
+
+                        delete gig.id;
+                        delete gig.contractorId;
+                        delete gig.profileId;
+
+                        gig.contractor = gig.contractor.name;
+                        gig.place = gig.place.formatted_address;
+                        gig.tags = gig.tags
+                            .map((tag) => {
+                                return tag.name;
+                            })
+                            .join(", ");
+
+                        return gig;
+                    });
+
+                    var sheets = [
+                        {
+                            name: "Gigs",
+                            data: preparedGigs
+                        }
+                    ];
+
+                    return reply(sheeter.toXLSX(sheets))
+                        .type("application/binary")
+                        .header("Content-Disposition", "attachment; filename=\"gigs.xlsx\"");
                 }).catch(function(err) {
                     return reply(Boom.badRequest(err));
                 });
