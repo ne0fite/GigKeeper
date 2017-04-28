@@ -1,17 +1,17 @@
 /**
  * @license
  * Copyright (C) 2017 Phoenix Bright Software, LLC
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -19,11 +19,9 @@
 'use strict';
 
 angular.module('GigKeeper').controller('gigs', [
-    '$scope', '$state', 'uiGridConstants', 'dialogs', 'contractors', 'Gig', 'UrlBuilder',
-    'BlockingPromiseManager',
+    '$scope', '$state', 'uiGridConstants', 'dialogs', 'contractors', 'Gig', 'UrlBuilder', 'BlockingPromiseManager',
     function(
-        $scope, $state, uiGridConstants, dialogs, contractors, Gig, UrlBuilder,
-        BlockingPromiseManager
+        $scope, $state, uiGridConstants, dialogs, contractors, Gig, UrlBuilder, BlockingPromiseManager
     ) {
 
         $scope.selected = null;
@@ -127,9 +125,9 @@ angular.module('GigKeeper').controller('gigs', [
 
         /**
          * Edit the selected UI Grid row.
-         * 
+         *
          * @param {object} [$event] Angular event
-         * 
+         *
          * @return {void}
          */
         $scope.editSelected = function($event) {
@@ -166,20 +164,13 @@ angular.module('GigKeeper').controller('gigs', [
 
         /**
          * Export the user's gigs.
-         * 
+         *
          * @return {void}
          */
         $scope.export = function () {
-            Gig.export()
-                .then(
-                    function (result) {
-                        var filename = result.headers()['content-disposition'].match(/filename="([^"]*)"/)[1];
-                        var type = result.headers()['content-type'];
-                        var file = new File(result.data, filename, {type: type});
-                        
-                        window.saveAs(file); //save with FileSaver library
-                    }
-                );
+            Gig.data.export().$promise.then(function (result) {
+                window.saveAs(result.blob, result.filename);
+            });
         };
     }
 ]);
