@@ -19,9 +19,9 @@
 'use strict';
 
 angular.module('GigKeeper').controller('gigs', [
-    '$scope', '$state', 'uiGridConstants', 'dialogs', 'contractors', 'Gig', 'UrlBuilder', 'BlockingPromiseManager',
+    '$scope', '$state', '$window', 'uiGridConstants', 'dialogs', 'contractors', 'Gig', 'UrlBuilder', 'BlockingPromiseManager',
     function(
-        $scope, $state, uiGridConstants, dialogs, contractors, Gig, UrlBuilder, BlockingPromiseManager
+        $scope, $state, $window, uiGridConstants, dialogs, contractors, Gig, UrlBuilder, BlockingPromiseManager
     ) {
 
         $scope.selected = null;
@@ -157,7 +157,7 @@ angular.module('GigKeeper').controller('gigs', [
                 });
 
                 BlockingPromiseManager.add(request);
-            }, function() {
+            }, function() {window
 
             });
         };
@@ -169,7 +169,7 @@ angular.module('GigKeeper').controller('gigs', [
          */
         $scope.export = function () {
             Gig.data.export().$promise.then(function (result) {
-                window.saveAs(result.blob, result.filename);
+                $window.saveAs(result.blob, result.filename);
             });
         };
     }

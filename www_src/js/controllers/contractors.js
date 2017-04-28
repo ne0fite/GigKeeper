@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('contractors', [
-    '$scope', '$uibModal', 'dialogs', 'Contractor', 'BlockingPromiseManager',
-    function($scope, $uibModal, dialogs, Contractor, BlockingPromiseManager) {
+    '$scope', '$window', '$uibModal', 'dialogs', 'Contractor', 'BlockingPromiseManager',
+    function($scope, $window, $uibModal, dialogs, Contractor, BlockingPromiseManager) {
 
         $scope.selected = null;
 
@@ -147,7 +147,7 @@ angular.module('GigKeeper').controller('contractors', [
          */
         $scope.export = function () {
             Contractor.data.export().$promise.then(function (result) {
-                window.saveAs(result.blob, result.filename);
+                $window.saveAs(result.blob, result.filename);
             });
         };
     }
