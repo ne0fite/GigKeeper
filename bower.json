@@ -20,7 +20,8 @@
     "angular-messages": "^1.6.4",
     "angular-blocking-promise-manager": "https://github.com/zero-degrees/angular-blocking-promise-manager.git",
     "angular-ui-bootstrap-datetimepicker": "^2.5.0",
-    "ngmap":"^1.18.4"
+    "ngmap": "^1.18.4",
+    "file-saver": "^1.3.3"
   },
   "devDependencies": {},
   "resolutions": {

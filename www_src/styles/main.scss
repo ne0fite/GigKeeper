@@ -68,7 +68,7 @@ code {
 }
 
 .action-buttons {
-    padding: 0 0 10px 0;
+    margin-bottom: 10px;
 
     button {
         margin-left: 0;
@@ -79,6 +79,11 @@ code {
             margin-left: 10px;
         }
     }
+}
+
+.ui-grid + .action-buttons {
+    margin-bottom: 0;
+    margin-top: 10px;
 }
 
 .bg-faded {

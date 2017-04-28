@@ -1,17 +1,17 @@
 /**
  * @license
  * Copyright (C) 2017 Phoenix Bright Software, LLC
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -41,6 +41,19 @@ angular.module('GigKeeper').factory('Contractor', [
                     action: 'delete',
                     method: 'DELETE',
                     url: UrlBuilder.build('/api/v1/contractor/:id')
+                },
+                export: {
+                    action: 'export',
+                    method: 'get',
+                    url: UrlBuilder.build('/api/v1/contractor/export'),
+                    responseType: 'arraybuffer',
+                    cache: false,
+                    transformResponse: function (data, headers) {
+                        return {
+                            blob: new Blob([data], {type: 'application/vnd.ms-excel'}),
+                            filename: headers()['content-disposition'].match(/filename="([^"]*)"/)[1]
+                        };
+                    }
                 }
             }),
             getModel: function() {
