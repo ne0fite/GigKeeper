@@ -35,7 +35,8 @@ var mapPlugin = {
                 },
                 validate: {
                     params: {
-                        placeId: Joi.string().required()
+                        fromPlaceId: Joi.string().required(),
+                        toPlaceId: Joi.string().required()
                     }
                 }
             },
@@ -60,7 +61,8 @@ var mapPlugin = {
                 },
                 validate: {
                     params: {
-                        placeId: Joi.string().required()
+                        fromPlaceId: Joi.string().required(),
+                        toPlaceId: Joi.string().required()
                     }
                 }
             },
