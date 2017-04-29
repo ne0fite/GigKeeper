@@ -44,6 +44,7 @@ angular.module('GigKeeper').controller('GigEditController', [
         gig.tags = gig.tags ? gig.tags : [];
         $scope.form = {
             name: gig.name,
+            startPlace: angular.fromJson(gig.startPlace),
             place: angular.fromJson(gig.place),
             distance: gig.distance,
             duration: gig.duration,
@@ -92,6 +93,10 @@ angular.module('GigKeeper').controller('GigEditController', [
                     if ($rootScope.user.profile.defaultDuration > 0) {
                         $scope.form.endDate = new Date(newValue.getTime() + defaultDuration * 60 * 1000);
                     }
+                }
+
+                if(!$scope.form.startPlace) {
+                    $scope.form.startPlace = $rootScope.user.profile.homeBasePlace;
                 }
             });
         });

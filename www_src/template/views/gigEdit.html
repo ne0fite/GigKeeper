@@ -45,8 +45,24 @@
             </div>
         </div>
 
+        <div class="form-group" ng-class="{ 'has-error': gigForm.$submitted && gigForm.startPlace.$invalid }">
+            <label for="startPlace">Starting location</label>
+            <input type="text"
+                    id="startPlace"
+                    name="startPlace"
+                    class="form-control"
+                    g-places-autocomplete
+                    data-force-selection="true"
+                    ng-model="form.startPlace"
+                    autocomplete="off"
+                    required />
+            <div ng-messages="gigForm.name.$error" role="alert" ng-if="gigForm.$submitted">
+                <p class="help-block" ng-message="required">Choose a location</p>
+            </div>
+        </div>
+
         <div class="form-group" ng-class="{ 'has-error': gigForm.$submitted && gigForm.place.$invalid }">
-            <label for="place">Location</label>
+            <label for="place">Destination</label>
             <input type="text"
                     id="place"
                     name="place"
