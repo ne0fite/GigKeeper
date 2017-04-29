@@ -96,7 +96,7 @@ angular.module('GigKeeper').controller('GigEditController', [
                 }
 
                 if(!$scope.form.startPlace) {
-                    $scope.form.startPlace = $rootScope.user.profile.homeBasePlace;
+                    $scope.resetStartPlace();
                 }
             });
         });
@@ -108,6 +108,15 @@ angular.module('GigKeeper').controller('GigEditController', [
                 }
             }
         });
+
+        /**
+         * Reset the starting location to the user's home base.
+         *
+         * @return {void}
+         */
+        $scope.resetStartPlace = function () {
+            $scope.form.startPlace = $rootScope.user.profile.homeBasePlace;
+        };
 
         /**
          * Estimate the distance to the specified location
@@ -122,7 +131,10 @@ angular.module('GigKeeper').controller('GigEditController', [
             var button = angular.element('#estimate_button');
             button.button('loading');
 
-            var request = GoogleMaps.data.directionsTo({placeId: $scope.form.place.place_id}).$promise
+            var request = GoogleMaps.data.directionsTo({
+                fromPlaceId: $scope.form.startPlace.place_id,
+                toPlaceId: $scope.form.place.place_id
+            }).$promise
                 .then(function(response) {
                     selectRouteDialog(response);
                     button.button('reset');
