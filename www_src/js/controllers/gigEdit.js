@@ -169,6 +169,7 @@ angular.module('GigKeeper').controller('GigEditController', [
 
                 var payload = {
                     name: $scope.form.name,
+                    startPlace: $scope.form.startPlace,
                     place: $scope.form.place,
                     distance: $scope.form.distance,
                     duration: $scope.form.duration,
