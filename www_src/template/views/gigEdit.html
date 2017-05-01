@@ -78,7 +78,7 @@
                             </div>
                         </div>
                     </div>
-                </div>                
+                </div>
             </div>
         </div>
 
@@ -108,10 +108,40 @@
 
                     <div class="col-sm-12 form-group" ng-class="{ 'has-error': gigForm.$submitted && gigForm.originPlace.$invalid }">
                         <label>I will be coming from</label>
-                        <div>
-                            <input type="radio" name="originType[]" id="originType_home" value="home" ng-model="form.originType"> <label for="originType_home">Home</label>
-                            <input type="radio" name="originType[]" id="originType_gig" value="gig" ng-model="form.originType"> <label for="originType_gig">Another Gig</label>
-                            <input type="radio" name="originType[]" id="originType_other" value="other" ng-model="form.originType"> <label for="originType_other">Someplace Else</label>
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-4">
+                                <input type="radio"
+                                    name="originType[]"
+                                    id="originType_home"
+                                    value="home"
+                                    ng-model="form.originType">
+                                <label for="originType_home"
+                                    ng-class="{'text-primary': form.originType == 'home', 'text-muted': form.originType != 'home'}">
+                                    Home
+                                </label>
+                            </div>
+                            <div class="col-xs-6 col-sm-4">
+                                <input type="radio"
+                                    name="originType[]"
+                                    id="originType_gig"
+                                    value="gig"
+                                    ng-model="form.originType">
+                                <label for="originType_gig"
+                                    ng-class="{'text-primary': form.originType == 'gig', 'text-muted': form.originType != 'gig'}">
+                                    Another Gig
+                                </label>
+                            </div>
+                            <div class="col-xs-6 col-sm-4">
+                                <input type="radio"
+                                    name="originType[]"
+                                    id="originType_other"
+                                    value="other"
+                                    ng-model="form.originType">
+                                <label for="originType_other"
+                                    ng-class="{'text-primary': form.originType == 'other', 'text-muted': form.originType != 'other'}">
+                                    Someplace Else
+                                </label>
+                            </div>
                         </div>
                         <div>
                             <select ng-show="form.originType == 'gig'"

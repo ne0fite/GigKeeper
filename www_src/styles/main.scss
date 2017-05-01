@@ -35,17 +35,12 @@ footer {
     background-color: #f5f5f5;
 
     > .container {
-        padding-right: 15px;
-        padding-left: 15px;
+        padding: 20px 15px;
     }
 
     ul {
         margin-bottom: 0;
     }
-}
-
-.container .text-muted {
-    margin: 20px 0;
 }
 
 code {
