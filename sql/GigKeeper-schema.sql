@@ -30,6 +30,19 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 SET search_path = public, pg_catalog;
 
+--
+-- Name: enum_gigs_originType; Type: TYPE; Schema: public; Owner: gigkeeper
+--
+
+CREATE TYPE "enum_gigs_originType" AS ENUM (
+    'home',
+    'gig',
+    'other'
+);
+
+
+ALTER TYPE "enum_gigs_originType" OWNER TO gigkeeper;
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -101,7 +114,10 @@ CREATE TABLE gigs (
     "createdAt" timestamp with time zone NOT NULL,
     "updatedAt" timestamp with time zone NOT NULL,
     "profileId" uuid NOT NULL,
-    "contractorId" uuid NOT NULL
+    "contractorId" uuid,
+    "originPlace" jsonb,
+    "originType" "enum_gigs_originType" DEFAULT 'home'::"enum_gigs_originType" NOT NULL,
+    "originGigId" uuid
 );
 
 
@@ -261,6 +277,14 @@ CREATE UNIQUE INDEX invites_email_code ON invites USING btree (email, code);
 
 
 --
+-- Name: gigs contractorId_foreign_idx; Type: FK CONSTRAINT; Schema: public; Owner: gigkeeper
+--
+
+ALTER TABLE ONLY gigs
+    ADD CONSTRAINT "contractorId_foreign_idx" FOREIGN KEY ("contractorId") REFERENCES contractors(id);
+
+
+--
 -- Name: contractors contractors_profileId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: gigkeeper
 --
 
@@ -298,6 +322,14 @@ ALTER TABLE ONLY gig_tags
 
 ALTER TABLE ONLY gigs
     ADD CONSTRAINT "gigs_contractorId_fkey" FOREIGN KEY ("contractorId") REFERENCES contractors(id) ON UPDATE CASCADE;
+
+
+--
+-- Name: gigs gigs_originGigId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: gigkeeper
+--
+
+ALTER TABLE ONLY gigs
+    ADD CONSTRAINT "gigs_originGigId_fkey" FOREIGN KEY ("originGigId") REFERENCES gigs(id);
 
 
 --
