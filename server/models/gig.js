@@ -22,8 +22,9 @@ module.exports = function(sequelize, DataTypes) {
     return sequelize.define("gig", {
         id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV1, primaryKey: true, allowNull: false },
         name: { type: DataTypes.STRING, allowNull: false },
-        startPlace: {  type: DataTypes.JSONB, allowNull: true },
-        place: {  type: DataTypes.JSONB, allowNull: true },
+        originType: { type: DataTypes.ENUM("home", "gig", "other"), allowNull: false, defaultValue: "home" },
+        originPlace: { type: DataTypes.JSONB, allowNull: true },
+        place: { type: DataTypes.JSONB, allowNull: true },
         distance: { type: DataTypes.DECIMAL(8, 2), allowNull: true },
         duration: { type: DataTypes.DECIMAL(8, 2), allowNull: true },
         startDate: { type: DataTypes.DATE, allowNull: false },
@@ -39,7 +40,7 @@ module.exports = function(sequelize, DataTypes) {
                 });
                 models.gig.belongsTo(models.contractor, {
                     foreignKey: {
-                        allowNull: false
+                        allowNull: true
                     }
                 });
                 models.gig.belongsToMany(models.tag, {
@@ -48,6 +49,12 @@ module.exports = function(sequelize, DataTypes) {
                         unique: false
                     },
                     foreignKey: "gigId"
+                });
+                models.gig.belongsTo(models.gig, {
+                    as: "originGig",
+                    foreignKey: {
+                        allowNull: true
+                    }
                 });
             }
         }

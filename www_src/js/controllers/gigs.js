@@ -39,19 +39,6 @@ angular.module('GigKeeper').controller('gigs', [
             showGridFooter: true,
             noUnselect: true,
             columnDefs: [{
-                name: 'Contractor',
-                field: 'contractor.name',
-                type: 'string',
-                filter: {
-                    type: uiGridConstants.filter.SELECT,
-                    selectOptions: contractors.map(function(contractor) {
-                        return {
-                            value: contractor.name,
-                            label: contractor.name
-                        };
-                    })
-                }
-            }, {
                 name: 'Description',
                 field: 'name',
                 type: 'string'
@@ -89,6 +76,19 @@ angular.module('GigKeeper').controller('gigs', [
                 field: 'endDate',
                 type: 'date',
                 cellFilter: 'date:"MM/dd/yyyy hh:mm a"'
+            }, {
+                name: 'Contractor',
+                field: 'contractor.name',
+                type: 'string',
+                filter: {
+                    type: uiGridConstants.filter.SELECT,
+                    selectOptions: contractors.map(function(contractor) {
+                        return {
+                            value: contractor.name,
+                            label: contractor.name
+                        };
+                    })
+                }
             }],
             data: [],
             onRegisterApi: function(gridApi) {

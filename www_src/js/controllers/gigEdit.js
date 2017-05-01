@@ -29,6 +29,14 @@ angular.module('GigKeeper').controller('GigEditController', [
 
         $scope.tagDropdownOptions = Tag.getDropdownOptions();
 
+        $scope.gigDropdownOptions = {
+            dataSource: Gig.getDataSource(),
+            autoBind: false,
+            dataTextField: 'name',
+            dataValueField: 'id',
+            valuePrimitive: false
+        };
+
         /**
          * Update the form based on the user's selected route.
          *
@@ -44,7 +52,9 @@ angular.module('GigKeeper').controller('GigEditController', [
         gig.tags = gig.tags ? gig.tags : [];
         $scope.form = {
             name: gig.name,
-            startPlace: angular.fromJson(gig.startPlace),
+            originType: gig.originType || 'home',
+            originPlace: angular.fromJson(gig.originPlace),
+            originGig: gig.originGig || null,
             place: angular.fromJson(gig.place),
             distance: gig.distance,
             duration: gig.duration,
@@ -82,7 +92,9 @@ angular.module('GigKeeper').controller('GigEditController', [
             format: 'n0'
         };
 
-        BlockingPromiseManager.then(function () { //we have to wait for the user's profile to load
+        // don't start watching stuff until the user profile is loaded
+        BlockingPromiseManager.then(function () {
+
             $scope.$watch('form.startDate', function(newValue, oldValue) {
                 var defaultDuration = $rootScope.user.profile.defaultDuration;
 
@@ -95,18 +107,50 @@ angular.module('GigKeeper').controller('GigEditController', [
                     }
                 }
 
-                if(!$scope.form.startPlace) {
-                    $scope.resetStartPlace();
+                if(!$scope.form.originPlace) {
+                    $scope.resetOriginPlace();
                 }
             });
-        });
-
-        $scope.$watch('form.endDate', function(newValue, oldValue) {
-            if (newValue != oldValue && newValue) {
-                if ($scope.form.endDate < $scope.form.startDate) {
-                    $scope.form.startDate = $scope.form.endDate;
+        
+            $scope.$watch('form.endDate', function(newValue, oldValue) {
+                if (newValue != oldValue && newValue) {
+                    if ($scope.form.endDate < $scope.form.startDate) {
+                        $scope.form.startDate = $scope.form.endDate;
+                    }
                 }
-            }
+            });
+
+            $scope.$watch('form.originType', function(newValue, oldValue) {
+                if (newValue != oldValue && newValue) {
+                    switch (newValue) {
+                    case 'home':
+                        $scope.form.originPlace = $rootScope.user.profile.homeBasePlace;
+                        break;
+                    case 'gig':
+                        if ($scope.form.originGig) {
+                            $scope.form.originPlace = $scope.form.originGig.place;
+                        }
+                        break;
+                    case 'other':
+                        break;
+                    }
+                }
+            });
+
+            $scope.$watch('form.originGig', function(newValue, oldValue) {
+                if (newValue != oldValue && newValue) {
+                    if ($scope.form.originType == 'gig') {
+                        $scope.form.originPlace = newValue.place;
+                    }
+                }
+            });
+
+            $scope.$watch('form.place', function(newValue, oldValue) {
+                if (newValue != oldValue && newValue) {
+                    $scope.form.distance = null;
+                    $scope.form.duration = null;
+                }
+            });
         });
 
         /**
@@ -114,8 +158,8 @@ angular.module('GigKeeper').controller('GigEditController', [
          *
          * @return {void}
          */
-        $scope.resetStartPlace = function () {
-            $scope.form.startPlace = $rootScope.user.profile.homeBasePlace;
+        $scope.resetOriginPlace = function () {
+            $scope.form.originPlace = $rootScope.user.profile.homeBasePlace;
         };
 
         /**
@@ -132,7 +176,7 @@ angular.module('GigKeeper').controller('GigEditController', [
             button.button('loading');
 
             var request = GoogleMaps.data.directionsTo({
-                fromPlaceId: $scope.form.startPlace.place_id,
+                fromPlaceId: $scope.form.originPlace.place_id,
                 toPlaceId: $scope.form.place.place_id
             }).$promise
                 .then(function(response) {
@@ -169,7 +213,9 @@ angular.module('GigKeeper').controller('GigEditController', [
 
                 var payload = {
                     name: $scope.form.name,
-                    startPlace: $scope.form.startPlace,
+                    originType: $scope.form.originType,
+                    originPlace: $scope.form.originPlace,
+                    originGigId: $scope.form.originGig ? $scope.form.originGig.id : null,
                     place: $scope.form.place,
                     distance: $scope.form.distance,
                     duration: $scope.form.duration,

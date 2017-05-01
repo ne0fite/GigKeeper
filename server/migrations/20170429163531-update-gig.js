@@ -20,13 +20,44 @@
 
 module.exports = {
     up: function (queryInterface, Sequelize) {
-        return queryInterface.addColumn("gigs", "startPlace", {
+        return queryInterface.addColumn("gigs", "originPlace", {
             type: Sequelize.JSONB(),
             allowNull: true
+        }).then(function() {
+            return queryInterface.addColumn("gigs", "originType", { 
+                type: Sequelize.ENUM("home", "gig", "other"), 
+                allowNull: false, 
+                defaultValue: "home" 
+            });
+        }).then(function() {
+            return queryInterface.addColumn("gigs", "originGigId", { 
+                type: Sequelize.UUID, 
+                allowNull: true,
+                references: {
+                    model: "gigs",
+                    key: "id"
+                }
+            });
+        }).then(function() {
+            return queryInterface.changeColumn("gigs", "contractorId", {
+                type: Sequelize.UUID, 
+                allowNull: true
+            });
         });
     },
 
-    down: function (queryInterface) {
-        return queryInterface.removeColumn("gigs", "startPlace");
+    down: function (queryInterface, Sequelize) {
+        return queryInterface.removeColumn("gigs", "originPlace")
+        .then(function() {
+            return queryInterface.removeColumn("gigs", "originType");
+        })
+        .then(function() {
+            return queryInterface.removeColumn("gigs", "originGigId");
+        }).then(function() {
+            return queryInterface.changeColumn("gigs", "contractorId", {
+                type: Sequelize.UUID, 
+                allowNull: false
+            });
+        });
     }
 };

@@ -52,6 +52,38 @@ code {
     font-size: 80%;
 }
 
+.row {
+    &.fixedheight {
+        div.form-group {
+
+            @media (min-width: 768px) {
+                height: 70px;
+            }
+
+            button {
+                &.bottomalign {
+
+                    @media (min-width: 768px) {
+                        position: absolute;
+                        bottom: 15px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.required {
+    label {
+
+        &::after {
+            content: '*';
+            margin-left: 4px;
+            color: #a94442;
+        }
+    }
+}
+
 .policy-page {
 
     h2 {

@@ -11,164 +11,211 @@
         <div class="alert alert-danger" ng-if="errorMessage">{{ errorMessage }}</div>
         <div class="alert alert-success" ng-if="successMessage">{{ successMessage }}</div>
 
-        <div class="form-group" ng-class="{ 'has-error': gigForm.$submitted && gigForm.contractorId.$invalid }">
-            <label for="contractorId">Contractor</label>
-            <div>
-                <select id="contractorId"
-                        name="contractorId"
-                        class="form-control"
-                        ng-model="form.contractorId"
-                        required>
-                    <option value="">Select a Contractor</option>
-                    <option ng-repeat="contractor in contractors track by contractor.id" ng-value="contractor.id">
-                        {{contractor.name}}
-                    </option>
-                </select>
-                <div ng-messages="gigForm.contractorId.$error" role="alert" ng-if="gigForm.$submitted">
-                    <p class="help-block" ng-message="required">Select a contractor</p>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>Details</strong>
+            </div>
+            <div class="panel-body">
+
+                <div class="row">
+                    <div class="col-sm-12 form-group required" ng-class="{ 'has-error': gigForm.$submitted && gigForm.name.$invalid }">
+                        <label for="gig_name">Description</label>
+                        <input type="text"
+                                name="name"
+                                kendo-combo-box
+                                options="descriptionsComboOptions"
+                                ng-model="form.name"
+                                id="gig_name"
+                                style="width: 100%;"
+                                required />
+                        <div ng-messages="gigForm.name.$error" role="alert" ng-if="gigForm.$submitted">
+                            <p class="help-block" ng-message="required">Enter a description</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6 form-group required" ng-class="{ 'has-error': gigForm.$submitted && gigForm.startDate.$invalid }">
+                        <label for="startDate">Start</label>
+                        <div>
+                            <datetimepicker id="startDate" name="startDate" ng-model="form.startDate" date-format="M/d/yyyy" ng-required="true">
+                            </datetimepicker>
+                        </div>
+                        <div ng-messages="gigForm.startDate.$error" role="alert" ng-if="gigForm.$submitted">
+                            <p class="help-block" ng-message="required">Choose a start date/time</p>
+                            <p class="help-block" ng-message="date">Invalid date format</p>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 form-group required" ng-class="{ 'has-error': gigForm.$submitted && gigForm.endDate.$invalid }">
+                        <label for="endDate">End</label>
+                        <div>
+                            <datetimepicker id="endDate" name="endDate" ng-model="form.endDate" date-format="M/d/yyyy" ng-required="true">
+                            </datetimepicker>
+                        </div>
+                        <div ng-messages="gigForm.endDate.$error" role="alert" ng-if="gigForm.$submitted">
+                            <p class="help-block" ng-message="required">Choose an end date/time</p>
+                            <p class="help-block" ng-message="date">Invalid date format</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12 form-group" ng-class="{ 'has-error': gigForm.$submitted && gigForm.contractorId.$invalid }">
+                        <label for="contractorId">Contractor</label>
+                        <div>
+                            <select id="contractorId"
+                                    name="contractorId"
+                                    class="form-control"
+                                    ng-model="form.contractorId">
+                                <option value="">None</option>
+                                <option ng-repeat="contractor in contractors track by contractor.id" ng-value="contractor.id">
+                                    {{contractor.name}}
+                                </option>
+                            </select>
+                            <div ng-messages="gigForm.contractorId.$error" role="alert" ng-if="gigForm.$submitted">
+                                <p class="help-block" ng-message="required">Select a contractor</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>Travel</strong>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-12 form-group required" ng-class="{ 'has-error': gigForm.$submitted && gigForm.place.$invalid }">
+                        <label for="place">Location</label>
+                        <div>
+                            <input type="text"
+                                    id="place"
+                                    name="place"
+                                    class="form-control"
+                                    g-places-autocomplete
+                                    data-force-selection="true"
+                                    ng-model="form.place"
+                                    autocomplete="off"
+                                    ng-required="true" />
+                        </div>
+                        <div ng-messages="gigForm.name.$error" role="alert" ng-if="gigForm.$submitted">
+                            <p class="help-block" ng-message="required">Choose a location</p>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 form-group" ng-class="{ 'has-error': gigForm.$submitted && gigForm.originPlace.$invalid }">
+                        <label>I will be coming from</label>
+                        <div>
+                            <input type="radio" name="originType[]" id="originType_home" value="home" ng-model="form.originType"> <label for="originType_home">Home</label>
+                            <input type="radio" name="originType[]" id="originType_gig" value="gig" ng-model="form.originType"> <label for="originType_gig">Another Gig</label>
+                            <input type="radio" name="originType[]" id="originType_other" value="other" ng-model="form.originType"> <label for="originType_other">Someplace Else</label>
+                        </div>
+                        <div>
+                            <select ng-show="form.originType == 'gig'"
+                                    name="originGig"
+                                    id="originGig"
+                                    kendo-drop-down-list="originGigSelect"
+                                    options="gigDropdownOptions"
+                                    k-ng-model="form.originGig">
+                            </select>
+                            <input ng-show="form.originType == 'other'"
+                                   type="text"
+                                   id="originPlace"
+                                   name="originPlace"
+                                   class="form-control"
+                                   g-places-autocomplete
+                                   data-force-selection="true"
+                                   ng-model="form.originPlace"
+                                   autocomplete="off" />
+                        </div>
+                        <div ng-messages="gigForm.name.$error" role="alert" ng-if="gigForm.$submitted">
+                            <p class="help-block" ng-message="required">Choose a location</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row fixedheight">
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-xs-6 form-group">
+                                <label for="distance">Distance</label> <span class="text-muted">(miles)</span>
+                                <div>
+                                    <input name="distance"
+                                            id="distance"
+                                            kendo-numeric-text-box
+                                            options="distanceOptions"
+                                            ng-model="form.distance" />
+                                </div>
+                            </div>
+                            <div class="col-xs-6 form-group">
+                                <label for="duration">Travel Time</label> <span class="text-muted">(mins)</span>
+                                <div>
+                                    <input name="duration"
+                                            id="duration"
+                                            kendo-numeric-text-box
+                                            options="durationOptions"
+                                            ng-model="form.duration" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 form-group" ng-if="form.place && user.profile.homeBasePlace">
+                        <button type="button"
+                            class="btn btn-primary btn-estimate bottomalign"
+                            id="estimate_button"
+                            ng-click="estimateDistance($event)"
+                            data-loading-text="<i class='fa fa-spinner fa-spin'></i> Estimating...">
+                            <i class="fa fa-car"></i> Estimate
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="form-group" ng-class="{ 'has-error': gigForm.$submitted && gigForm.name.$invalid }">
-            <label for="gig_name">Description</label>
-            <input type="text"
-                    name="name"
-                    kendo-combo-box
-                    options="descriptionsComboOptions"
-                    ng-model="form.name"
-                    id="gig_name"
-                    style="width: 100%;"
-                    required />
-            <div ng-messages="gigForm.name.$error" role="alert" ng-if="gigForm.$submitted">
-                <p class="help-block" ng-message="required">Enter a description</p>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>Other Info</strong>
             </div>
-        </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <label for="tags">Tags</label>
+                        <a href="#" ng-click="addTag($event)"><i class="fa fa-plus"></i> New</a>
+                        <select id="tags"
+                                name="tags"
+                                kendo-multi-select
+                                options="tagDropdownOptions"
+                                k-ng-model="form.tags"></select>
+                    </div>
+                </div>
 
-        <div class="form-group" ng-class="{ 'has-error': gigForm.$submitted && gigForm.startPlace.$invalid }">
-            <label for="startPlace">Starting location</label>
-            <div class="input-group">
-                <input type="text"
-                        id="startPlace"
-                        name="startPlace"
-                        class="form-control"
-                        g-places-autocomplete
-                        data-force-selection="true"
-                        ng-model="form.startPlace"
-                        autocomplete="off"
-                        required />
-                <span class="input-group-btn">
-                    <button type="button" class="btn btn-default" ng-click="resetStartPlace()">
-                        <i class="fa fa-home"></i>
-                    </button>
-                </span>
-            </div>
-            <div ng-messages="gigForm.name.$error" role="alert" ng-if="gigForm.$submitted">
-                <p class="help-block" ng-message="required">Choose a location</p>
-            </div>
-        </div>
-
-        <div class="form-group" ng-class="{ 'has-error': gigForm.$submitted && gigForm.place.$invalid }">
-            <label for="place">Destination</label>
-            <input type="text"
-                    id="place"
-                    name="place"
-                    class="form-control"
-                    g-places-autocomplete
-                    data-force-selection="true"
-                    ng-model="form.place"
-                    autocomplete="off"
-                    required />
-            <div ng-messages="gigForm.name.$error" role="alert" ng-if="gigForm.$submitted">
-                <p class="help-block" ng-message="required">Choose a location</p>
-            </div>
-        </div>
-
-        <div class="form-group" ng-class="{ 'has-error': gigForm.$submitted && gigForm.startDate.$invalid }">
-            <label for="startDate">Start</label>
-            <div style="width: 100%;">
-                <datetimepicker id="startDate" name="startDate" ng-model="form.startDate" date-format="M/d/yyyy" ng-required="true">
-                </datetimepicker>
-            </div>
-            <div ng-messages="gigForm.startDate.$error" role="alert" ng-if="gigForm.$submitted">
-                <p class="help-block" ng-message="required">Choose a start date/time</p>
-                <p class="help-block" ng-message="date">Invalid date format</p>
-            </div>
-        </div>
-
-        <div class="form-group" ng-class="{ 'has-error': gigForm.$submitted && gigForm.endDate.$invalid }">
-            <label for="endDate">End</label>
-            <div style="width: 100%;">
-                <datetimepicker id="endDate" name="endDate" ng-model="form.endDate" date-format="M/d/yyyy" ng-required="true">
-                </datetimepicker>
-            </div>
-            <div ng-messages="gigForm.endDate.$error" role="alert" ng-if="gigForm.$submitted">
-                <p class="help-block" ng-message="required">Choose an end date/time</p>
-                <p class="help-block" ng-message="date">Invalid date format</p>
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <label for="notes">Notes</label>
+                        <textarea id="notes" name="notes" class="form-control" ng-model="form.notes"></textarea>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-4 form-group">
-                <div><label for="distance">Distance (miles)</label></div>
-                <input name="distance"
-                        id="distance"
-                        kendo-numeric-text-box
-                        options="distanceOptions"
-                        ng-model="form.distance" />
-            </div>
-            <div class="col-md-4 form-group">
-                <div><label for="duration">Travel Time (minutes)</label></div>
-                <input name="duration"
-                        id="duration"
-                        kendo-numeric-text-box
-                        options="durationOptions"
-                        ng-model="form.duration" />
-            </div>
-            <div class="col-md-4 form-group" ng-if="form.place && user.profile.homeBasePlace">
-                <label class="visible-md-block visible-lg-block">&nbsp;</label>
-                <button type="button"
-                    class="btn btn-primary btn-estimate"
-                    id="estimate_button"
-                    ng-click="estimateDistance($event)"
-                    data-loading-text="<i class='fa fa-spinner fa-spin'></i> Estimating...">
-                    <i class="fa fa-car"></i> Estimate
+            <div class="col-sm-12 form-group text-right">
+                <button class="btn btn-primary"
+                        id="save_button"
+                        type="submit"
+                        data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving...">
+                        <i class="fa fa-check"></i> Save
+                </button>
+                <button class="btn btn-warning"
+                        id="cancel_button"
+                        type="button"
+                        ng-click="cancel()">
+                        <i class="fa fa-times"></i> Cancel
                 </button>
             </div>
-        </div>
-
-        <div class="form-group">
-            <label for="tags">
-                Tags
-            </label>
-            <a href="#" ng-click="addTag($event)">
-                <i class="fa fa-plus"></i> New
-            </a>
-            <select id="tags"
-                    name="tags"
-                    kendo-multi-select
-                    options="tagDropdownOptions"
-                    k-ng-model="form.tags"></select>
-        </div>
-
-        <div class="form-group">
-            <label for="notes">Notes</label>
-            <textarea id="notes" name="notes" class="form-control" ng-model="form.notes"></textarea>
-        </div>
-
-        <div class="form-group text-right">
-            <button class="btn btn-primary"
-                    id="save_button"
-                    type="submit"
-                    data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving...">
-                    <i class="fa fa-check"></i> Save
-            </button>
-            <button class="btn btn-warning"
-                    id="cancel_button"
-                    type="button"
-                    ng-click="cancel()">
-                    <i class="fa fa-times"></i> Cancel
-            </button>
         </div>
     </form>
 </script>

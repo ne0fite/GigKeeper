@@ -46,7 +46,10 @@ var gigPlugin = {
                     },
                     include: [{
                         model: models.contractor,
-                        required: true
+                        required: false
+                    }, {
+                        model: models.gig,
+                        as: "originGig"
                     }, {
                         model: models.tag
                     }],
@@ -85,6 +88,9 @@ var gigPlugin = {
                         profileId: request.auth.credentials.profileId
                     },
                     include: [{
+                        model: models.gig,
+                        as: "originGig"
+                    }, {
                         model: models.tag
                     }]
                 };
@@ -110,13 +116,15 @@ var gigPlugin = {
                 validate: {
                     payload: {
                         name: Joi.string().required(),
-                        startPlace: Joi.object().required(),
+                        originType: Joi.string().required().allow("home", "gig", "other"),
+                        originPlace: Joi.object().required(),
+                        originGigId: Joi.string().guid().optional().allow(null, ""),
                         place: Joi.object().required(),
                         distance: Joi.number().optional().allow(null),
                         duration: Joi.number().optional().allow(null),
                         startDate: Joi.date().required(),
                         endDate: Joi.date().required(),
-                        contractorId: Joi.string().required(),
+                        contractorId: Joi.string().optional().allow(null, ""),
                         tags: Joi.any().optional(),
                         notes: Joi.string().optional().allow(null, "")
                     }
@@ -168,13 +176,15 @@ var gigPlugin = {
                     },
                     payload: {
                         name: Joi.string().required(),
-                        startPlace: Joi.object().required(),
+                        originType: Joi.string().required().allow("home", "gig", "other"),
+                        originPlace: Joi.object().required(),
+                        originGigId: Joi.string().guid().optional().allow(null, ""),
                         place: Joi.object().required(),
                         distance: Joi.number().optional().allow(null),
                         duration: Joi.number().optional().allow(null),
                         startDate: Joi.date().required(),
                         endDate: Joi.date().required(),
-                        contractorId: Joi.string().required(),
+                        contractorId: Joi.string().optional().allow(null, ""),
                         tags: Joi.any().optional(),
                         notes: Joi.string().optional().allow(null, "")
                     }
@@ -338,7 +348,7 @@ var gigPlugin = {
                         throw new Error("Gig does not have a location");
                     }
 
-                    placeId1 = gig.startPlace.place_id;
+                    placeId1 = gig.originPlace.place_id;
                     placeId2 = gig.place.place_id;
                     distance = place.distance(placeId1, placeId2);
 
@@ -386,7 +396,7 @@ var gigPlugin = {
                         delete gig.profileId;
 
                         gig.contractor = gig.contractor.name;
-                        gig.startPlace = gig.startPlace.formatted_address;
+                        gig.originPlace = gig.originPlace.formatted_address;
                         gig.place = gig.place.formatted_address;
                         gig.tags = gig.tags
                             .map((tag) => {
