@@ -30,11 +30,6 @@ var settingsPlugin = {
         server.route({
             method: "GET",
             path: "/api/v1/settings",
-            config: {
-                cors: {
-                    origin: ["*"]
-                }
-            },
             handler: function(request, reply) {
 
                 var db = server.plugins["hapi-sequelize"].gigkeeperdb;
@@ -63,9 +58,6 @@ var settingsPlugin = {
             method: "POST",
             path: "/api/v1/settings",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     payload: {
                         homeBasePlace: Joi.object().optional().allow(null).default(null),

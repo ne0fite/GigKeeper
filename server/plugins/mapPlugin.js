@@ -30,9 +30,6 @@ var mapPlugin = {
             method: "GET",
             path: "/api/v1/map/distance/{fromPlaceId}/{toPlaceId}",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     params: {
                         fromPlaceId: Joi.string().required(),
@@ -56,9 +53,6 @@ var mapPlugin = {
             method: "GET",
             path: "/api/v1/map/directions/{fromPlaceId}/{toPlaceId}",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     params: {
                         fromPlaceId: Joi.string().required(),

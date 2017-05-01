@@ -28,11 +28,6 @@ var contractorPlugin = {
         server.route({
             method: "GET",
             path: "/api/v1/contractor",
-            config: {
-                cors: {
-                    origin: ["*"]
-                }
-            },
             handler: function(request, reply) {
 
                 var db = server.plugins["hapi-sequelize"].gigkeeperdb;
@@ -57,9 +52,6 @@ var contractorPlugin = {
             method: "POST",
             path: "/api/v1/contractor",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     payload: {
                         name: Joi.string().required(),
@@ -94,9 +86,6 @@ var contractorPlugin = {
             method: "POST",
             path: "/api/v1/contractor/{id}",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     params: {
                         id: Joi.string().guid().required()
@@ -146,9 +135,6 @@ var contractorPlugin = {
             method: "DELETE",
             path: "/api/v1/contractor/{id}",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     params: {
                         id: Joi.string().guid().required()
@@ -183,11 +169,6 @@ var contractorPlugin = {
         server.route({
             method: "GET",
             path: "/api/v1/contractor/export",
-            config: {
-                cors: {
-                    origin: ["*"]
-                }
-            },
             handler: function(request, reply) {
 
                 var db = server.plugins["hapi-sequelize"].gigkeeperdb;

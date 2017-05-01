@@ -31,11 +31,6 @@ var userPlugin = {
         server.route({
             method: "GET",
             path: "/api/v1/user/profile",
-            config: {
-                cors: {
-                    origin: ["*"]
-                }
-            },
             handler: function(request, reply) {
 
                 var db = server.plugins["hapi-sequelize"].gigkeeperdb;
@@ -73,9 +68,6 @@ var userPlugin = {
             method: "POST",
             path: "/api/v1/user/profile",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     payload: {
                         firstName: Joi.string().optional().allow(null, ""),
@@ -146,9 +138,6 @@ var userPlugin = {
             method: "POST",
             path: "/api/v1/user/invite",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     payload: {
                         email: Joi.string().email().required()

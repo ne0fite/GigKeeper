@@ -50,9 +50,6 @@ var securityPlugin = {
             method: "POST",
             path: "/api/v1/login",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     payload: {
                         email: Joi.string().email().required(),
@@ -83,9 +80,6 @@ var securityPlugin = {
             method: "POST",
             path: "/api/v1/logout",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 auth: false
             },
             handler: function(request, reply) {
@@ -141,9 +135,6 @@ var securityPlugin = {
             method: "POST",
             path: "/api/v1/requestPasswordReset",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     payload: {
                         email: Joi.string().email().required()
@@ -182,9 +173,6 @@ var securityPlugin = {
             method: "POST",
             path: "/api/v1/resetPassword",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     payload: {
                         token: Joi.string().required(),

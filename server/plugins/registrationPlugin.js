@@ -29,11 +29,6 @@ var registrationPlugin = {
         server.route({
             method: "GET",
             path: "/api/v1/register/invite",
-            config: {
-                cors: {
-                    origin: ["*"]
-                }
-            },
             handler: function(request, reply) {
 
                 var db = server.plugins["hapi-sequelize"].gigkeeperdb;
@@ -62,9 +57,6 @@ var registrationPlugin = {
             method: "GET",
             path: "/api/v1/register/invite/{code}",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     params: {
                         code: Joi.string().required()
@@ -95,9 +87,6 @@ var registrationPlugin = {
             method: "POST",
             path: "/api/v1/register/invite",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     payload: {
                         email: Joi.string().email().required(),
@@ -124,9 +113,6 @@ var registrationPlugin = {
             method: "POST",
             path: "/api/v1/register/invite/{code}",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     params: {
                         code: Joi.string().required()
