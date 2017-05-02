@@ -24,7 +24,7 @@ angular.module('GigKeeper').factory('UrlBuilder', [
             build: function (relativeUrl) {
                 var apiConfig = window.appConfig.api;
 
-                return 'http://' + apiConfig.host + ':' + apiConfig.port + relativeUrl;
+                return apiConfig.base + relativeUrl;
             }
         };
     }

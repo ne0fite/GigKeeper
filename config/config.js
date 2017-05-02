@@ -55,8 +55,7 @@ module.exports = {
         }
     },
     api: {
-        host: process.env.API_HOST || configJson.api.host || "localhost",
-        port: process.env.API_PORT || configJson.api.port || 8000
+        base: process.env.API_BASE || configJson.api.base || "http://localhost:8000"
     },
     db: {
         host: dbconfig[env].host,
