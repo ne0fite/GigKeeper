@@ -25,7 +25,8 @@ var gulp = require("gulp"),
     config = require("./config/config.js"),
     fs = require("fs"),
     zip = require("gulp-zip"),
-    clean = require("gulp-clean");
+    clean = require("gulp-clean"),
+    gulpEbDeploy = require('gulp-elasticbeanstalk-deploy');
 
 var globs = {
         config: "config/config.json",
@@ -224,6 +225,32 @@ gulp.task("dist:build", ["build", "dist:clean"], function() {
         "!config/config.json" ], { base: "./" })
         .pipe(zip(filename))
         .pipe(gulp.dest("dist"));
+});
+
+gulp.task('deploy', function() {
+    return gulp.src([ ".ebextensions",
+        ".bowerrc",
+        "bower.json",
+        "config/**/*",
+        "LICENSE.md",
+        "main.js",
+        "package.json",
+        "README.md",
+        "server/**/*",
+        "www/**/*",
+        "!www/bower_components/**/*",
+        "!config/config.json" ], { base: "./" })
+    .pipe(gulpEbDeploy({
+        name: 'GigKeeper',
+        timestamp: true,
+        waitForDeploy: true,
+        amazon: {
+            region: 'us-west-2',
+            bucket: 'elasticbeanstalk-us-west-2-008453750068',
+            applicationName: 'GIgKeeper',
+            environmentName: 'gigkeeper-env'
+        }
+    }))
 });
 
 /*** Server tasks ***/
