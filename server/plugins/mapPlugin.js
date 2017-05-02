@@ -1,17 +1,17 @@
 /**
  * @license
  * Copyright (C) 2017 Phoenix Bright Software, LLC
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,26 +28,18 @@ var mapPlugin = {
 
         server.route({
             method: "GET",
-            path: "/api/v1/map/distance/{placeId}",
+            path: "/api/v1/map/distance/{fromPlaceId}/{toPlaceId}",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     params: {
-                        placeId: Joi.string().required()
+                        fromPlaceId: Joi.string().required(),
+                        toPlaceId: Joi.string().required()
                     }
                 }
             },
             handler: function(request, reply) {
-                var placeId1, placeId2;
-
-                if (!request.auth.credentials.profile.homeBasePlace) {
-                    return reply(Boom.badRequest("Home Base Location not set up"));
-                }
-
-                placeId1 = request.auth.credentials.profile.homeBasePlace.place_id;
-                placeId2 = request.params.placeId;
+                var placeId1 = request.params.fromPlaceId;
+                var placeId2 = request.params.toPlaceId;
 
                 place.distance(placeId1, placeId2).asPromise().then(function(result) {
                     reply(result.json);
@@ -59,26 +51,18 @@ var mapPlugin = {
 
         server.route({
             method: "GET",
-            path: "/api/v1/map/directions/{placeId}",
+            path: "/api/v1/map/directions/{fromPlaceId}/{toPlaceId}",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     params: {
-                        placeId: Joi.string().required()
+                        fromPlaceId: Joi.string().required(),
+                        toPlaceId: Joi.string().required()
                     }
                 }
             },
             handler: function(request, reply) {
-                var placeId1, placeId2;
-
-                if (!request.auth.credentials.profile.homeBasePlace) {
-                    return reply(Boom.badRequest("Home Base Location not set up"));
-                }
-
-                placeId1 = request.auth.credentials.profile.homeBasePlace.place_id;
-                placeId2 = request.params.placeId;
+                var placeId1 = request.params.fromPlaceId;
+                var placeId2 = request.params.toPlaceId;
 
                 directions.directions(placeId1, placeId2).asPromise().then(function(result) {
                     reply(result.json);

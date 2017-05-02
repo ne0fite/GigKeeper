@@ -26,11 +26,6 @@ var tagPlugin = {
         server.route({
             method: "GET",
             path: "/api/v1/tag",
-            config: {
-                cors: {
-                    origin: ["*"]
-                }
-            },
             handler: function(request, reply) {
 
                 var db = server.plugins["hapi-sequelize"].gigkeeperdb;
@@ -55,9 +50,6 @@ var tagPlugin = {
             method: "POST",
             path: "/api/v1/tag",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     payload: {
                         name: Joi.string().required(),
@@ -84,9 +76,6 @@ var tagPlugin = {
             method: "POST",
             path: "/api/v1/tag/{id}",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     params: {
                         id: Joi.string().guid().required()
@@ -128,9 +117,6 @@ var tagPlugin = {
             method: "DELETE",
             path: "/api/v1/tag/{id}",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     params: {
                         id: Joi.string().guid().required()

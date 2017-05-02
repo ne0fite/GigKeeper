@@ -29,6 +29,23 @@ angular.module('GigKeeper').controller('GigEditController', [
 
         $scope.tagDropdownOptions = Tag.getDropdownOptions();
 
+        var template = function(gig) {
+
+            var startDate = moment(new Date(gig.startDate)).format('M/D/YYY h:mm a');
+            return '<div>' + gig.name + ' @ ' + gig.place.name + ' <span class="small pull-right">' + startDate + '</span></div>'
+                + '<div class="small">' + gig.place.formatted_address + '</div>';
+        };
+
+        $scope.gigDropdownOptions = {
+            dataSource: Gig.getDataSource(),
+            autoBind: true,
+            dataTextField: 'name',
+            dataValueField: 'id',
+            valuePrimitive: false,
+            template: template,
+            valueTemplate: template
+        };
+
         /**
          * Update the form based on the user's selected route.
          *
@@ -44,6 +61,9 @@ angular.module('GigKeeper').controller('GigEditController', [
         gig.tags = gig.tags ? gig.tags : [];
         $scope.form = {
             name: gig.name,
+            originType: gig.originType || 'home',
+            originPlace: angular.fromJson(gig.originPlace),
+            originGig: gig.originGig || null,
             place: angular.fromJson(gig.place),
             distance: gig.distance,
             duration: gig.duration,
@@ -81,7 +101,9 @@ angular.module('GigKeeper').controller('GigEditController', [
             format: 'n0'
         };
 
-        BlockingPromiseManager.then(function () { //we have to wait for the user's profile to load
+        // don't start watching stuff until the user profile is loaded
+        BlockingPromiseManager.then(function () {
+
             $scope.$watch('form.startDate', function(newValue, oldValue) {
                 var defaultDuration = $rootScope.user.profile.defaultDuration;
 
@@ -93,16 +115,61 @@ angular.module('GigKeeper').controller('GigEditController', [
                         $scope.form.endDate = new Date(newValue.getTime() + defaultDuration * 60 * 1000);
                     }
                 }
+
+                if(!$scope.form.originPlace) {
+                    $scope.resetOriginPlace();
+                }
+            });
+        
+            $scope.$watch('form.endDate', function(newValue, oldValue) {
+                if (newValue != oldValue && newValue) {
+                    if ($scope.form.endDate < $scope.form.startDate) {
+                        $scope.form.startDate = $scope.form.endDate;
+                    }
+                }
+            });
+
+            $scope.$watch('form.originType', function(newValue, oldValue) {
+                if (newValue != oldValue && newValue) {
+                    switch (newValue) {
+                    case 'home':
+                        $scope.form.originPlace = $rootScope.user.profile.homeBasePlace;
+                        break;
+                    case 'gig':
+                        if ($scope.form.originGig) {
+                            $scope.form.originPlace = $scope.form.originGig.place;
+                        }
+                        break;
+                    case 'other':
+                        break;
+                    }
+                }
+            });
+
+            $scope.$watch('form.originGig', function(newValue, oldValue) {
+                if (newValue != oldValue && newValue) {
+                    if ($scope.form.originType == 'gig') {
+                        $scope.form.originPlace = newValue.place;
+                    }
+                }
+            });
+
+            $scope.$watch('form.place', function(newValue, oldValue) {
+                if (newValue != oldValue && newValue) {
+                    $scope.form.distance = null;
+                    $scope.form.duration = null;
+                }
             });
         });
 
-        $scope.$watch('form.endDate', function(newValue, oldValue) {
-            if (newValue != oldValue && newValue) {
-                if ($scope.form.endDate < $scope.form.startDate) {
-                    $scope.form.startDate = $scope.form.endDate;
-                }
-            }
-        });
+        /**
+         * Reset the starting location to the user's home base.
+         *
+         * @return {void}
+         */
+        $scope.resetOriginPlace = function () {
+            $scope.form.originPlace = $rootScope.user.profile.homeBasePlace;
+        };
 
         /**
          * Estimate the distance to the specified location
@@ -117,7 +184,10 @@ angular.module('GigKeeper').controller('GigEditController', [
             var button = angular.element('#estimate_button');
             button.button('loading');
 
-            var request = GoogleMaps.data.directionsTo({placeId: $scope.form.place.place_id}).$promise
+            var request = GoogleMaps.data.directionsTo({
+                fromPlaceId: $scope.form.originPlace.place_id,
+                toPlaceId: $scope.form.place.place_id
+            }).$promise
                 .then(function(response) {
                     selectRouteDialog(response);
                     button.button('reset');
@@ -152,6 +222,9 @@ angular.module('GigKeeper').controller('GigEditController', [
 
                 var payload = {
                     name: $scope.form.name,
+                    originType: $scope.form.originType,
+                    originPlace: $scope.form.originPlace,
+                    originGigId: $scope.form.originGig ? $scope.form.originGig.id : null,
                     place: $scope.form.place,
                     distance: $scope.form.distance,
                     duration: $scope.form.duration,

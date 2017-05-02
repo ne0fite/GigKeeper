@@ -35,8 +35,7 @@ footer {
     background-color: #f5f5f5;
 
     > .container {
-        padding-right: 15px;
-        padding-left: 15px;
+        padding: 20px 15px;
     }
 
     ul {
@@ -44,12 +43,40 @@ footer {
     }
 }
 
-.container .text-muted {
-    margin: 20px 0;
-}
-
 code {
     font-size: 80%;
+}
+
+.row {
+    &.fixedheight {
+        div.form-group {
+
+            @media (min-width: 768px) {
+                height: 70px;
+            }
+
+            button {
+                &.bottomalign {
+
+                    @media (min-width: 768px) {
+                        position: absolute;
+                        bottom: 15px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.required {
+    label {
+
+        &::after {
+            content: '*';
+            margin-left: 4px;
+            color: #a94442;
+        }
+    }
 }
 
 .policy-page {

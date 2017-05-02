@@ -30,11 +30,6 @@ var gigPlugin = {
         server.route({
             method: "GET",
             path: "/api/v1/gig",
-            config: {
-                cors: {
-                    origin: ["*"]
-                }
-            },
             handler: function(request, reply) {
 
                 var db = server.plugins["hapi-sequelize"].gigkeeperdb;
@@ -46,7 +41,10 @@ var gigPlugin = {
                     },
                     include: [{
                         model: models.contractor,
-                        required: true
+                        required: false
+                    }, {
+                        model: models.gig,
+                        as: "originGig"
                     }, {
                         model: models.tag
                     }],
@@ -65,9 +63,6 @@ var gigPlugin = {
             method: "GET",
             path: "/api/v1/gig/{id}",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     params: {
                         id: Joi.string().guid().required()
@@ -85,6 +80,9 @@ var gigPlugin = {
                         profileId: request.auth.credentials.profileId
                     },
                     include: [{
+                        model: models.gig,
+                        as: "originGig"
+                    }, {
                         model: models.tag
                     }]
                 };
@@ -104,18 +102,18 @@ var gigPlugin = {
             method: "POST",
             path: "/api/v1/gig",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     payload: {
                         name: Joi.string().required(),
+                        originType: Joi.string().required().allow("home", "gig", "other"),
+                        originPlace: Joi.object().required(),
+                        originGigId: Joi.string().guid().optional().allow(null, ""),
                         place: Joi.object().required(),
                         distance: Joi.number().optional().allow(null),
                         duration: Joi.number().optional().allow(null),
                         startDate: Joi.date().required(),
                         endDate: Joi.date().required(),
-                        contractorId: Joi.string().required(),
+                        contractorId: Joi.string().optional().allow(null, ""),
                         tags: Joi.any().optional(),
                         notes: Joi.string().optional().allow(null, "")
                     }
@@ -158,21 +156,21 @@ var gigPlugin = {
             method: "POST",
             path: "/api/v1/gig/{id}",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     params: {
                         id: Joi.string().guid().required()
                     },
                     payload: {
                         name: Joi.string().required(),
+                        originType: Joi.string().required().allow("home", "gig", "other"),
+                        originPlace: Joi.object().required(),
+                        originGigId: Joi.string().guid().optional().allow(null, ""),
                         place: Joi.object().required(),
                         distance: Joi.number().optional().allow(null),
                         duration: Joi.number().optional().allow(null),
                         startDate: Joi.date().required(),
                         endDate: Joi.date().required(),
-                        contractorId: Joi.string().required(),
+                        contractorId: Joi.string().optional().allow(null, ""),
                         tags: Joi.any().optional(),
                         notes: Joi.string().optional().allow(null, "")
                     }
@@ -232,9 +230,6 @@ var gigPlugin = {
             method: "DELETE",
             path: "/api/v1/gig/{id}",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     params: {
                         id: Joi.string().guid().required()
@@ -269,11 +264,6 @@ var gigPlugin = {
         server.route({
             method: "GET",
             path: "/api/v1/gig/descriptions",
-            config: {
-                cors: {
-                    origin: ["*"]
-                }
-            },
             handler: function(request, reply) {
 
                 var db = server.plugins["hapi-sequelize"].gigkeeperdb;
@@ -301,9 +291,6 @@ var gigPlugin = {
             method: "GET",
             path: "/api/v1/gig/{id}/distance",
             config: {
-                cors: {
-                    origin: ["*"]
-                },
                 validate: {
                     params: {
                         id: Joi.string().guid().required()
@@ -336,7 +323,7 @@ var gigPlugin = {
                         throw new Error("Gig does not have a location");
                     }
 
-                    placeId1 = request.auth.credentials.profile.homeBasePlace.place_id;
+                    placeId1 = gig.originPlace.place_id;
                     placeId2 = gig.place.place_id;
                     distance = place.distance(placeId1, placeId2);
 
@@ -352,11 +339,6 @@ var gigPlugin = {
         server.route({
             method: "GET",
             path: "/api/v1/gig/export",
-            config: {
-                cors: {
-                    origin: ["*"]
-                }
-            },
             handler: function(request, reply) {
 
                 var db = server.plugins["hapi-sequelize"].gigkeeperdb;
@@ -384,6 +366,7 @@ var gigPlugin = {
                         delete gig.profileId;
 
                         gig.contractor = gig.contractor.name;
+                        gig.originPlace = gig.originPlace.formatted_address;
                         gig.place = gig.place.formatted_address;
                         gig.tags = gig.tags
                             .map((tag) => {

@@ -27,7 +27,16 @@ var HapiCookie = require("hapi-auth-cookie");
 var config = require("./config/config.js");
 
 // Create a server with a host and port
-var server = new Hapi.Server();
+var server = new Hapi.Server({
+    connections: {
+        routes: {
+            cors: {
+                origin: ["*"]
+            }
+        }
+    }
+});
+
 server.connection({
     host: config.app.host,
     port: config.app.port
