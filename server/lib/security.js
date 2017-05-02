@@ -30,9 +30,9 @@ module.exports = {
             pid: user.profileId,
             scope: user.scope,
             // expires after 7 days
+            // TODO is 7 days too long? maybe 24 hours?
             exp: Math.floor(new Date().getTime() / 1000) + 7 * 24 * 60 * 60
         }, config.app.jwt.secret);
-
 
         return token;
     }

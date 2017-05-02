@@ -50,10 +50,6 @@ module.exports = {
         baseUrl: process.env.BASE_URL || configJson.app.baseUrl || "http://localhost:8000",
         host: process.env.SERVER_HOST || configJson.app.host || "localhost",
         port: process.env.SERVER_PORT || configJson.app.port || 8000,
-        cookie: {
-            name: process.env.COOKIE_NAME || configJson.app.cookie.name || "gigkeeper-session",
-            secret: process.env.COOKIE_SECRET || configJson.app.cookie.secret || "tempdevcookieneedstobecreated123"
-        },
         jwt: {
             secret: process.env.JWT_SECRET || configJson.app.jwt.secret || "NeverShareYourSecret"
         }
