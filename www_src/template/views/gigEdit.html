@@ -147,6 +147,7 @@
                             <select ng-show="form.originType == 'gig'"
                                     name="originGig"
                                     id="originGig"
+                                    style="width: 100%;"
                                     kendo-drop-down-list="originGigSelect"
                                     options="gigDropdownOptions"
                                     k-ng-model="form.originGig">
@@ -160,9 +161,6 @@
                                    data-force-selection="true"
                                    ng-model="form.originPlace"
                                    autocomplete="off" />
-                        </div>
-                        <div ng-messages="gigForm.name.$error" role="alert" ng-if="gigForm.$submitted">
-                            <p class="help-block" ng-message="required">Choose a location</p>
                         </div>
                     </div>
                 </div>

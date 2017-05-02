@@ -18,7 +18,7 @@
 
 "use strict";
 
-
+var config = require("../../config/config.js");
 var Mailer = require("./mailer.js");
 
 module.exports = ForgotPassword;
@@ -53,7 +53,7 @@ ForgotPassword.prototype.sendPasswordReset = function(user) {
     return user.update(updatePayload).then(function() {
 
         var mailOptions = {
-            from: "swamsley@gmail.com",
+            from: config.smtp.fromAddress,
             to: user.email,
             subject: "[Gig Keeper] Password Reset",
         };

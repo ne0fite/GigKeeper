@@ -29,12 +29,21 @@ angular.module('GigKeeper').controller('GigEditController', [
 
         $scope.tagDropdownOptions = Tag.getDropdownOptions();
 
+        var template = function(gig) {
+
+            var startDate = moment(new Date(gig.startDate)).format('M/D/YYY h:mm a');
+            return '<div>' + gig.name + ' @ ' + gig.place.name + ' <span class="small pull-right">' + startDate + '</span></div>'
+                + '<div class="small">' + gig.place.formatted_address + '</div>';
+        };
+
         $scope.gigDropdownOptions = {
             dataSource: Gig.getDataSource(),
-            autoBind: false,
+            autoBind: true,
             dataTextField: 'name',
             dataValueField: 'id',
-            valuePrimitive: false
+            valuePrimitive: false,
+            template: template,
+            valueTemplate: template
         };
 
         /**
