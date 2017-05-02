@@ -210,7 +210,7 @@ gulp.task("dist:build", ["build", "dist:clean"], function() {
 
     var filename = "gigkeeper.zip";
 
-    gulp.src([ ".ebextensions",
+    gulp.src([ ".ebextensions/**/*",
         ".bowerrc",
         "bower.json",
         "config/**/*",
@@ -227,7 +227,7 @@ gulp.task("dist:build", ["build", "dist:clean"], function() {
 });
 
 gulp.task('deploy', function() {
-    return gulp.src([ ".ebextensions",
+    return gulp.src([ ".ebextensions/**/*",
         ".bowerrc",
         "bower.json",
         "config/**/*",
