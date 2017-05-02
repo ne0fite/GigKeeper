@@ -32,6 +32,7 @@ if (fs.existsSync(__dirname + "/config.json")) {
 // create missing properties
 configJson.app = configJson.app || {};
 configJson.app.cookie = configJson.app.cookie || {};
+configJson.app.jwt = configJson.app.jwt || {};
 configJson.api = configJson.api || {};
 configJson.db = configJson.db || {};
 configJson.smtp = configJson.smtp || {};
@@ -52,6 +53,9 @@ module.exports = {
         cookie: {
             name: process.env.COOKIE_NAME || configJson.app.cookie.name || "gigkeeper-session",
             secret: process.env.COOKIE_SECRET || configJson.app.cookie.secret || "tempdevcookieneedstobecreated123"
+        },
+        jwt: {
+            secret: process.env.JWT_SECRET || configJson.app.jwt.secret || "NeverShareYourSecret"
         }
     },
     api: {

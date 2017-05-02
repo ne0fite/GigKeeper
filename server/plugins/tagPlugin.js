@@ -33,7 +33,7 @@ var tagPlugin = {
 
                 var options = {
                     where: {
-                        profileId: request.auth.credentials.profileId
+                        profileId: request.auth.credentials.pid
                     },
                     order: [ "name" ]
                 };
@@ -62,7 +62,7 @@ var tagPlugin = {
                 var db = server.plugins["hapi-sequelize"].gigkeeperdb;
                 var models = db.sequelize.models;
 
-                request.payload.profileId = request.auth.credentials.profileId;
+                request.payload.profileId = request.auth.credentials.pid;
 
                 models.tag.create(request.payload).then(function(tag) {
                     reply(tag);
@@ -94,7 +94,7 @@ var tagPlugin = {
                 var options = {
                     where: {
                         id: request.params.id,
-                        profileId: request.auth.credentials.profileId
+                        profileId: request.auth.credentials.pid
                     }
                 };
 
@@ -131,7 +131,7 @@ var tagPlugin = {
                 var options = {
                     where: {
                         id: request.params.id,
-                        profileId: request.auth.credentials.profileId
+                        profileId: request.auth.credentials.pid
                     }
                 };
 

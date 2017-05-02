@@ -22,6 +22,7 @@ var Boom = require("boom");
 var Joi = require("joi");
 var bcrypt = require("bcrypt");
 var Promise = require("bluebird");
+var Security = require("../lib/security.js");
 var ForgotPassword = require("../lib/forgotPassword.js");
 var config = require("../../config/config.js");
 
@@ -29,23 +30,38 @@ var securityPlugin = {
 
     register: function(server, options, next) {
 
-        // setup cookie-based authentication strategy
-        server.auth.strategy("base", "cookie", {
-            cookie: config.app.cookie.name,
-            password: config.app.cookie.secret,
+        var validateJwt = function(decoded, request, callback) {
 
-            // session cookie is good for 24 hours
-            ttl: 24 * 60 * 60 * 1000,
+            var db = server.plugins["hapi-sequelize"].gigkeeperdb;
+            var models = db.sequelize.models;
 
-            // ideally, would be better https only, but hard to dev with
-            isSecure: false
+            var queryOptions = {
+                where: {
+                    id: decoded.uid
+                }
+            };
+
+            models.user.findOne(queryOptions).then(function(user) {
+                if (user && user.active) {
+                    callback(null, true);
+                } else {
+                    callback(null, false);
+                }
+            }).catch(function(error) {
+                callback(error, false);
+            });
+        };
+
+        server.auth.strategy("jwt", "jwt", {
+            key: config.app.jwt.secret,
+            validateFunc: validateJwt,
+            verifyOptions: {
+                algorithms: ["HS256"]
+            }
         });
 
-        // setup base (cookie-based) auth as default
-        server.auth.default({
-            strategy: "base"
-        });
-        
+        server.auth.default("jwt");
+
         server.route({
             method: "POST",
             path: "/api/v1/login",
@@ -62,7 +78,11 @@ var securityPlugin = {
                 getValidatedUser(request.payload.email, request.payload.password).then(function(user) {
                     if (user) {
                         if (user.active) {
-                            request.cookieAuth.set(user);
+
+                            user.apiToken = Security.createToken(user);
+
+                            // TODO: create session
+
                             return reply(user);
                         } else {
                             return reply(Boom.unauthorized("Account disabled"));
@@ -83,7 +103,7 @@ var securityPlugin = {
                 auth: false
             },
             handler: function(request, reply) {
-                request.cookieAuth.clear();
+                // TODO: invalidate session
                 return reply();
             }
         });
@@ -143,7 +163,7 @@ var securityPlugin = {
                 auth: false
             },
             handler: function(request, reply) {
-                
+
                 var db = server.plugins["hapi-sequelize"].gigkeeperdb;
                 var models = db.sequelize.models;
 
@@ -177,19 +197,19 @@ var securityPlugin = {
                     payload: {
                         token: Joi.string().required(),
                         password: Joi.string().required(),
-                        passwordConfirm: Joi.any().valid(Joi.ref("password")).optional().allow(null).options({ 
-                            language: { 
-                                any: { 
+                        passwordConfirm: Joi.any().valid(Joi.ref("password")).optional().allow(null).options({
+                            language: {
+                                any: {
                                     allowOnly: "Password and Confirm Password do not match"
-                                } 
-                            } 
+                                }
+                            }
                         })
                     }
                 },
                 auth: false
             },
             handler: function(request, reply) {
-                
+
                 var db = server.plugins["hapi-sequelize"].gigkeeperdb;
                 var models = db.sequelize.models;
 
@@ -211,7 +231,7 @@ var securityPlugin = {
                     if (!user.active) {
                         throw new Error("Account is disabled");
                     }
-                    
+
                     var now = new Date();
                     if (user.resetTokenExpiresAt < now) {
                         throw new Error("Token has expired");
@@ -224,8 +244,12 @@ var securityPlugin = {
                     // log the user in
                     var clean = user.get({ plain: true });
                     delete clean.password;
-                    request.cookieAuth.set(user);
-                    reply(user);
+
+                    // TODO: create session
+                    
+                    clean.apiToken = Security.createToken(user);
+
+                    reply(clean);
                 }).catch(function(error) {
                     reply(Boom.badRequest(error));
                 });

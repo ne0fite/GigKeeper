@@ -16,22 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
+"use strict";
 
-angular.module('GigKeeper', [
-    'ng',
-    'ngStorage',
-    'ngResource',
-    'ui.router',
-    'ui.router.title',
-    'kendo.directives',
-    'google.places',
-    'ngMessages',
-    'ui.bootstrap',
-    'ui.bootstrap.datetimepicker',
-    'ui.grid',
-    'ui.grid.edit',
-    'ui.grid.selection',
-    'BlockingPromiseManager',
-    'ngMap'
-]);
+var JWT = require("jsonwebtoken");
+var config = require("../../config/config.js");
+
+module.exports = {
+
+    createToken: function(user) {
+
+        var token = JWT.sign({
+            uid: user.id,
+            pid: user.profileId,
+            scope: user.scope,
+            // expires after 7 days
+            exp: Math.floor(new Date().getTime() / 1000) + 7 * 24 * 60 * 60
+        }, config.app.jwt.secret);
+
+
+        return token;
+    }
+};

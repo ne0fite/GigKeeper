@@ -37,7 +37,7 @@ var settingsPlugin = {
 
                 var options = {
                     where: {
-                        id: request.auth.credentials.profileId
+                        id: request.auth.credentials.pid
                     }
                 };
 
@@ -70,23 +70,19 @@ var settingsPlugin = {
 
                 var db = server.plugins["hapi-sequelize"].gigkeeperdb;
                 var models = db.sequelize.models;
-                var credentials = Object.assign({}, request.auth.credentials);
                 var updatedProfile = Object.assign({}, request.payload);
 
                 updatedProfile.homeBasePlace = place.stripPlace(request.payload.homeBasePlace);
 
                 var options = {
                     where: {
-                        id: request.auth.credentials.profileId
+                        id: request.auth.credentials.pid
                     }
                 };
 
                 models.profile.findOne(options).then(function(profile) {
 
                     if (profile) {
-                        credentials.profile = updatedProfile;
-                        request.cookieAuth.set(credentials);
-
                         return profile.update(updatedProfile);
                     } else {
                         throw new Error("Invalid Session");

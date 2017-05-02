@@ -246,6 +246,7 @@ angular.module('GigKeeper').config([
             }
         ]);
 
+        $httpProvider.interceptors.push('AuthenticationInterceptor');
         $httpProvider.interceptors.push('SoftErrorInterceptor');
     }
 ]);

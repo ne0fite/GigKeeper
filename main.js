@@ -21,7 +21,6 @@
 var Hapi = require("hapi");
 var Inert = require("inert");
 var Sequelize = require("sequelize");
-var HapiCookie = require("hapi-auth-cookie");
 
 // server settings
 var config = require("./config/config.js");
@@ -56,7 +55,7 @@ var sequelize = new Sequelize(config.db.name, config.db.user, config.db.pass, se
 
 server.register([
     Inert,
-    HapiCookie,
+    require("hapi-auth-jwt2"),
     {
         register: require("hapi-sequelize"),
         options: [{

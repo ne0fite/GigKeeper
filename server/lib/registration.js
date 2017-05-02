@@ -60,7 +60,7 @@ Registration.prototype.createCode = function() {
  * @param {String} email
  * @return {Promise}
  */
-Registration.prototype.sendInvite = function(payload, user) {
+Registration.prototype.sendInvite = function(payload, token) {
     var self = this;
 
     return self.db.sequelize.transaction(function(t) {
@@ -69,16 +69,31 @@ Registration.prototype.sendInvite = function(payload, user) {
             email: payload.email,
             message: payload.message,
             code: null,
-            userId: user.id
+            userId: token.uid
         };
 
-        var userQuery = {
+        var inviteUserQuery = {
             where: {
-                email: payload.email
+                id: token.uid
             }
         };
 
-        return self.models.user.findOne(userQuery).then(function(existingUser) {
+        var inviteUser;
+        return self.models.user.findOne(inviteUserQuery).then(function(result) {
+            if (!result) {
+                throw new Error("Invalid token");
+            }
+
+            inviteUser = result;
+
+            var userQuery = {
+                where: {
+                    email: payload.email
+                }
+            };
+
+            return self.models.user.findOne(userQuery);
+        }).then(function(existingUser) {
             if (existingUser) {
                 throw new Error("User already registered with email");
             }
@@ -118,7 +133,7 @@ Registration.prototype.sendInvite = function(payload, user) {
                 subject: "[Gig Keeper] Invitation",
             };
 
-            invitePayload.user = user;
+            invitePayload.user = inviteUser;
 
             self.mailer.sendEmail(mailOptions, "invite", invitePayload).catch(function(error) {
                 // TODO logging component
