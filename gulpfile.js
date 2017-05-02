@@ -115,8 +115,7 @@ gulp.task("config", function() {
         appConfigString = "var appConfig = ";
 
     appConfig.api = {
-        host: config.api.host,
-        port: config.api.port
+        base: config.api.base
     };
 
     appConfigString += JSON.stringify(appConfig) + ";";
@@ -211,7 +210,7 @@ gulp.task("dist:build", ["build", "dist:clean"], function() {
 
     var filename = "gigkeeper.zip";
 
-    gulp.src([ ".ebextensions",
+    gulp.src([ ".ebextensions/**/*",
         ".bowerrc",
         "bower.json",
         "config/**/*",
@@ -228,7 +227,7 @@ gulp.task("dist:build", ["build", "dist:clean"], function() {
 });
 
 gulp.task('deploy', function() {
-    return gulp.src([ ".ebextensions",
+    return gulp.src([ ".ebextensions/**/*",
         ".bowerrc",
         "bower.json",
         "config/**/*",
