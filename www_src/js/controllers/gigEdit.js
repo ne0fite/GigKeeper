@@ -19,10 +19,10 @@
 'use strict';
 
 angular.module('GigKeeper').controller('GigEditController', [
-    '$rootScope', '$scope', '$uibModal', '$filter', '$title', '$stateParams', '$state', '$window', 'contractors', 'gig',
+    '$rootScope', '$scope', '$sessionStorage', '$uibModal', '$filter', '$title', '$stateParams', '$state', '$window', 'contractors', 'gig',
     'Tag', 'Gig', 'UrlBuilder', 'BlockingPromiseManager', 'GoogleMaps', 'dialogs',
     function(
-        $rootScope, $scope, $uibModal, $filter, $title, $stateParams, $state, $window, contractors, gig,
+        $rootScope, $scope, $sessionStorage, $uibModal, $filter, $title, $stateParams, $state, $window, contractors, gig,
         Tag, Gig, UrlBuilder, BlockingPromiseManager, GoogleMaps, dialogs
     ) {
         $scope.title = $title;
@@ -81,7 +81,12 @@ angular.module('GigKeeper').controller('GigEditController', [
             dataSource: new kendo.data.DataSource({
                 transport: {
                     read: {
-                        url: UrlBuilder.build('/api/v1/gig/descriptions')
+                        url: UrlBuilder.build('/api/v1/gig/descriptions'),
+                        beforeSend: function(req) {
+                            if ($sessionStorage.apiToken) {
+                                req.setRequestHeader('Authorization', $sessionStorage.apiToken);
+                            }
+                        }
                     }
                 }
             }),

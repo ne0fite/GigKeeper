@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').factory('Tag', [
-    '$resource', '$uibModal', 'UrlBuilder',
-    function($resource, $uibModal, UrlBuilder) {
+    '$resource', '$sessionStorage', '$uibModal', 'UrlBuilder',
+    function($resource, $sessionStorage, $uibModal, UrlBuilder) {
         return {
             data: $resource(UrlBuilder.build('/api/v1/tag'), {}, {
                 index: {
@@ -60,7 +60,12 @@ angular.module('GigKeeper').factory('Tag', [
                 return new kendo.data.DataSource({
                     transport: {
                         read: {
-                            url: UrlBuilder.build('/api/v1/tag')
+                            url: UrlBuilder.build('/api/v1/tag'),
+                            beforeSend: function(req) {
+                                if ($sessionStorage.apiToken) {
+                                    req.setRequestHeader('Authorization', $sessionStorage.apiToken);
+                                }
+                            }
                         }
                     },
                     schema: {
