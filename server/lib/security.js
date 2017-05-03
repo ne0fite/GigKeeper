@@ -18,22 +18,98 @@
 
 "use strict";
 
+var Promise = require("bluebird");
+var bcrypt = Promise.promisifyAll(require("bcrypt"));
 var JWT = require("jsonwebtoken");
 var config = require("../../config/config.js");
 
-module.exports = {
+module.exports = Security;
 
-    createToken: function(user) {
+function Security(server) {
+    this.server     = server;
+    this.db         = server.plugins["hapi-sequelize"].gigkeeperdb;
+    this.models     = this.db.sequelize.models;
+}
 
-        var token = JWT.sign({
-            uid: user.id,
-            pid: user.profileId,
-            scope: user.scope,
-            // expires after 7 days
-            // TODO is 7 days too long? maybe 24 hours?
-            exp: Math.floor(new Date().getTime() / 1000) + 7 * 24 * 60 * 60
-        }, config.app.jwt.secret);
+Security.prototype.getJwtOptions = function() {
+    var self = this;
+    return {
+        key: config.app.jwt.secret,
+        validateFunc: function(decoded, request, callback) {
+            self.validateToken(decoded, request, callback);
+        },
+        verifyOptions: {
+            algorithms: ["HS256"]
+        }
+    };
+};
 
-        return token;
-    }
+Security.prototype.getValidatedUser = function(email, password) {
+    var self = this;
+
+    var queryOptions = {
+        where: {
+            email: {
+                ilike: email
+            }
+        },
+        include: [{
+            model: self.models.profile,
+            required: true
+        }]
+    };
+
+    var user;
+    return self.models.user.findOne(queryOptions).then(function(result) {
+        if (result) {
+            user = result;
+            return bcrypt.compareAsync(password, user.password);
+        } else {
+            // TODO: log invalid username
+            return false;
+        }
+    }).then(function(result) {
+        if (result) {
+            var clean = user.get({ plain: true });
+            delete clean.password;
+            return clean;
+        } else {
+            // TODO: log invalid password attempt
+            return null;
+        }
+    });
+};
+
+Security.prototype.createToken = function(user) {
+
+    var token = JWT.sign({
+        uid: user.id,
+        pid: user.profileId,
+        scope: user.scope,
+        // expires after 7 days
+        // TODO is 7 days too long? maybe 24 hours?
+        exp: Math.floor(new Date().getTime() / 1000) + 7 * 24 * 60 * 60
+    }, config.app.jwt.secret);
+
+    return token;
+};
+
+Security.prototype.validateToken = function(decoded, request, callback) {
+    var self = this;
+
+    var queryOptions = {
+        where: {
+            id: decoded.uid
+        }
+    };
+
+    self.models.user.findOne(queryOptions).then(function(user) {
+        if (user && user.active) {
+            callback(null, true);
+        } else {
+            callback(null, false);
+        }
+    }).catch(function(error) {
+        callback(error, false);
+    });
 };

@@ -88,7 +88,9 @@ Registration.prototype.sendInvite = function(payload, token) {
 
             var userQuery = {
                 where: {
-                    email: payload.email
+                    email: {
+                        ilike: payload.email
+                    }
                 }
             };
 
@@ -106,7 +108,9 @@ Registration.prototype.sendInvite = function(payload, token) {
             // lookup an existing invite for the user
             var queryOptions = {
                 where: {
-                    email: payload.email
+                    email: {
+                        ilike: payload.email
+                    }
                 }
             };
             return self.models.invite.findOne(queryOptions);
@@ -150,7 +154,9 @@ Registration.prototype.createAccount = function(payload) {
     
     return self.db.models.user.findOne({
         where: {
-            email: payload.email
+            email: {
+                ilike: payload.email
+            }
         }
     }).then(function(existingUser) {
         if (existingUser) {

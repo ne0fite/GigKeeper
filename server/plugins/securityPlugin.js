@@ -20,45 +20,16 @@
 
 var Boom = require("boom");
 var Joi = require("joi");
-var bcrypt = require("bcrypt");
-var Promise = require("bluebird");
 var Security = require("../lib/security.js");
 var ForgotPassword = require("../lib/forgotPassword.js");
-var config = require("../../config/config.js");
 
 var securityPlugin = {
 
     register: function(server, options, next) {
 
-        var validateJwt = function(decoded, request, callback) {
+        var security = new Security(server);
 
-            var db = server.plugins["hapi-sequelize"].gigkeeperdb;
-            var models = db.sequelize.models;
-
-            var queryOptions = {
-                where: {
-                    id: decoded.uid
-                }
-            };
-
-            models.user.findOne(queryOptions).then(function(user) {
-                if (user && user.active) {
-                    callback(null, true);
-                } else {
-                    callback(null, false);
-                }
-            }).catch(function(error) {
-                callback(error, false);
-            });
-        };
-
-        server.auth.strategy("jwt", "jwt", {
-            key: config.app.jwt.secret,
-            validateFunc: validateJwt,
-            verifyOptions: {
-                algorithms: ["HS256"]
-            }
-        });
+        server.auth.strategy("jwt", "jwt", security.getJwtOptions());
 
         server.auth.default("jwt");
 
@@ -75,11 +46,11 @@ var securityPlugin = {
                 auth: false
             },
             handler: function(request, reply) {
-                getValidatedUser(request.payload.email, request.payload.password).then(function(user) {
+                security.getValidatedUser(request.payload.email, request.payload.password).then(function(user) {
                     if (user) {
                         if (user.active) {
 
-                            user.apiToken = Security.createToken(user);
+                            user.apiToken = security.createToken(user);
 
                             // TODO: create session
 
@@ -108,49 +79,6 @@ var securityPlugin = {
             }
         });
 
-        function getValidatedUser(email, password) {
-            return new Promise(function(resolve, reject) {
-                var db = server.plugins["hapi-sequelize"].gigkeeperdb;
-                var models = db.sequelize.models;
-
-                var queryOptions = {
-                    where: {
-                        email: email
-                    },
-                    include: [{
-                        model: models.profile,
-                        required: true
-                    }]
-                };
-
-                models.user.findOne(queryOptions).then(function(user) {
-                    if (user) {
-
-                        bcrypt.compare(password, user.password, function(err, result) {
-                            if (err) {
-                                reject(new Error(err));
-                            }
-
-                            if (result) {
-                                var clean = user.get({ plain: true });
-                                //clean.profile = user.profile.get({ plain: true });
-                                delete clean.password;
-                                resolve(clean);
-                            } else {
-                                // TODO: log invalid password attempt
-                                resolve(null);
-                            }
-                        });
-                    } else {
-                        // TODO: log invalid username
-                        resolve(null);
-                    }
-                }).catch(function(error) {
-                    reject(error);
-                });
-            });
-        }
-
         server.route({
             method: "POST",
             path: "/api/v1/requestPasswordReset",
@@ -169,7 +97,9 @@ var securityPlugin = {
 
                 var queryOptions = {
                     where: {
-                        email: request.payload.email
+                        email: {
+                            ilike: request.payload.email
+                        }
                     }
                 };
 
@@ -247,7 +177,7 @@ var securityPlugin = {
 
                     // TODO: create session
                     
-                    clean.apiToken = Security.createToken(user);
+                    clean.apiToken = security.createToken(user);
 
                     reply(clean);
                 }).catch(function(error) {

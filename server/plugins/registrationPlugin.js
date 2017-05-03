@@ -27,6 +27,8 @@ var registrationPlugin = {
 
     register: function(server, options, next) {
 
+        var security = new Security(server);
+
         server.route({
             method: "GET",
             path: "/api/v1/register/invite",
@@ -190,7 +192,7 @@ var registrationPlugin = {
 
                     // TODO: create session
 
-                    clean.apiToken = Security.createToken(user);
+                    clean.apiToken = security.createToken(user);
                     
                     reply(clean);
                 }).catch(function(err) {
