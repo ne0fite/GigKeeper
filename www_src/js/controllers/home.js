@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('home', [
-    '$rootScope', '$scope', '$sessionStorage', '$state', 'Security', 'UrlBuilder', 'BlockingPromiseManager',
-    function($rootScope, $scope, $sessionStorage, $state, Security, UrlBuilder, BlockingPromiseManager) {
+    '$rootScope', '$scope', 'localStorageService', '$state', 'Security', 'UrlBuilder', 'BlockingPromiseManager',
+    function($rootScope, $scope, localStorageService, $state, Security, UrlBuilder, BlockingPromiseManager) {
 
         $scope.submitLoginForm = function(loginForm) {
             $scope.errorMessage = null;
@@ -38,7 +38,7 @@ angular.module('GigKeeper').controller('home', [
                     if (user.error) {
                         $scope.errorMessage = user.message;
                     } else {
-                        $sessionStorage.apiToken = user.apiToken;
+                        localStorageService.set('apiToken', user.apiToken);
                         delete user.apiToken;
                         $rootScope.user = user;
                         $state.go('gigs');

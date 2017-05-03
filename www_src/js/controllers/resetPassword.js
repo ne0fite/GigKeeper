@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('resetPassword', [
-    '$scope', '$rootScope', '$sessionStorage', '$state', '$stateParams', 'Security',
-    function($scope, $rootScope, $sessionStorage, $state, $stateParams, Security) {
+    '$scope', '$rootScope', 'localStorageService', '$state', '$stateParams', 'Security',
+    function($scope, $rootScope, localStorageService, $state, $stateParams, Security) {
 
         $scope.form = {
             token: $stateParams.token,
@@ -46,7 +46,7 @@ angular.module('GigKeeper').controller('resetPassword', [
                     });
                     button.button('reset');
 
-                    $sessionStorage.apiToken = user.apiToken;
+                    localStorageService.set('apiToken', user.apiToken);
                     delete user.apiToken;
                     $rootScope.user = user;
                     $state.go('gigs');

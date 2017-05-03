@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').run([
-    '$rootScope', '$sessionStorage', '$state', '$sce', 'Security', 'UrlBuilder', 'BlockingPromiseManager',
-    function($rootScope, $sessionStorage, $state, $sce, Security, UrlBuilder, BlockingPromiseManager) {
+    '$rootScope', 'localStorageService', '$state', '$sce', 'Security', 'UrlBuilder', 'BlockingPromiseManager',
+    function($rootScope, localStorageService, $state, $sce, Security, UrlBuilder, BlockingPromiseManager) {
 
         $rootScope.copyrightDate = new Date();
         
@@ -57,7 +57,7 @@ angular.module('GigKeeper').run([
             var request = Security.data.logout().$promise;
             request.then(function(response) { // eslint-disable-line no-unused-vars
                 $rootScope.user = null;
-                $sessionStorage.apiToken = null;
+                localStorageService.remove('apiToken');
                 $state.go('home');
             }).catch(function(error) {
                 $rootScope.alerts.push({

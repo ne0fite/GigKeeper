@@ -19,10 +19,10 @@
 'use strict';
 
 angular.module('GigKeeper').controller('GigEditController', [
-    '$rootScope', '$scope', '$sessionStorage', '$uibModal', '$filter', '$title', '$stateParams', '$state', '$window', 'contractors', 'gig',
+    '$rootScope', '$scope', 'localStorageService', '$uibModal', '$filter', '$title', '$stateParams', '$state', '$window', 'contractors', 'gig',
     'Tag', 'Gig', 'UrlBuilder', 'BlockingPromiseManager', 'GoogleMaps', 'dialogs',
     function(
-        $rootScope, $scope, $sessionStorage, $uibModal, $filter, $title, $stateParams, $state, $window, contractors, gig,
+        $rootScope, $scope, localStorageService, $uibModal, $filter, $title, $stateParams, $state, $window, contractors, gig,
         Tag, Gig, UrlBuilder, BlockingPromiseManager, GoogleMaps, dialogs
     ) {
         $scope.title = $title;
@@ -83,8 +83,9 @@ angular.module('GigKeeper').controller('GigEditController', [
                     read: {
                         url: UrlBuilder.build('/api/v1/gig/descriptions'),
                         beforeSend: function(req) {
-                            if ($sessionStorage.apiToken) {
-                                req.setRequestHeader('Authorization', $sessionStorage.apiToken);
+                            var apiToken = localStorageService.get('apiToken');
+                            if (apiToken) {
+                                req.setRequestHeader('Authorization', apiToken);
                             }
                         }
                     }

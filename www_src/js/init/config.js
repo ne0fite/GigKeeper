@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').config([
-    '$compileProvider', '$stateProvider', '$urlRouterProvider', '$titleProvider', '$httpProvider',
-    function($compileProvider, $stateProvider, $urlRouterProvider, $titleProvider, $httpProvider) {
+    '$compileProvider', '$stateProvider', '$urlRouterProvider', '$titleProvider', '$httpProvider', 'localStorageServiceProvider',
+    function($compileProvider, $stateProvider, $urlRouterProvider, $titleProvider, $httpProvider, localStorageServiceProvider) {
 
         var appConfig = window.appConfig;
 
@@ -31,6 +31,10 @@ angular.module('GigKeeper').config([
         $compileProvider.cssClassDirectivesEnabled(false);
         
         $urlRouterProvider.otherwise('/');
+
+        localStorageServiceProvider
+            .setPrefix('GigKeeper')
+            .setStorageType('sessionStorage');
 
         $stateProvider.state({
             name: 'home',

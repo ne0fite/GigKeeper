@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').factory('Gig', [
-    '$resource', '$sessionStorage', 'UrlBuilder',
-    function($resource, $sessionStorage, UrlBuilder) {
+    '$resource', 'localStorageService', 'UrlBuilder',
+    function($resource, localStorageService, UrlBuilder) {
         return {
             data: $resource(UrlBuilder.build('/api/v1/gig'), {}, {
                 index: {
@@ -94,8 +94,9 @@ angular.module('GigKeeper').factory('Gig', [
                         read: {
                             url: UrlBuilder.build('/api/v1/gig'),
                             beforeSend: function(req) {
-                                if ($sessionStorage.apiToken) {
-                                    req.setRequestHeader('Authorization', $sessionStorage.apiToken);
+                                var apiToken = localStorageService.get('apiToken');
+                                if (apiToken) {
+                                    req.setRequestHeader('Authorization', apiToken);
                                 }
                             }
                         }

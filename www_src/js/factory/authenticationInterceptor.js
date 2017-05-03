@@ -19,12 +19,13 @@
 'use strict';
 
 angular.module('GigKeeper').factory('AuthenticationInterceptor', [
-    '$sessionStorage',
-    function($sessionStorage) {
+    'localStorageService',
+    function(localStorageService) {
         return {
             request: function(config) {
-                if ($sessionStorage.apiToken) {
-                    config.headers.Authorization = $sessionStorage.apiToken;
+                var apiToken = localStorageService.get('apiToken');
+                if (apiToken) {
+                    config.headers.Authorization = apiToken;
                 }
                 return config;
             }

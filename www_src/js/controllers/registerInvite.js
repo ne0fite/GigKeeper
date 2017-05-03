@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('registerInvite', [
-    '$rootScope', '$scope', '$sessionStorage', '$state', 'Registration', 'invite', 'BlockingPromiseManager',
-    function($rootScope, $scope, $sessionStorage, $state, Registration, invite, BlockingPromiseManager) {
+    '$rootScope', '$scope', 'localStorageService', '$state', 'Registration', 'invite', 'BlockingPromiseManager',
+    function($rootScope, $scope, localStorageService, $state, Registration, invite, BlockingPromiseManager) {
 
         $scope.invite = invite;
 
@@ -55,7 +55,7 @@ angular.module('GigKeeper').controller('registerInvite', [
 
                     if (!result.error) {
 
-                        $sessionStorage.apiToken = result.apiToken;
+                        localStorageService.set('apiToken', result.apiToken);
                         delete result.apiToken;
                         $rootScope.user = result;
                         $state.go('gigs');

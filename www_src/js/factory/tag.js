@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').factory('Tag', [
-    '$resource', '$sessionStorage', '$uibModal', 'UrlBuilder',
-    function($resource, $sessionStorage, $uibModal, UrlBuilder) {
+    '$resource', 'localStorageService', '$uibModal', 'UrlBuilder',
+    function($resource, localStorageService, $uibModal, UrlBuilder) {
         return {
             data: $resource(UrlBuilder.build('/api/v1/tag'), {}, {
                 index: {
@@ -62,8 +62,9 @@ angular.module('GigKeeper').factory('Tag', [
                         read: {
                             url: UrlBuilder.build('/api/v1/tag'),
                             beforeSend: function(req) {
-                                if ($sessionStorage.apiToken) {
-                                    req.setRequestHeader('Authorization', $sessionStorage.apiToken);
+                                var apiToken = localStorageService.get('apiToken');
+                                if (apiToken) {
+                                    req.setRequestHeader('Authorization', apiToken);
                                 }
                             }
                         }
