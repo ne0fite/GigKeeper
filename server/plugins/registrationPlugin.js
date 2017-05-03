@@ -21,10 +21,13 @@
 var Boom = require("boom");
 var Joi = require("joi");
 var Registration = require("../lib/registration.js");
+var Security = require("../lib/security.js");
 
 var registrationPlugin = {
 
     register: function(server, options, next) {
+
+        var security = new Security(server);
 
         server.route({
             method: "GET",
@@ -39,7 +42,7 @@ var registrationPlugin = {
                         model: models.user,
                         required: true,
                         where: {
-                            profileId: request.auth.credentials.profileId
+                            profileId: request.auth.credentials.pid
                         }
                     }],
                     order: [ [ "createdAt", "asc" ] ]
@@ -92,20 +95,20 @@ var registrationPlugin = {
                         email: Joi.string().email().required(),
                         message: Joi.string().optional().allow(null, "")
                     }
-                },
-                auth: {
-                    strategy: "base",
-                    scope: "admin"
                 }
             },
             handler: function(request, reply) {
 
-                var registration = new Registration(server);
-                return registration.sendInvite(request.payload, request.auth.credentials).then(function(invite) {
-                    reply(invite);
-                }).catch(function(error) {
-                    reply(Boom.badRequest(error));
-                });
+                if (request.auth.credentials.scope == "admin") {
+                    var registration = new Registration(server);
+                    return registration.sendInvite(request.payload, request.auth.credentials).then(function(invite) {
+                        reply(invite);
+                    }).catch(function(error) {
+                        reply(Boom.badRequest(error));
+                    });
+                } else {
+                    reply(Boom.forbidden("You do not have the privileges required to perform this function"));
+                }
             }
         });
 
@@ -187,8 +190,10 @@ var registrationPlugin = {
                     var clean = user.get({ plain: true });
                     delete clean.password;
 
-                    request.cookieAuth.set(clean);
+                    // TODO: create session
 
+                    clean.apiToken = security.createToken(user);
+                    
                     reply(clean);
                 }).catch(function(err) {
                     reply(Boom.badRequest(err));

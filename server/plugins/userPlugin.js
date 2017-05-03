@@ -38,7 +38,7 @@ var userPlugin = {
 
                 var options = {
                     where: {
-                        id: request.auth.credentials.id
+                        id: request.auth.credentials.uid
                     },
                     include: [{
                         model: models.profile,
@@ -92,7 +92,7 @@ var userPlugin = {
 
                 var userOptions = {
                     where: {
-                        id: request.auth.credentials.id
+                        id: request.auth.credentials.uid
                     }
                 };
 

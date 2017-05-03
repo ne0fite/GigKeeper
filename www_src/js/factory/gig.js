@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').factory('Gig', [
-    '$resource', '$http', 'UrlBuilder',
-    function($resource, $http, UrlBuilder) {
+    '$resource', 'localStorageService', 'UrlBuilder',
+    function($resource, localStorageService, UrlBuilder) {
         return {
             data: $resource(UrlBuilder.build('/api/v1/gig'), {}, {
                 index: {
@@ -92,7 +92,13 @@ angular.module('GigKeeper').factory('Gig', [
                 return new kendo.data.DataSource({
                     transport: {
                         read: {
-                            url: UrlBuilder.build('/api/v1/gig')
+                            url: UrlBuilder.build('/api/v1/gig'),
+                            beforeSend: function(req) {
+                                var apiToken = localStorageService.get('apiToken');
+                                if (apiToken) {
+                                    req.setRequestHeader('Authorization', apiToken);
+                                }
+                            }
                         }
                     },
                     schema: {

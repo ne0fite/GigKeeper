@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('registerInvite', [
-    '$scope', '$state', 'Registration', 'invite',
-    function($scope, $state, Registration, invite) {
+    '$rootScope', '$scope', 'localStorageService', '$state', 'Registration', 'invite', 'BlockingPromiseManager',
+    function($rootScope, $scope, localStorageService, $state, Registration, invite, BlockingPromiseManager) {
 
         $scope.invite = invite;
 
@@ -54,6 +54,10 @@ angular.module('GigKeeper').controller('registerInvite', [
                 request.then(function(result) {
 
                     if (!result.error) {
+
+                        localStorageService.set('apiToken', result.apiToken);
+                        delete result.apiToken;
+                        $rootScope.user = result;
                         $state.go('gigs');
                     } else {
                         $scope.errorMessage = result.message;
@@ -65,7 +69,7 @@ angular.module('GigKeeper').controller('registerInvite', [
                     button.button('reset');
                 });
 
-                //BlockingPromiseManager.add(request);
+                BlockingPromiseManager.add(request);
             } else {
                 $scope.errorMessage = 'Check form for errors';
             }

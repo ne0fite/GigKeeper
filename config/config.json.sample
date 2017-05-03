@@ -4,8 +4,7 @@
         "baseUrl": "http://localhost:8000",
         "host": "localhost",
         "port": 8000,
-        "cookie": {
-            "name": "gigkeeper-session",
+        "jwt": {
             "secret": "<your_secret_string>"
         }
     },

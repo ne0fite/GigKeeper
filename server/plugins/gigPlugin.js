@@ -37,7 +37,7 @@ var gigPlugin = {
 
                 var queryOptions = {
                     where: {
-                        profileId: request.auth.credentials.profileId
+                        profileId: request.auth.credentials.pid
                     },
                     include: [{
                         model: models.contractor,
@@ -77,7 +77,7 @@ var gigPlugin = {
                 var queryOptions = {
                     where: {
                         id: request.params.id,
-                        profileId: request.auth.credentials.profileId
+                        profileId: request.auth.credentials.pid
                     },
                     include: [{
                         model: models.gig,
@@ -124,7 +124,7 @@ var gigPlugin = {
                 var db = server.plugins["hapi-sequelize"].gigkeeperdb;
                 var models = db.sequelize.models;
 
-                request.payload.profileId = request.auth.credentials.profileId;
+                request.payload.profileId = request.auth.credentials.pid;
 
                 var gig;
 
@@ -136,7 +136,7 @@ var gigPlugin = {
                         if (request.payload.tags) {
                             return Promise.each(request.payload.tags, function(tag) {
                                 var gigTagPayload = {
-                                    profileId: request.auth.credentials.profileId,
+                                    profileId: request.auth.credentials.pid,
                                     gigId: gig.id,
                                     tagId: tag.id
                                 };
@@ -184,7 +184,7 @@ var gigPlugin = {
                 var queryOptions = {
                     where: {
                         id: request.params.id,
-                        profileId: request.auth.credentials.profileId
+                        profileId: request.auth.credentials.pid
                     }
                 };
 
@@ -209,7 +209,7 @@ var gigPlugin = {
                             if (request.payload.tags) {
                                 return Promise.each(request.payload.tags, function(tag) {
                                     var gigTagPayload = {
-                                        profileId: request.auth.credentials.profileId,
+                                        profileId: request.auth.credentials.pid,
                                         gigId: gig.id,
                                         tagId: tag.id
                                     };
@@ -244,7 +244,7 @@ var gigPlugin = {
                 var queryOptions = {
                     where: {
                         id: request.params.id,
-                        profileId: request.auth.credentials.profileId
+                        profileId: request.auth.credentials.pid
                     }
                 };
 
@@ -273,7 +273,7 @@ var gigPlugin = {
                     raw: true,
                     attributes: [ "name" ],
                     where: {
-                        profileId: request.auth.credentials.profileId
+                        profileId: request.auth.credentials.pid
                     },
                     group: [ "name" ],
                     order: [ "name" ]
@@ -304,13 +304,9 @@ var gigPlugin = {
                 var queryOptions = {
                     where: {
                         id: request.params.id,
-                        profileId: request.auth.credentials.profileId
+                        profileId: request.auth.credentials.pid
                     }
                 };
-
-                if (!request.auth.credentials.profile.homeBasePlace) {
-                    return reply(Boom.badRequest("Home Base Location not set up"));
-                }
 
                 models.gig.findOne(queryOptions).then(function(gig) {
                     var placeId1, placeId2, distance;
@@ -346,7 +342,7 @@ var gigPlugin = {
 
                 var queryOptions = {
                     where: {
-                        profileId: request.auth.credentials.profileId
+                        profileId: request.auth.credentials.pid
                     },
                     include: [{
                         model: models.contractor,

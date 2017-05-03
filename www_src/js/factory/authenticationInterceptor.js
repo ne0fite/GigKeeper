@@ -18,20 +18,17 @@
 
 'use strict';
 
-angular.module('GigKeeper', [
-    'ng',
-    'LocalStorageModule',
-    'ngResource',
-    'ui.router',
-    'ui.router.title',
-    'kendo.directives',
-    'google.places',
-    'ngMessages',
-    'ui.bootstrap',
-    'ui.bootstrap.datetimepicker',
-    'ui.grid',
-    'ui.grid.edit',
-    'ui.grid.selection',
-    'BlockingPromiseManager',
-    'ngMap'
+angular.module('GigKeeper').factory('AuthenticationInterceptor', [
+    'localStorageService',
+    function(localStorageService) {
+        return {
+            request: function(config) {
+                var apiToken = localStorageService.get('apiToken');
+                if (apiToken) {
+                    config.headers.Authorization = apiToken;
+                }
+                return config;
+            }
+        };
+    }
 ]);

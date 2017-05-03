@@ -19,11 +19,11 @@
 'use strict';
 
 angular.module('GigKeeper').controller('GigEditController', [
-    '$rootScope', '$scope', '$uibModal', '$filter', '$title', '$stateParams', '$state','contractors', 'gig', 'Tag', 'Gig', 'UrlBuilder',
-    'BlockingPromiseManager', 'GoogleMaps', 'dialogs',
+    '$rootScope', '$scope', 'localStorageService', '$uibModal', '$filter', '$title', '$stateParams', '$state', '$window', 'contractors', 'gig',
+    'Tag', 'Gig', 'UrlBuilder', 'BlockingPromiseManager', 'GoogleMaps', 'dialogs',
     function(
-        $rootScope, $scope, $uibModal, $filter, $title, $stateParams, $state, contractors, gig, Tag, Gig, UrlBuilder,
-        BlockingPromiseManager, GoogleMaps, dialogs
+        $rootScope, $scope, localStorageService, $uibModal, $filter, $title, $stateParams, $state, $window, contractors, gig,
+        Tag, Gig, UrlBuilder, BlockingPromiseManager, GoogleMaps, dialogs
     ) {
         $scope.title = $title;
 
@@ -31,9 +31,9 @@ angular.module('GigKeeper').controller('GigEditController', [
 
         var template = function(gig) {
 
-            var startDate = moment(new Date(gig.startDate)).format('M/D/YYY h:mm a');
-            return '<div>' + gig.name + ' @ ' + gig.place.name + ' <span class="small pull-right">' + startDate + '</span></div>'
-                + '<div class="small">' + gig.place.formatted_address + '</div>';
+            var startDate = $window.moment(new Date(gig.startDate)).format('M/D/YYY h:mm a');
+            return '<div>' + gig.name + ' @ ' + gig.place.name + ' <span class="small pull-right">' + startDate +
+                '</span></div>' + '<div class="small">' + gig.place.formatted_address + '</div>';
         };
 
         $scope.gigDropdownOptions = {
@@ -81,7 +81,13 @@ angular.module('GigKeeper').controller('GigEditController', [
             dataSource: new kendo.data.DataSource({
                 transport: {
                     read: {
-                        url: UrlBuilder.build('/api/v1/gig/descriptions')
+                        url: UrlBuilder.build('/api/v1/gig/descriptions'),
+                        beforeSend: function(req) {
+                            var apiToken = localStorageService.get('apiToken');
+                            if (apiToken) {
+                                req.setRequestHeader('Authorization', apiToken);
+                            }
+                        }
                     }
                 }
             }),
@@ -120,7 +126,7 @@ angular.module('GigKeeper').controller('GigEditController', [
                     $scope.resetOriginPlace();
                 }
             });
-        
+
             $scope.$watch('form.endDate', function(newValue, oldValue) {
                 if (newValue != oldValue && newValue) {
                     if ($scope.form.endDate < $scope.form.startDate) {

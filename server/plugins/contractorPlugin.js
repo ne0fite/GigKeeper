@@ -35,7 +35,7 @@ var contractorPlugin = {
 
                 var options = {
                     where: {
-                        profileId: request.auth.credentials.profileId
+                        profileId: request.auth.credentials.pid
                     },
                     order: [ "name" ]
                 };
@@ -72,7 +72,7 @@ var contractorPlugin = {
                 var db = server.plugins["hapi-sequelize"].gigkeeperdb;
                 var models = db.sequelize.models;
 
-                request.payload.profileId = request.auth.credentials.profileId;
+                request.payload.profileId = request.auth.credentials.pid;
 
                 models.contractor.create(request.payload).then(function(contractor) {
                     reply(contractor);
@@ -112,7 +112,7 @@ var contractorPlugin = {
                 var options = {
                     where: {
                         id: request.params.id,
-                        profileId: request.auth.credentials.profileId
+                        profileId: request.auth.credentials.pid
                     }
                 };
 
@@ -149,7 +149,7 @@ var contractorPlugin = {
                 var options = {
                     where: {
                         id: request.params.id,
-                        profileId: request.auth.credentials.profileId
+                        profileId: request.auth.credentials.pid
                     }
                 };
 
@@ -176,7 +176,7 @@ var contractorPlugin = {
 
                 var options = {
                     where: {
-                        profileId: request.auth.credentials.profileId
+                        profileId: request.auth.credentials.pid
                     },
                     order: [ "name" ]
                 };
