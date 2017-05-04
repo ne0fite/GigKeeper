@@ -28,11 +28,6 @@ var Security = require("../server/lib/security.js");
 lab.experiment("security", function () {
     var security = new Security();
 
-    lab.test("JWT Options", function(done) {
-        let jwtOptions = security.getJwtOptions();
-        done();
-    });
-
     lab.test("Validate User", function(done) {
         security.getValidatedUser("test@example.com", "123123").then(function(user) {
             done();

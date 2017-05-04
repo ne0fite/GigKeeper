@@ -25,7 +25,7 @@ const models = db.models;
 
 class TagController extends AbstractController {
 
-    index(ctx, next) {
+    async index(ctx) {
         var queryOptions = {
             where: {
                 profileId: ctx.state.user.pid
@@ -43,7 +43,7 @@ class TagController extends AbstractController {
         });
     }
 
-    get(ctx, tagId, next) {
+    async get(ctx, tagId) {
         
         var queryOptions = {
             where: {
@@ -69,7 +69,7 @@ class TagController extends AbstractController {
         });
     }
 
-    create(ctx, next) {
+    async create(ctx) {
 
         var payload = ctx.request.body;
 
@@ -85,7 +85,7 @@ class TagController extends AbstractController {
         });
     }
 
-    update(ctx, tagId, next) {
+    async update(ctx, tagId) {
 
         var queryOptions = {
             where: {
@@ -114,7 +114,7 @@ class TagController extends AbstractController {
         });
     }
 
-    delete(ctx, tagId, next) {
+    async delete(ctx, tagId) {
 
         var queryOptions = {
             where: {

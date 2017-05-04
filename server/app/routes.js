@@ -27,7 +27,7 @@ const routes = module.exports;
 routes.register = (app) => {
 
     // secure all routes except security and registration
-    app.use(jwt({ secret: config.app.jwt.secret }).unless({ path: [/^\/api\/v1\/security/, /^\/api\/v1\/register/] }));
+    app.use(jwt({ secret: config.api.jwt.secret }).unless({ path: [/^\/api\/v1\/security/, /^\/api\/v1\/register/] }));
 
     // security routes
     app.use(route.post("/api/v1/security/login", app.controllers.security.loginAction));

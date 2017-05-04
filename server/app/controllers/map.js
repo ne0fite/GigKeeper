@@ -24,7 +24,7 @@ const directions = require("../../lib/directions")();
 
 class MapController extends AbstractController {
 
-    getDistance(ctx, fromPlaceId, toPlaceId, next) {
+    async getDistance(ctx, fromPlaceId, toPlaceId) {
         return place.distance(fromPlaceId, toPlaceId).asPromise().then(function(result) {
             ctx.body = result.json;
         }).catch(function(error) {
@@ -35,7 +35,7 @@ class MapController extends AbstractController {
         });
     }
 
-    getDirections(ctx, fromPlaceId, toPlaceId, next) {
+    async getDirections(ctx, fromPlaceId, toPlaceId) {
         return directions.directions(fromPlaceId, toPlaceId).asPromise().then(function(result) {
             ctx.body = result.json;
         }).catch(function(error) {

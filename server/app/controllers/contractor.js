@@ -26,7 +26,7 @@ const models = db.models;
 
 class ContractorController extends AbstractController {
 
-    index(ctx, next) {
+    async index(ctx) {
         var queryOptions = {
             where: {
                 profileId: ctx.state.user.pid
@@ -44,7 +44,7 @@ class ContractorController extends AbstractController {
         });
     }
 
-    get(ctx, contractorId, next) {
+    async get(ctx, contractorId) {
         
         var queryOptions = {
             where: {
@@ -67,7 +67,7 @@ class ContractorController extends AbstractController {
         });
     }
 
-    create(ctx, next) {
+    async create(ctx) {
 
         var payload = ctx.request.body;
 
@@ -83,7 +83,7 @@ class ContractorController extends AbstractController {
         });
     }
 
-    update(ctx, contractorId, next) {
+    async update(ctx, contractorId) {
 
         var queryOptions = {
             where: {
@@ -112,7 +112,7 @@ class ContractorController extends AbstractController {
         });
     }
 
-    delete(ctx, contractorId, next) {
+    async delete(ctx, contractorId) {
 
         var queryOptions = {
             where: {
@@ -138,7 +138,7 @@ class ContractorController extends AbstractController {
         });
     }
 
-    export(ctx, next) {
+    async export(ctx) {
         var queryOptions = {
             where: {
                 profileId: ctx.state.user.pid
@@ -163,7 +163,7 @@ class ContractorController extends AbstractController {
 
             ctx.body = sheeter.toXLSX(sheets);
             ctx.request.response.attachment("contractors.xlsx");
-        }).catch(function(err) {
+        }).catch(function(error) {
             ctx.status = 500;
             ctx.body = {
                 message: error.message

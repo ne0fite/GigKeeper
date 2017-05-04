@@ -26,7 +26,7 @@ const models = db.models;
 
 class SettingsController extends AbstractController {
 
-    get(ctx, next) {
+    async get(ctx) {
         var queryOptions = {
             where: {
                 id: ctx.state.user.pid
@@ -50,7 +50,7 @@ class SettingsController extends AbstractController {
         });
     }
 
-    save(ctx, next) {
+    async save(ctx) {
 
         var updatedProfile = Object.assign({}, ctx.request.body);
 

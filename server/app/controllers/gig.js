@@ -28,7 +28,7 @@ const models = db.models;
 
 class GigController extends AbstractController {
 
-    index(ctx, next) {
+    async index(ctx) {
         var queryOptions = {
             where: {
                 profileId: ctx.state.user.pid
@@ -58,7 +58,7 @@ class GigController extends AbstractController {
         });
     }
 
-    get(ctx, gigId, next) {
+    async get(ctx, gigId) {
 
         var queryOptions = {
             where: {
@@ -91,7 +91,7 @@ class GigController extends AbstractController {
         });
     }
 
-    create(ctx, next) {
+    async create(ctx) {
 
         var payload = ctx.request.body;
 
@@ -126,7 +126,7 @@ class GigController extends AbstractController {
         });
     }
 
-    update(ctx, gigId, next) {
+    async update(ctx, gigId) {
 
         var payload = ctx.request.body;
 
@@ -181,7 +181,7 @@ class GigController extends AbstractController {
         });
     }
 
-    delete(ctx, gigId, next) {
+    async delete(ctx, gigId) {
 
         var queryOptions = {
             where: {
@@ -210,7 +210,7 @@ class GigController extends AbstractController {
         });
     }
 
-    getGigDescriptions(ctx, next) {
+    async getGigDescriptions(ctx) {
         var queryOptions = {
             raw: true,
             attributes: ["name"],
@@ -232,7 +232,7 @@ class GigController extends AbstractController {
         });
     }
 
-    getGigDistance(ctx, gigId, next) {
+    async getGigDistance(ctx, gigId) {
 
         var queryOptions = {
             where: {
@@ -268,7 +268,7 @@ class GigController extends AbstractController {
         });
     }
 
-    export(ctx, next) {
+    async export(ctx) {
 
         var queryOptions = {
             where: {

@@ -31,7 +31,7 @@ class SecurityController extends AbstractController {
         super();
     }
 
-    loginAction(ctx, next) {
+    async loginAction(ctx) {
         
         const security = new Security();
 
@@ -67,14 +67,14 @@ class SecurityController extends AbstractController {
         });
     }
 
-    logoutAction(ctx, next) {
+    async logoutAction(ctx) {
         ctx.body = {};
 
         // TODO: remove session
 
     }
 
-    requestPasswordResetAction(ctx, next) {
+    async requestPasswordResetAction(ctx) {
 
         var queryOptions = {
             where: {
@@ -87,7 +87,7 @@ class SecurityController extends AbstractController {
         return models.user.findOne(queryOptions).then(function(user) {
 
             if (!user) {
-                throw new Error("User not found for email address " + request.payload.email);
+                throw new Error("User not found for email address " + ctx.request.body.email);
             }
 
             var forgotPassword = new ForgotPassword();
@@ -102,7 +102,7 @@ class SecurityController extends AbstractController {
         });
     }
 
-    resetPasswordAction(ctx, next) {
+    async resetPasswordAction(ctx) {
 
         const security = new Security();
         

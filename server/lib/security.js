@@ -30,19 +30,6 @@ class Security {
         this.models     = this.db.models;
     }
 
-    getJwtOptions() {
-        var self = this;
-        return {
-            key: config.app.jwt.secret,
-            validateFunc: function(decoded, request, callback) {
-                self.validateToken(decoded, request, callback);
-            },
-            verifyOptions: {
-                algorithms: ["HS256"]
-            }
-        };
-    }
-
     getValidatedUser(email, password) {
         var self = this;
 
@@ -88,29 +75,9 @@ class Security {
             // expires after 7 days
             // TODO is 7 days too long? maybe 24 hours?
             exp: Math.floor(new Date().getTime() / 1000) + 7 * 24 * 60 * 60
-        }, config.app.jwt.secret);
+        }, config.api.jwt.secret);
 
         return token;
-    }
-
-    validateToken(decoded, request, callback) {
-        var self = this;
-
-        var queryOptions = {
-            where: {
-                id: decoded.uid
-            }
-        };
-
-        self.models.user.findOne(queryOptions).then(function(user) {
-            if (user && user.active) {
-                callback(null, true);
-            } else {
-                callback(null, false);
-            }
-        }).catch(function(error) {
-            callback(error, false);
-        });
     }
 }
 

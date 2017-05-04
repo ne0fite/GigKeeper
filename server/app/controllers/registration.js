@@ -27,7 +27,7 @@ const models = db.models;
 
 class RegistrationController extends AbstractController {
 
-    inviteIndex(ctx, next) {
+    async inviteIndex(ctx) {
 
         if (ctx.state.user.scope == "admin") {
 
@@ -58,7 +58,7 @@ class RegistrationController extends AbstractController {
         }
     }
 
-    getInvite(ctx, code, next) {
+    async getInvite(ctx, code) {
 
         var queryOptions = {
             where: {
@@ -76,7 +76,7 @@ class RegistrationController extends AbstractController {
         });
     }
 
-    sendInvite(ctx, next) {
+    async sendInvite(ctx) {
         if (ctx.state.user.scope == "admin") {
             var registration = new Registration();
             return registration.sendInvite(ctx.request.body, ctx.state.user).then(function(invite) {
@@ -95,7 +95,7 @@ class RegistrationController extends AbstractController {
         }
     }
 
-    registerInvite(ctx, code, next) {
+    async registerInvite(ctx, code) {
 
         const security = new Security();
 

@@ -63,6 +63,6 @@ app.routes.register(app);
 
 //start the server
 if (!module.parent) {
-    console.log("GigKeeper API server running on port " + app.config.app.port);
-    app.listen(app.config.app.port);
+    console.log("GigKeeper API server running on port " + app.config.api.port); // eslint-disable-line no-console
+    app.listen(app.config.api.port);
 }

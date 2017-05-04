@@ -31,7 +31,7 @@ class UserController extends AbstractController {
         super();
     }
 
-    getProfileAction(ctx, next) {
+    async getProfileAction(ctx) {
 
         var queryOptions = {
             where: {
@@ -69,7 +69,7 @@ class UserController extends AbstractController {
         });
     }
 
-    saveProfileAction(ctx, next) {
+    async saveProfileAction(ctx) {
 
         var userOptions = {
             where: {
@@ -117,7 +117,7 @@ class UserController extends AbstractController {
         });
     }
 
-    inviteAction(ctx, next) {
+    async inviteAction(ctx) {
 
         var registration = new Registration();
 
