@@ -6,7 +6,6 @@ var gulp = require("gulp"),
     sass = require("gulp-sass"),
     autoprefixer = require("gulp-autoprefixer"),
     sourcemaps = require("gulp-sourcemaps"),
-    gls = require("gulp-live-server"),
     imagemin = require("gulp-imagemin"),
     uglify = require("gulp-uglify"),
     changed = require("gulp-changed"),
@@ -26,17 +25,20 @@ var gulp = require("gulp"),
     fs = require("fs"),
     zip = require("gulp-zip"),
     clean = require("gulp-clean"),
-    gulpEbDeploy = require('gulp-elasticbeanstalk-deploy');
+    browserSync = require("browser-sync"),
+    nodemon = require("gulp-nodemon"),
+    gulpEbDeploy = require("gulp-elasticbeanstalk-deploy");
 
 var globs = {
-        config: "config/config.json",
-        staticAssets: "www/**/*",
-        indexHtml: "www_src/index.html",
+        config: ["config/config.json"],
+        api: ["server/**/*", "config/*"],
+        staticAssets: ["www/**/*"],
+        indexHtml: ["www_src/index.html"],
         html: ["www_src/index.html", "www_src/template/**/*.html"],
-        styles: "www_src/styles/**/*.scss",
-        stylesMain: "www_src/styles/main.scss",
+        styles: ["www_src/styles/**/*.scss"],
+        stylesMain: ["www_src/styles/main.scss"],
         scripts: ["www_src/app.js", "www_src/js/**/*.js"],
-        img: "www_src/images/**/*"
+        img: ["www_src/images/**/*"]
     },
     dirs = {
         html: "www",
@@ -187,19 +189,39 @@ gulp.task("watch", ["build"], function() {
     gulp.watch(globs.img, ["images"]);
 });
 
-gulp.task("serve", ["watch"], function() {
-    var server = gls.static(dirs.html, 8001);
-
-    server.start();
-
-    gulp.watch(globs.staticAssets, function(file) {
-        server.notify.apply(server, [file]);
-    });
-});
-
 gulp.task("build", ["config", "html", "sass", "scripts", "images"]);
 
-gulp.task("default", ["serve"]);
+gulp.task("api", function (callback) {
+    var started = false;
+
+    return nodemon({
+        script: "server/main.js",
+        watch: globs.server
+    })
+    .on("start", function onStart() {
+        if (!started) {
+            started = true;
+
+            return callback();
+        }
+    });
+});443
+
+gulp.task("default", ["watch", "api"], function () {
+    browserSync.init({
+        injectChanges: true,
+        open: false,
+        server: dirs.html,
+        port: config.app.port,
+        reloadDelay: 250
+    });
+
+    gulp.watch(globs.staticAssets, function () {
+        browserSync.reload({
+            stream: false
+        });
+    });
+});
 
 gulp.task("dist:clean", function() {
     gulp.src("dist/*", { read: false })

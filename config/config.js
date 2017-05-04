@@ -1,17 +1,17 @@
 /**
  * @license
  * Copyright (C) 2017 Phoenix Bright Software, LLC
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -40,17 +40,32 @@ configJson.google = configJson.google || {};
 
 var env = process.env.NODE_ENV || configJson.app.env || "development";
 
+/**
+ * Build up a base URL for the environment.
+ *
+ * @param {object} envConfig An environment section from the config
+ *
+ * @return {string}
+ */
+function buildBaseUrl(envConfig) {
+    const portSuffix = [80, 443].indexOf(envConfig.port) != -1 ? "" : ":" + envConfig.port;
+
+    return envConfig.baseUrl = envConfig.protocol + "://" + envConfig.host + portSuffix;
+}
+
 // export the config, prefering in order:
 // - environment variables
 // - config JSON
 // - dev defaults
 module.exports = {
     app: {
-        baseUrl: process.env.BASE_URL || configJson.app.baseUrl || "http://localhost:8000"
+        protocol: process.env.UI_PROTOCOL || configJson.app.protocol || "http",
+        host: process.env.UI_HOST || configJson.app.host || "localhost",
+        port: process.env.UI_PORT || configJson.app.port || 8001
     },
     api: {
         env: env,
-        baseUrl: process.env.API_BASE || configJson.api.baseUrl || "http://localhost:8000",
+        protocol: process.env.SERVER_PROTOCOL || configJson.api.protocol || "http",
         host: process.env.SERVER_HOST || configJson.api.host || "localhost",
         port: process.env.SERVER_PORT || configJson.api.port || 8000,
         jwt: {
@@ -79,3 +94,6 @@ module.exports = {
         apiKey: process.env.GOOGLE_MAPS_API_KEY || configJson.google.apiKey
     }
 };
+
+module.exports.app.baseUrl = buildBaseUrl(module.exports.app);
+module.exports.api.baseUrl = buildBaseUrl(module.exports.api);
