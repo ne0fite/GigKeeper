@@ -1,10 +1,12 @@
 {
     "app": {
-        "baseUrl": "http://localhost:8000"
+        "protocol": "http",
+        "host": "localhost",
+        "port": 8001
     },
     "api": {
         "env": "development",
-        "baseUrl": "http://localhost:8000",
+        "protocol": "http",
         "host": "localhost",
         "port": 8000,
         "jwt": {
