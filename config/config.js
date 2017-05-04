@@ -43,21 +43,23 @@ var env = process.env.NODE_ENV || configJson.env || "development";
 /**
  * Build up a base URL for the environment.
  *
- * @param {object} envConfig An environment section from the config
+ * @param {string} protocol "http" or "https"
+ * @param {string} host The server's hostname or IP
+ * @param {number} port The server's external port number
  *
  * @return {string}
  */
-function buildBaseUrl(envConfig) {
-    const portSuffix = [80, 443].indexOf(envConfig.port) != -1 ? "" : ":" + envConfig.port;
+function buildBaseUrl(protocol, host, port) {
+    const portSuffix = [80, 443].indexOf(port) != -1 ? "" : ":" + port;
 
-    return envConfig.baseUrl = envConfig.protocol + "://" + envConfig.host + portSuffix;
+    return protocol + "://" + host + portSuffix;
 }
 
 // export the config, prefering in order:
 // - environment variables
 // - config JSON
 // - dev defaults
-module.exports = {
+var config = module.exports = {
     env: env,
     app: {
         protocol: process.env.UI_PROTOCOL || configJson.app.protocol || "http",
@@ -68,6 +70,7 @@ module.exports = {
         protocol: process.env.SERVER_PROTOCOL || configJson.api.protocol || "http",
         host: process.env.SERVER_HOST || configJson.api.host || "localhost",
         port: process.env.SERVER_PORT || configJson.api.port || 8000,
+        externalPort: process.env.SERVER_EXTERNAL_PORT || configJson.api.externalPort || 8000,
         jwt: {
             secret: process.env.JWT_SECRET || configJson.api.jwt.secret || "NeverShareYourSecret"
         }
@@ -95,5 +98,5 @@ module.exports = {
     }
 };
 
-module.exports.app.baseUrl = buildBaseUrl(module.exports.app);
-module.exports.api.baseUrl = buildBaseUrl(module.exports.api);
+config.app.baseUrl = buildBaseUrl(config.app.protocol, config.app.host, config.app.port);
+config.api.baseUrl = buildBaseUrl(config.api.protocol, config.api.host, config.api.externalPort);

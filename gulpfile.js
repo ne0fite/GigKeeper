@@ -118,7 +118,7 @@ gulp.task("config", function() {
     appConfig.api = {
         protocol: config.api.protocol,
         host: config.api.host,
-        port: config.api.port
+        port: config.api.externalPort
     };
 
     var appConfigString = "var appConfig = " + JSON.stringify(appConfig) + ";";

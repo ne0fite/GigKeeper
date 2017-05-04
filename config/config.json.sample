@@ -9,6 +9,7 @@
         "protocol": "http",
         "host": "localhost",
         "port": 8000,
+        "externalPort": 8000,
         "jwt": {
             "secret": "<your_secret_string>"
         }
