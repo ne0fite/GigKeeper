@@ -28,7 +28,12 @@ const json = require("koa-json");
 const app = module.exports = new koa();
 app.config = require("../config/config.js");
 app.unless = require("koa-unless");
-app.use(cors());
+
+app.use(cors({
+    origin: app.config.app.baseUrl,
+    expose: [ "Content-Disposition" ]
+}));
+
 app.use(bodyParser());
 app.routes = require("./app/routes");
 app.controllers = require("./app/controllers");
@@ -45,12 +50,6 @@ app.use(compress({
     threshold: 2048,
     flush: require("zlib").Z_SYNC_FLUSH
 }));
-
-//add Access-Control-Allow-Origin header
-app.use(async(ctx, next) => {
-    await next();
-    ctx.set("Access-Control-Allow-Origin", app.config.app.baseUrl);
-});
 
 //add x-response-time header
 app.use(async(ctx, next) => {

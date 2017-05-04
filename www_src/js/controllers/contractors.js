@@ -148,11 +148,6 @@ angular.module('GigKeeper').controller('contractors', [
         $scope.export = function () {
             Contractor.data.export().$promise.then(function (result) {
                 $window.saveAs(result.blob, result.filename);
-            }).catch(function(error) {
-                $scope.alerts.push({
-                    msg: error.message,
-                    type: 'danger'
-                });
             });
         };
     }

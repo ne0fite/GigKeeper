@@ -309,9 +309,7 @@ class GigController extends AbstractController {
             }];
 
             ctx.body = sheeter.toXLSX(sheets);
-
-            ctx.set("Content-Type", "application/vnd.ms-excel");
-            ctx.set("Content-Disposition", "attachment; filename=\"gigs.xlsx\"");
+            ctx.request.response.attachment("gigs.xlsx");
         }).catch(function(error) {
             ctx.status = 500;
             ctx.body = {

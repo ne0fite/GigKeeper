@@ -162,9 +162,7 @@ class ContractorController extends AbstractController {
             }];
 
             ctx.body = sheeter.toXLSX(sheets);
-
-            ctx.set("Content-Type", "application/vnd.ms-excel");
-            ctx.set("Content-Disposition", "attachment; filename=\"contractors.xlsx\"");
+            ctx.request.response.attachment("contractors.xlsx");
         }).catch(function(err) {
             ctx.status = 500;
             ctx.body = {
