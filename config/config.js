@@ -38,7 +38,7 @@ configJson.db = configJson.db || {};
 configJson.smtp = configJson.smtp || {};
 configJson.google = configJson.google || {};
 
-var env = process.env.NODE_ENV || configJson.app.env || "development";
+var env = process.env.NODE_ENV || configJson.env || "development";
 
 /**
  * Build up a base URL for the environment.
@@ -58,13 +58,13 @@ function buildBaseUrl(envConfig) {
 // - config JSON
 // - dev defaults
 module.exports = {
+    env: env,
     app: {
         protocol: process.env.UI_PROTOCOL || configJson.app.protocol || "http",
         host: process.env.UI_HOST || configJson.app.host || "localhost",
         port: process.env.UI_PORT || configJson.app.port || 8001
     },
     api: {
-        env: env,
         protocol: process.env.SERVER_PROTOCOL || configJson.api.protocol || "http",
         host: process.env.SERVER_HOST || configJson.api.host || "localhost",
         port: process.env.SERVER_PORT || configJson.api.port || 8000,

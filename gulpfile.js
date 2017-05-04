@@ -112,15 +112,16 @@ makeDirs();
 gulp.task("config", function() {
     var config = require("./config/config.js"),
         appConfig = {
-            env: config.app.env
-        },
-        appConfigString = "var appConfig = ";
+            env: config.env
+        };
 
     appConfig.api = {
-        base: config.api.baseUrl
+        protocol: config.api.protocol,
+        host: config.api.host,
+        port: config.api.port
     };
 
-    appConfigString += JSON.stringify(appConfig) + ";";
+    var appConfigString = "var appConfig = " + JSON.stringify(appConfig) + ";";
 
     fs.writeFileSync("www/js/appConfig.js", appConfigString);
 });
@@ -196,7 +197,7 @@ gulp.task("api", function (callback) {
 
     return nodemon({
         script: "server/main.js",
-        watch: globs.server
+        watch: globs.api
     })
     .on("start", function onStart() {
         if (!started) {

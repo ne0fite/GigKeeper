@@ -1,17 +1,17 @@
 /**
  * @license
  * Copyright (C) 2017 Phoenix Bright Software, LLC
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -21,10 +21,31 @@
 angular.module('GigKeeper').factory('UrlBuilder', [
     function() {
         return {
+            /**
+             * Build an absolute URL for the API.
+             *
+             * @param {string} relativeUrl A relative API URL
+             *
+             * @return {string} The full URL
+             */
             build: function (relativeUrl) {
-                var apiConfig = window.appConfig.api;
+                if(relativeUrl[0] != '/') {
+                    relativeUrl = '/' + relativeUrl;
+                }
 
-                return apiConfig.base + relativeUrl;
+                return this.buildBaseUrl() + relativeUrl;
+            },
+
+            /**
+             * Build the API's base URL.
+             *
+             * @return {string}
+             */
+            buildBaseUrl: function () {
+                var apiConfig = window.appConfig.api;
+                var portSuffix = [80, 443].indexOf(apiConfig.port) != -1 ? '' : ':' + apiConfig.port;
+
+                return apiConfig.protocol + '://' + apiConfig.host + portSuffix;
             }
         };
     }
