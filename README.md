@@ -24,8 +24,7 @@ The `config.json` file works well with local development. However, environment v
 <tr><td>NODE_ENV</td><td>The node environment (development, stage, production)</td><td>development</td></tr>
 <tr><td>SERVER_HOST</td><td>Web server host</td><td>localhost</td></tr>
 <tr><td>SERVER_PORT</td><td>Web server port</td><td>8000</td></tr>
-<tr><td>COOKIE_NAME</td><td>Session cookie name</td><td>gigkeeper-session</td></tr>
-<tr><td>COOKIE_SECRET</td><td>Session cookie secret</td><td>tempdevcookieneedstobecreated123</td></tr>
+<tr><td>JWT_SECRET</td><td>JSON Web Token secret key</td><td>NeverShareYourSecret</td></tr>
 <tr><td>DB_HOST</td><td>Database host name</td><td>localhost</td></tr>
 <tr><td>DB_PORT</td><td>Database host port</td><td>5432</td></tr>
 <tr><td>DB_DIALECT</td><td>Database host dialect</td><td>postgres</td></tr>
@@ -45,7 +44,11 @@ The `config.json` file works well with local development. However, environment v
 
 See the list of nodemailer's [well know services](https://github.com/nodemailer/nodemailer/blob/master/lib/well-known/services.json) for the SMTP service.
 
-The cookie secret is a 32-character hash. Go to the [Online Random Hash Generator](http://md5.my-addr.com/online_random_md5_hash_generator-and-md5_random_hash.php) to generate a random MD5 hash.
+To generate a cryptographically strong JWT secret:
+
+```
+node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"
+```
 
 Go to [Google Maps API](https://developers.google.com/maps/documentation/javascript/get-api-key) to generate an API key.
 

@@ -15,3 +15,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+'use strict';
+
+angular.module('GigKeeper').factory('AuthenticationInterceptor', [
+    'localStorageService',
+    function(localStorageService) {
+        return {
+            request: function(config) {
+                var apiToken = localStorageService.get('apiToken');
+                if (apiToken) {
+                    config.headers.Authorization = 'Bearer ' + apiToken;
+                }
+                return config;
+            }
+        };
+    }
+]);

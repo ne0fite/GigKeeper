@@ -31,9 +31,20 @@ angular.module('GigKeeper').factory('SoftErrorInterceptor', [
                     return response;        //it is redundant to display a message for a 401
                 }
 
+                var message;
+                if (response.data) {
+                    if (response.data.message) {
+                        message = response.data.message;
+                    } else {
+                        message = response.data;
+                    }
+                } else {
+                    message = response;
+                }
+
                 $rootScope.alerts.push({
                     type: 'danger',
-                    msg: response.data.message
+                    msg: message
                 });
 
                 return $q.reject(response);

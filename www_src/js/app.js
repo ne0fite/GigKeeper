@@ -20,6 +20,7 @@
 
 angular.module('GigKeeper', [
     'ng',
+    'LocalStorageModule',
     'ngResource',
     'ui.router',
     'ui.router.title',

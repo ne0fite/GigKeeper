@@ -16,16 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
+"use strict";
 
-angular.module('GigKeeper').factory('UrlBuilder', [
-    function() {
-        return {
-            build: function (relativeUrl) {
-                var apiConfig = window.appConfig.api;
+const path = require("path");
+const sqlizr = require("sqlizr");
+const Sequelize = require("sequelize");
 
-                return apiConfig.base + relativeUrl;
-            }
-        };
-    }
-]);
+const modelPath = path.join(__dirname, "./models/*.js");
+
+const config = require("../../../config/config.js");
+
+const sequelizeOptions = {
+    dialect: config.db.dialect,
+    host: config.db.host,
+    port: config.db.port,
+    benchmark: true
+};
+
+const sequelize = new Sequelize(config.db.name, config.db.user, config.db.pass, sequelizeOptions);
+
+module.exports = {
+    models: sqlizr(sequelize, modelPath),
+    sequelize: sequelize
+};

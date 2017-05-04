@@ -16,16 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
+"use strict";
 
-angular.module('GigKeeper').factory('UrlBuilder', [
-    function() {
-        return {
-            build: function (relativeUrl) {
-                var apiConfig = window.appConfig.api;
-
-                return apiConfig.base + relativeUrl;
-            }
-        };
-    }
-]);
+module.exports = {
+    sequelize: require("./sequelize")
+};
