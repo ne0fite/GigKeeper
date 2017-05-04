@@ -247,7 +247,7 @@ gulp.task("dist:build", ["build", "dist:clean"], function() {
         .pipe(gulp.dest("dist"));
 });
 
-gulp.task('deploy', function() {
+gulp.task('deploy', ["build"], function() {
     return gulp.src([ ".ebextensions/**/*",
         ".bowerrc",
         "bower.json",

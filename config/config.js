@@ -66,7 +66,7 @@ module.exports = {
     },
     api: {
         env: env,
-        baseUrl: process.env.API_BASE || configJson.api.base || "http://localhost:8000",
+        baseUrl: process.env.API_BASE || configJson.api.baseUrl || "http://localhost:8000",
         protocol: process.env.SERVER_PROTOCOL || configJson.api.protocol || "http",
         host: process.env.SERVER_HOST || configJson.api.host || "localhost",
         port: process.env.SERVER_PORT || configJson.api.port || 8000,
