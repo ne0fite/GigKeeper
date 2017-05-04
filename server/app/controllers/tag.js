@@ -18,19 +18,17 @@
 
 "use strict";
 
-const AbstractController = require("./abstract");
-
 const db = require("../../db").sequelize;
 const models = db.models;
 
-class TagController extends AbstractController {
+module.exports = {
 
-    async index(ctx) {
+    index: async(ctx) => {
         var queryOptions = {
             where: {
                 profileId: ctx.state.user.pid
             },
-            order: [ "name" ]
+            order: ["name"]
         };
 
         return models.tag.findAll(queryOptions).then(function(tags) {
@@ -41,10 +39,10 @@ class TagController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    async get(ctx, tagId) {
-        
+    get: async(ctx, tagId) => {
+
         var queryOptions = {
             where: {
                 id: tagId,
@@ -67,9 +65,9 @@ class TagController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    async create(ctx) {
+    create: async(ctx) => {
 
         var payload = ctx.request.body;
 
@@ -83,9 +81,9 @@ class TagController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    async update(ctx, tagId) {
+    update: async(ctx, tagId) => {
 
         var queryOptions = {
             where: {
@@ -112,9 +110,9 @@ class TagController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    async delete(ctx, tagId) {
+    delete: async(ctx, tagId) => {
 
         var queryOptions = {
             where: {
@@ -139,6 +137,4 @@ class TagController extends AbstractController {
             };
         });
     }
-}
-
-module.exports = TagController;
+};

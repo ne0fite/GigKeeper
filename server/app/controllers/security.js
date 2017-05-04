@@ -18,25 +18,20 @@
 
 "use strict";
 
-const AbstractController = require("./abstract");
 const Security = require("../../lib/security");
 const ForgotPassword = require("../../lib/forgotPassword.js");
 
 const db = require("../../db").sequelize;
 const models = db.models;
+const security = new Security();
+const forgotPassword = new ForgotPassword();
 
-class SecurityController extends AbstractController {
+module.exports = {
 
-    constructor() {
-        super();
-    }
-
-    async loginAction(ctx) {
-        
-        const security = new Security();
+    loginAction: async(ctx) => {
 
         return security.getValidatedUser(ctx.request.body.email, ctx.request.body.password).then(function(user) {
-            
+
             if (user) {
 
                 if (user.active) {
@@ -65,16 +60,16 @@ class SecurityController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    async logoutAction(ctx) {
+    logoutAction: async(ctx) => {
         ctx.body = {};
 
         // TODO: remove session
 
-    }
+    },
 
-    async requestPasswordResetAction(ctx) {
+    requestPasswordResetAction: async(ctx) => {
 
         var queryOptions = {
             where: {
@@ -90,7 +85,6 @@ class SecurityController extends AbstractController {
                 throw new Error("User not found for email address " + ctx.request.body.email);
             }
 
-            var forgotPassword = new ForgotPassword();
             return forgotPassword.sendPasswordReset(user);
         }).then(function() {
             ctx.body = {};
@@ -100,12 +94,10 @@ class SecurityController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    async resetPasswordAction(ctx) {
+    resetPasswordAction: async(ctx) => {
 
-        const security = new Security();
-        
         var queryOptions = {
             where: {
                 resetToken: ctx.request.body.token
@@ -130,7 +122,6 @@ class SecurityController extends AbstractController {
                 throw new Error("Token has expired");
             }
 
-            var forgotPassword = new ForgotPassword();
             return forgotPassword.resetPassword(user, ctx.request.body.password);
         }).then(function() {
 
@@ -150,6 +141,4 @@ class SecurityController extends AbstractController {
             };
         });
     }
-}
-
-module.exports = SecurityController;
+};

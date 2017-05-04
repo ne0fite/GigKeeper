@@ -35,7 +35,7 @@ angular.module('GigKeeper').controller('home', [
                 var request = Security.data.login(postData).$promise;
 
                 request.then(function(user) {
-                    if (user.error) {
+                    if (user.message) {
                         $scope.errorMessage = user.message;
                     } else {
                         localStorageService.set('apiToken', user.apiToken);

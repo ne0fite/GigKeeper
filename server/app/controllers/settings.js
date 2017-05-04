@@ -18,15 +18,13 @@
 
 "use strict";
 
-const AbstractController = require("./abstract");
 const place = require("../../lib/place")();
-
 const db = require("../../db").sequelize;
 const models = db.models;
 
-class SettingsController extends AbstractController {
+module.exports = {
 
-    async get(ctx) {
+    get: async(ctx) => {
         var queryOptions = {
             where: {
                 id: ctx.state.user.pid
@@ -48,9 +46,9 @@ class SettingsController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    async save(ctx) {
+    save: async(ctx) => {
 
         var updatedProfile = Object.assign({}, ctx.request.body);
 
@@ -78,6 +76,4 @@ class SettingsController extends AbstractController {
             };
         });
     }
-}
-
-module.exports = SettingsController;
+};

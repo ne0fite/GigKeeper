@@ -18,20 +18,16 @@
 
 "use strict";
 
-const AbstractController = require("./abstract");
 const bcrypt = require("bcrypt");
+const Registration = require("../../lib/registration");
 
 const db = require("../../db").sequelize;
 const models = db.models;
-const Registration = require("../../lib/registration");
+const registration = new Registration();
 
-class UserController extends AbstractController {
+module.exports = {
 
-    constructor() {
-        super();
-    }
-
-    async getProfileAction(ctx) {
+    getProfileAction: async(ctx) => {
 
         var queryOptions = {
             where: {
@@ -67,9 +63,9 @@ class UserController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    async saveProfileAction(ctx) {
+    saveProfileAction: async(ctx) => {
 
         var userOptions = {
             where: {
@@ -115,11 +111,9 @@ class UserController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    async inviteAction(ctx) {
-
-        var registration = new Registration();
+    inviteAction: async(ctx) => {
 
         return registration.sendInvite(ctx.request.body, ctx.state.user).then(function(invite) {
             ctx.body = invite;
@@ -130,6 +124,4 @@ class UserController extends AbstractController {
             };
         });
     }
-}
-
-module.exports = UserController;
+};

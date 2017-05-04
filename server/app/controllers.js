@@ -18,22 +18,13 @@
 
 "use strict";
 
-const ContractorController = require("./controllers/contractor");
-const GigController = require("./controllers/gig");
-const MapController = require("./controllers/map");
-const RegistrationController = require("./controllers/registration");
-const SecurityController = require("./controllers/security");
-const SettingsController = require("./controllers/settings");
-const TagController = require("./controllers/tag");
-const UserController = require("./controllers/user");
-
-const controllers = module.exports;
-
-controllers.contractor = new ContractorController();
-controllers.gig = new GigController();
-controllers.map = new MapController();
-controllers.registration = new RegistrationController();
-controllers.security = new SecurityController();
-controllers.settings = new SettingsController();
-controllers.tag = new TagController();
-controllers.user = new UserController();
+module.exports = {
+    contractor:     require("./controllers/contractor"),
+    gig:            require("./controllers/gig"),
+    map:            require("./controllers/map"),
+    registration:   require("./controllers/registration"),
+    security:       require("./controllers/security"),
+    settings:       require("./controllers/settings"),
+    tag:            require("./controllers/tag"),
+    user:           require("./controllers/user")
+};

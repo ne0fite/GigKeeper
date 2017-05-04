@@ -18,15 +18,14 @@
 
 "use strict";
 
-const AbstractController = require("./abstract");
 const sheeter = require("../../lib/sheeter");
 
 const db = require("../../db").sequelize;
 const models = db.models;
 
-class ContractorController extends AbstractController {
+module.exports = {
 
-    async index(ctx) {
+    index: async (ctx) => {
         var queryOptions = {
             where: {
                 profileId: ctx.state.user.pid
@@ -42,9 +41,9 @@ class ContractorController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    async get(ctx, contractorId) {
+    get: async (ctx, contractorId) => {
         
         var queryOptions = {
             where: {
@@ -65,9 +64,9 @@ class ContractorController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    async create(ctx) {
+    create: async (ctx) => {
 
         var payload = ctx.request.body;
 
@@ -81,9 +80,9 @@ class ContractorController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    async update(ctx, contractorId) {
+    update: async (ctx, contractorId) => {
 
         var queryOptions = {
             where: {
@@ -110,9 +109,9 @@ class ContractorController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    async delete(ctx, contractorId) {
+    delete: async (ctx, contractorId) => {
 
         var queryOptions = {
             where: {
@@ -136,9 +135,9 @@ class ContractorController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    async export(ctx) {
+    export: async (ctx) => {
         var queryOptions = {
             where: {
                 profileId: ctx.state.user.pid
@@ -170,6 +169,4 @@ class ContractorController extends AbstractController {
             };
         });
     }
-}
-
-module.exports = ContractorController;
+};

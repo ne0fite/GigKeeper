@@ -18,16 +18,17 @@
 
 "use strict";
 
-const AbstractController = require("./abstract");
 const Registration = require("../../lib/registration.js");
 const Security = require("../../lib/security.js");
 
 const db = require("../../db").sequelize;
 const models = db.models;
+const security = new Security();
+const registration = new Registration();
 
-class RegistrationController extends AbstractController {
+module.exports = {
 
-    async inviteIndex(ctx) {
+    inviteIndex: async (ctx) => {
 
         if (ctx.state.user.scope == "admin") {
 
@@ -56,9 +57,9 @@ class RegistrationController extends AbstractController {
                 message: "Insufficient Privileges"
             };
         }
-    }
+    },
 
-    async getInvite(ctx, code) {
+    getInvite: async (ctx, code) => {
 
         var queryOptions = {
             where: {
@@ -74,11 +75,11 @@ class RegistrationController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    async sendInvite(ctx) {
+    sendInvite: async (ctx) => {
         if (ctx.state.user.scope == "admin") {
-            var registration = new Registration();
+            
             return registration.sendInvite(ctx.request.body, ctx.state.user).then(function(invite) {
                 ctx.body = invite;
             }).catch(function(error) {
@@ -93,11 +94,9 @@ class RegistrationController extends AbstractController {
                 message: "Insufficient Privileges"
             };
         }
-    }
+    },
 
-    async registerInvite(ctx, code) {
-
-        const security = new Security();
+    registerInvite: async (ctx, code) => {
 
         var queryOptions = {
             where: {
@@ -117,7 +116,6 @@ class RegistrationController extends AbstractController {
             }
 
             // register the user with the payload
-            var registration = new Registration();
             return registration.createAccount(ctx.request.body);
         }).then(function(result) {
             newUser = result;
@@ -159,6 +157,4 @@ class RegistrationController extends AbstractController {
             };
         });
     }
-}
-
-module.exports = RegistrationController;
+};
