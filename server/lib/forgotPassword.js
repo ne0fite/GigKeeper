@@ -23,10 +23,9 @@ var Mailer = require("./mailer.js");
 
 module.exports = ForgotPassword;
 
-function ForgotPassword(server) {
-    this.server = server;
-    this.db = this.server.plugins["hapi-sequelize"].gigkeeperdb;
-    this.models = this.db.sequelize.models;
+function ForgotPassword() {
+    this.db = require("../db").sequelize;
+    this.models = this.db.models;
     this.mailer = new Mailer();
 }
 

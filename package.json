@@ -1,7 +1,7 @@
 {
   "name": "gigkeeper",
   "version": "0.0.1",
-  "description": "Gig management to track mileage and calendar entries for gigs",
+  "description": "Gig management for scheduling and promoting gigs",
   "repository": {
     "type": "git",
     "url": "https://github.com/ne0fite/GigKeeper.git"
@@ -21,36 +21,36 @@
       "url": "https://github.com/zero-degrees"
     }
   ],
-  "main": "main.js",
+  "main": "server/main.js",
   "scripts": {
     "prestart": "./node_modules/.bin/bower install",
-    "start": "node main.js"
+    "start": "node server/main.js"
   },
   "engines": {
-    "node": "6.10.0"
+    "node": "7.6.0"
   },
   "dependencies": {
     "@google/maps": "^0.3.1",
     "bcrypt": "^0.8.7",
     "bluebird": "^3.4.6",
-    "boom": "^4.2.0",
-    "bower": "^1.8.0",
     "chance": "^1.0.6",
     "es6-promise": "^4.1.0",
     "handlebars": "^4.0.6",
     "handlebars-intl": "^1.1.2",
-    "hapi": "^15.2.0",
-    "hapi-auth-jwt2": "^7.2.4",
-    "hapi-sequelize": "^3.0.4",
-    "inert": "^4.0.2",
     "joi": "^9.2.0",
     "jsonwebtoken": "^7.4.0",
-    "lodash": "^4.16.6",
+    "koa": "^2.2.0",
+    "koa-body-parser": "^1.1.2",
+    "koa-compress": "^2.0.0",
+    "koa-cors": "0.0.16",
+    "koa-json": "^2.0.2",
+    "koa-jwt": "^3.2.1",
+    "koa-logger": "^2.0.1",
+    "koa-route": "^3.2.0",
+    "koa-unless": "^1.0.7",
     "nodemailer": "^4.0.1",
     "pg": "^6.1.5",
     "pg-hstore": "^2.3.2",
-    "qs": "^6.4.0",
-    "request": "^2.81.0",
     "secure-random": "^1.1.1",
     "sequelize": "^3.25.0",
     "sha.js": "^2.4.8",
@@ -58,7 +58,9 @@
     "xlsx": "^0.9.12"
   },
   "devDependencies": {
+    "bower": "^1.8.0",
     "code": "^4.0.0",
+    "eslint-config-es2015": "^1.1.0",
     "gulp": "^3.9.1",
     "gulp-angular-htmlify": "^2.3.0",
     "gulp-autoprefixer": "^3.1.1",
@@ -82,6 +84,8 @@
     "jshint": "^2.9.4",
     "jshint-stylish": "^2.2.1",
     "lab": "^13.0.2",
+    "qs": "^6.4.0",
+    "request": "^2.81.0",
     "sequelize-cli": "^2.7.0"
   }
 }

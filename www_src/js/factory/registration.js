@@ -26,7 +26,7 @@ angular.module('GigKeeper').factory('Registration', [
                 index: {
                     action: 'index',
                     method: 'GET',
-                    url: UrlBuilder.build('/api/v1/register/invite'),
+                    url: UrlBuilder.build('/api/v1/profile/invite'),
                     isArray: true
                 },
                 invite: {
@@ -37,7 +37,7 @@ angular.module('GigKeeper').factory('Registration', [
                 sendInvite: {
                     action: 'sendInvite',
                     method: 'POST',
-                    url: UrlBuilder.build('/api/v1/register/invite')
+                    url: UrlBuilder.build('/api/v1/profile/invite')
                 },
                 registerInvite: {
                     action: 'registerInvite',

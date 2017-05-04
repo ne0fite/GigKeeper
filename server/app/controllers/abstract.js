@@ -16,16 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var profilePlugin = {
+"use strict";
 
-    register: function(server, options, next) {
-        next();
+class AbstractController {
+    constructor() {
+        
     }
-};
+}
 
-profilePlugin.register.attributes = {
-    name: "profilePlugin",
-    version: "0.0.1"
-};
-
-module.exports = profilePlugin;
+module.exports = AbstractController;

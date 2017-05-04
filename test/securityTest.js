@@ -16,29 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var publicPlugin = {
-    register: function (server, options, next) {
+"use strict";
 
-        server.route({
-            method: "GET",
-            path: "/{param*}",
-            config: {
-                auth: false
-            },
-            handler: {
-                directory: {
-                    path: "www"
-                }
-            }
-        });
-        
-        next();
-    }
-};
+var Lab = require("lab");
+var lab = exports.lab = Lab.script();
+var Code = require("code");
+var Chance = require("chance");
+var chance = new Chance();
+var Security = require("../server/lib/security.js");
 
-publicPlugin.register.attributes = {
-    name: "publicPlugin",
-    version: "0.0.1"
-};
+lab.experiment("security", function () {
+    var security = new Security();
 
-module.exports = publicPlugin;
+    lab.test("JWT Options", function(done) {
+        let jwtOptions = security.getJwtOptions();
+        done();
+    });
+
+    lab.test("Validate User", function(done) {
+        security.getValidatedUser("test@example.com", "123123").then(function(user) {
+            done();
+        }).catch(function(error) {
+            done(error);
+        })
+    });
+});

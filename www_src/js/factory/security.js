@@ -26,12 +26,12 @@ angular.module('GigKeeper').factory('Security', [
                 login: {
                     action: 'login',
                     method: 'POST',
-                    url: UrlBuilder.build('/api/v1/login')
+                    url: UrlBuilder.build('/api/v1/security/login')
                 },
                 logout: {
                     action: 'logout',
                     method: 'POST',
-                    url: UrlBuilder.build('/api/v1/logout')
+                    url: UrlBuilder.build('/api/v1/security/logout')
                 },
                 profile: {
                     action: 'profile',
@@ -41,12 +41,12 @@ angular.module('GigKeeper').factory('Security', [
                 requestPasswordReset: {
                     action: 'requestPasswordReset',
                     method: 'POST',
-                    url: UrlBuilder.build('/api/v1/requestPasswordReset')
+                    url: UrlBuilder.build('/api/v1/security/requestPasswordReset')
                 },
                 resetPassword: {
                     action: 'resetPassword',
                     method: 'POST',
-                    url: UrlBuilder.build('/api/v1/resetPassword')
+                    url: UrlBuilder.build('/api/v1/security/resetPassword')
                 }
             })
         };

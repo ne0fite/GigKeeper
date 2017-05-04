@@ -25,10 +25,9 @@ var config = require("../../config/config.js");
 
 module.exports = Registration;
 
-function Registration(server) {
-    this.server = server;
-    this.db = this.server.plugins["hapi-sequelize"].gigkeeperdb;
-    this.models = this.db.sequelize.models;
+function Registration() {
+    this.db = require("../db").sequelize;
+    this.models = this.db.models;
     this.mailer = new Mailer();
 }
 
@@ -58,6 +57,7 @@ Registration.prototype.createCode = function() {
  * Create or update a new invite code for the email address
  * and send the invite email.
  * @param {String} email
+ * @param {Object} token
  * @return {Promise}
  */
 Registration.prototype.sendInvite = function(payload, token) {
