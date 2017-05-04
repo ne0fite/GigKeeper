@@ -18,13 +18,12 @@
 
 "use strict";
 
-const AbstractController = require("./abstract");
 const place = require("../../lib/place")();
-const directions = require("../../lib/directions")();
+const directions = require("../../lib/directions");
 
-class MapController extends AbstractController {
+module.exports = {
 
-    getDistance(ctx, fromPlaceId, toPlaceId, next) {
+    getDistance: async (ctx, fromPlaceId, toPlaceId) => {
         return place.distance(fromPlaceId, toPlaceId).asPromise().then(function(result) {
             ctx.body = result.json;
         }).catch(function(error) {
@@ -33,9 +32,9 @@ class MapController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    getDirections(ctx, fromPlaceId, toPlaceId, next) {
+    getDirections: async (ctx, fromPlaceId, toPlaceId) => {
         return directions.directions(fromPlaceId, toPlaceId).asPromise().then(function(result) {
             ctx.body = result.json;
         }).catch(function(error) {
@@ -45,6 +44,4 @@ class MapController extends AbstractController {
             };
         });
     }
-}
-
-module.exports = MapController;
+};

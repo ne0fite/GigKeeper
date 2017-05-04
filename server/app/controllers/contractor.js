@@ -18,15 +18,14 @@
 
 "use strict";
 
-const AbstractController = require("./abstract");
 const sheeter = require("../../lib/sheeter");
 
 const db = require("../../db").sequelize;
 const models = db.models;
 
-class ContractorController extends AbstractController {
+module.exports = {
 
-    index(ctx, next) {
+    index: async (ctx) => {
         var queryOptions = {
             where: {
                 profileId: ctx.state.user.pid
@@ -42,9 +41,9 @@ class ContractorController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    get(ctx, contractorId, next) {
+    get: async (ctx, contractorId) => {
         
         var queryOptions = {
             where: {
@@ -65,9 +64,9 @@ class ContractorController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    create(ctx, next) {
+    create: async (ctx) => {
 
         var payload = ctx.request.body;
 
@@ -81,9 +80,9 @@ class ContractorController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    update(ctx, contractorId, next) {
+    update: async (ctx, contractorId) => {
 
         var queryOptions = {
             where: {
@@ -110,9 +109,9 @@ class ContractorController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    delete(ctx, contractorId, next) {
+    delete: async (ctx, contractorId) => {
 
         var queryOptions = {
             where: {
@@ -136,9 +135,9 @@ class ContractorController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    export(ctx, next) {
+    export: async (ctx) => {
         var queryOptions = {
             where: {
                 profileId: ctx.state.user.pid
@@ -163,13 +162,11 @@ class ContractorController extends AbstractController {
 
             ctx.body = sheeter.toXLSX(sheets);
             ctx.request.response.attachment("contractors.xlsx");
-        }).catch(function(err) {
+        }).catch(function(error) {
             ctx.status = 500;
             ctx.body = {
                 message: error.message
             };
         });
     }
-}
-
-module.exports = ContractorController;
+};

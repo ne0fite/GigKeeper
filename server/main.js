@@ -19,8 +19,8 @@
 "use strict";
 
 const koa = require("koa");
-const bodyParser = require("koa-body-parser");
-const cors = require("koa-cors");
+const bodyParser = require("koa-bodyparser");
+const cors = require("koa2-cors");
 const logger = require("koa-logger");
 const compress = require("koa-compress");
 const json = require("koa-json");
@@ -31,7 +31,7 @@ app.unless = require("koa-unless");
 
 app.use(cors({
     origin: app.config.app.baseUrl,
-    expose: [ "Content-Disposition" ]
+    exposeHeaders: [ "Content-Disposition" ]
 }));
 
 app.use(bodyParser());
@@ -63,6 +63,6 @@ app.routes.register(app);
 
 //start the server
 if (!module.parent) {
-    console.log("GigKeeper API server running on port " + app.config.app.port);
-    app.listen(app.config.app.port);
+    console.log("GigKeeper API server running on port " + app.config.api.port); // eslint-disable-line no-console
+    app.listen(app.config.api.port);
 }

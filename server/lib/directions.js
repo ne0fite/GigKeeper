@@ -18,18 +18,17 @@
 
 "use strict";
 
-var GoogleMaps = require("@google/maps");
-var Promise = require("bluebird");
+const GoogleMaps = require("@google/maps");
+const Promise = require("bluebird");
 
-var config = require("../../config/config.js");
+const config = require("../../config/config.js");
 
 /**
  * This service encapsulates Google Directions functionality.
  *
  * @return {function}
  */
-module.exports = function() {
-    var model = {};
+module.exports = {
 
     /**
      * Generate a request for the directions from one Google Places ID to another.
@@ -40,7 +39,7 @@ module.exports = function() {
      *
      * @return {object}  The distance request object
      */
-    model.directions = (originPlaceId, destPlaceId, alternatives = true) => {
+    directions: (originPlaceId, destPlaceId, alternatives = true) => {
         var maps = new GoogleMaps.createClient({
             key: config.google.apiKey,
             Promise: Promise
@@ -51,7 +50,5 @@ module.exports = function() {
             destination: "place_id:" + destPlaceId,
             alternatives: alternatives
         });
-    };
-
-    return model;
+    }
 };

@@ -4,7 +4,11 @@
         "node": true,
         "es6": true
     },
-    "extends": "es2015",
+    "parserOptions": {
+        "ecmaVersion": 2017,
+        "sourceType": "module"
+    },
+    "extends": "eslint:recommended",
     "rules": {
         "indent": [
             "error",

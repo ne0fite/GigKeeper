@@ -1,3 +1,3 @@
 {
-    "ignore": ["gulpfile.js", "www/*", "www_src/*"]
+    "ignore": ["gulpfile.js", "www/*", "www_src/*", "text/*"]
 }

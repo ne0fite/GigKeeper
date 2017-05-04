@@ -18,16 +18,15 @@
 
 "use strict";
 
-const AbstractController = require("./abstract");
-const Registration = require("../../lib/registration.js");
-const Security = require("../../lib/security.js");
+const registration = require("../../lib/registration.js");
+const security = require("../../lib/security.js");
 
 const db = require("../../db").sequelize;
 const models = db.models;
 
-class RegistrationController extends AbstractController {
+module.exports = {
 
-    inviteIndex(ctx, next) {
+    inviteIndex: async (ctx) => {
 
         if (ctx.state.user.scope == "admin") {
 
@@ -56,9 +55,9 @@ class RegistrationController extends AbstractController {
                 message: "Insufficient Privileges"
             };
         }
-    }
+    },
 
-    getInvite(ctx, code, next) {
+    getInvite: async (ctx, code) => {
 
         var queryOptions = {
             where: {
@@ -74,11 +73,11 @@ class RegistrationController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    sendInvite(ctx, next) {
+    sendInvite: async (ctx) => {
         if (ctx.state.user.scope == "admin") {
-            var registration = new Registration();
+            
             return registration.sendInvite(ctx.request.body, ctx.state.user).then(function(invite) {
                 ctx.body = invite;
             }).catch(function(error) {
@@ -93,11 +92,9 @@ class RegistrationController extends AbstractController {
                 message: "Insufficient Privileges"
             };
         }
-    }
+    },
 
-    registerInvite(ctx, code, next) {
-
-        const security = new Security();
+    registerInvite: async (ctx, code) => {
 
         var queryOptions = {
             where: {
@@ -117,7 +114,6 @@ class RegistrationController extends AbstractController {
             }
 
             // register the user with the payload
-            var registration = new Registration();
             return registration.createAccount(ctx.request.body);
         }).then(function(result) {
             newUser = result;
@@ -159,6 +155,4 @@ class RegistrationController extends AbstractController {
             };
         });
     }
-}
-
-module.exports = RegistrationController;
+};

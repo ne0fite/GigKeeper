@@ -18,7 +18,6 @@
 
 "use strict";
 
-const AbstractController = require("./abstract");
 const Promise = require("bluebird");
 const place = require("../../lib/place")();
 const sheeter = require("../../lib/sheeter");
@@ -26,9 +25,9 @@ const sheeter = require("../../lib/sheeter");
 const db = require("../../db").sequelize;
 const models = db.models;
 
-class GigController extends AbstractController {
+module.exports = {
 
-    index(ctx, next) {
+    index: async (ctx) => {
         var queryOptions = {
             where: {
                 profileId: ctx.state.user.pid
@@ -56,9 +55,9 @@ class GigController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    get(ctx, gigId, next) {
+    get: async (ctx, gigId) => {
 
         var queryOptions = {
             where: {
@@ -89,9 +88,9 @@ class GigController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    create(ctx, next) {
+    create: async (ctx) => {
 
         var payload = ctx.request.body;
 
@@ -124,9 +123,9 @@ class GigController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    update(ctx, gigId, next) {
+    update: async (ctx, gigId) => {
 
         var payload = ctx.request.body;
 
@@ -179,9 +178,9 @@ class GigController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    delete(ctx, gigId, next) {
+    delete: async (ctx, gigId) => {
 
         var queryOptions = {
             where: {
@@ -208,9 +207,9 @@ class GigController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    getGigDescriptions(ctx, next) {
+    getGigDescriptions: async (ctx) => {
         var queryOptions = {
             raw: true,
             attributes: ["name"],
@@ -230,9 +229,9 @@ class GigController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    getGigDistance(ctx, gigId, next) {
+    getGigDistance: async (ctx, gigId) => {
 
         var queryOptions = {
             where: {
@@ -266,9 +265,9 @@ class GigController extends AbstractController {
                 message: error.message
             };
         });
-    }
+    },
 
-    export(ctx, next) {
+    export: async (ctx) => {
 
         var queryOptions = {
             where: {
@@ -317,6 +316,4 @@ class GigController extends AbstractController {
             };
         });
     }
-}
-
-module.exports = GigController;
+};
