@@ -18,7 +18,90 @@
 
 "use strict";
 
-var XLSX = require("xlsx");
+const XLSX = require("xlsx");
+
+/**
+ * Converts a date string to a numeric Excel date.
+ *
+ * @param {string} date A date string that Date knows how to handle
+ *
+ * @return {number} The date's numeric representation in Excel
+ */
+const dateToExcel = (date) => {
+    var epoch = Date.parse(date);
+
+    return (epoch - new Date(Date.UTC(1899, 11, 30))) / (24 * 60 * 60 * 1000);
+};
+
+/**
+ * Turn an array full of data into an object that conforms to the js-xlsx input spec.
+ * https://github.com/SheetJS/js-xlsx
+ *
+ * @param {array} data
+ *
+ * @return {object} A sheet object
+ */
+const arrayToSheet = (data) => {
+    var sheet = {};
+    var i, j, row, cell;
+
+    //the range object contains the spreadsheet's dimensions (TBD)
+    var range = {
+        s: {
+            c: 10000000,
+            r: 10000000
+        },
+        e: {
+            c: 0,
+            r: 0
+        }
+    };
+
+    for (i = 0; i != data.length; ++i) {
+        if (typeof data[i] == "undefined") {
+            continue;
+        }
+
+        row = data[i];
+        for (j = 0; j != row.length; ++j) {
+            //update the range
+            range.s.r = range.s.r > i ? i : range.s.r;
+            range.s.c = range.s.c > j ? j : range.s.c;
+            range.e.r = range.e.r < i ? i : range.e.r;
+            range.e.c = range.e.c < j ? j : range.e.c;
+
+            cell = {
+                t: "s", //type (default to string)
+                v: row[j] //value
+            };
+
+            if (cell.v === null) {
+                continue;
+            }
+
+            var cellReference = XLSX.utils.encode_cell({ c: j, r: i });
+
+            //determine the cell's type, and encode it if necessary
+            if (typeof cell.v === "number") {
+                cell.t = "n";
+            } else if (typeof cell.v === "boolean") {
+                cell.t = "b";
+            } else if (cell.v instanceof Date) {
+                cell.t = "n";
+                cell.z = XLSX.SSF._table[14];
+                cell.v = dateToExcel(cell.v);
+            }
+
+            sheet[cellReference] = cell;
+        }
+    }
+
+    if (range.s.c < 10000000) {
+        sheet["!ref"] = XLSX.utils.encode_range(range);
+    }
+
+    return sheet;
+};
 
 /**
  * This service encapsulates spreadsheet generation functionality. I make no apologies for my sheety sense of humor.
@@ -26,93 +109,7 @@ var XLSX = require("xlsx");
  *
  * @return {function}
  */
-module.exports = (function() {
-    var model = {};
-
-    /**
-     * Converts a date string to a numeric Excel date.
-     *
-     * @param {string} date A date string that Date knows how to handle
-     *
-     * @return {number} The date's numeric representation in Excel
-     */
-    function dateToExcel(date) {
-        var epoch = Date.parse(date);
-
-        return (epoch - new Date(Date.UTC(1899, 11, 30))) / (24 * 60 * 60 * 1000);
-    }
-
-    /**
-     * Turn an array full of data into an object that conforms to the js-xlsx input spec.
-     * https://github.com/SheetJS/js-xlsx
-     *
-     * @param {array} data
-     *
-     * @return {object} A sheet object
-     */
-    function arrayToSheet(data) {
-        var sheet = {};
-        var i, j, row, cell;
-
-        //the range object contains the spreadsheet's dimensions (TBD)
-        var range = {
-            s: {
-                c: 10000000,
-                r: 10000000
-            },
-            e: {
-                c: 0,
-                r: 0
-            }
-        };
-
-        for(i = 0; i != data.length; ++i) {
-            if(typeof data[i] == "undefined") {
-                continue;
-            }
-
-            row = data[i];
-            for(j = 0; j != row.length; ++j) {
-                //update the range
-                range.s.r = range.s.r > i ? i : range.s.r;
-                range.s.c = range.s.c > j ? j : range.s.c;
-                range.e.r = range.e.r < i ? i : range.e.r;
-                range.e.c = range.e.c < j ? j : range.e.c;
-
-                cell = {
-                    t: "s",     //type (default to string)
-                    v: row[j]   //value
-                };
-
-                if(cell.v === null) {
-                    continue;
-                }
-
-                var cellReference = XLSX.utils.encode_cell({c: j, r: i});
-
-                //determine the cell's type, and encode it if necessary
-                if(typeof cell.v === "number") {
-                    cell.t = "n";
-                }
-                else if(typeof cell.v === "boolean") {
-                    cell.t = "b";
-                }
-                else if(cell.v instanceof Date) {
-                    cell.t = "n";
-                    cell.z = XLSX.SSF._table[14];
-                    cell.v = dateToExcel(cell.v);
-                }
-
-                sheet[cellReference] = cell;
-            }
-        }
-
-        if(range.s.c < 10000000) {
-            sheet["!ref"] = XLSX.utils.encode_range(range);
-        }
-
-        return sheet;
-    }
+module.exports = {
 
     /**
      * Generate an XLSX document from the provided array. Requires that all objects in the array have the same keys and
@@ -131,8 +128,8 @@ module.exports = (function() {
      *
      * @return {object} The workbook Buffer
      */
-    model.toXLSX = (sheets) => {
-        if(!sheets.length) {
+    toXLSX: (sheets) => {
+        if (!sheets.length) {
             throw new Error("There is no data to export.");
         }
 
@@ -163,7 +160,5 @@ module.exports = (function() {
         });
 
         return xlsx instanceof Buffer ? xlsx : new Buffer(xlsx, "binary");
-    };
-
-    return model;
-})();
+    }
+};

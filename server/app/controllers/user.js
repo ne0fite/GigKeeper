@@ -19,11 +19,10 @@
 "use strict";
 
 const bcrypt = require("bcrypt");
-const Registration = require("../../lib/registration");
+const registration = require("../../lib/registration");
 
 const db = require("../../db").sequelize;
 const models = db.models;
-const registration = new Registration();
 
 module.exports = {
 

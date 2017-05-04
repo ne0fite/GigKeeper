@@ -18,20 +18,17 @@
 
 "use strict";
 
-var Promise = require("bluebird");
-var bcrypt = Promise.promisifyAll(require("bcrypt"));
-var JWT = require("jsonwebtoken");
-var config = require("../../config/config.js");
+const Promise = require("bluebird");
+const bcrypt = Promise.promisifyAll(require("bcrypt"));
+const JWT = require("jsonwebtoken");
+const config = require("../../config/config.js");
 
-class Security {
+const db         = require("../db").sequelize;
+const models     = db.models;
 
-    constructor() {
-        this.db         = require("../db").sequelize;
-        this.models     = this.db.models;
-    }
+module.exports = {
 
-    getValidatedUser(email, password) {
-        var self = this;
+    getValidatedUser: (email, password) => {
 
         var queryOptions = {
             where: {
@@ -40,13 +37,13 @@ class Security {
                 }
             },
             include: [{
-                model: self.models.profile,
+                model: models.profile,
                 required: true
             }]
         };
 
         var user;
-        return self.models.user.findOne(queryOptions).then(function(result) {
+        return models.user.findOne(queryOptions).then(function(result) {
             if (result) {
                 user = result;
                 return bcrypt.compareAsync(password, user.password);
@@ -64,9 +61,9 @@ class Security {
                 return null;
             }
         });
-    }
+    },
 
-    createToken(user) {
+    createToken: (user) => {
 
         var token = JWT.sign({
             uid: user.id,
@@ -79,6 +76,4 @@ class Security {
 
         return token;
     }
-}
-
-module.exports = Security;
+};

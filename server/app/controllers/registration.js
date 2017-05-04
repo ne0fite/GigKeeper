@@ -18,13 +18,11 @@
 
 "use strict";
 
-const Registration = require("../../lib/registration.js");
-const Security = require("../../lib/security.js");
+const registration = require("../../lib/registration.js");
+const security = require("../../lib/security.js");
 
 const db = require("../../db").sequelize;
 const models = db.models;
-const security = new Security();
-const registration = new Registration();
 
 module.exports = {
 

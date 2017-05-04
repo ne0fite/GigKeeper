@@ -18,13 +18,11 @@
 
 "use strict";
 
-const Security = require("../../lib/security");
-const ForgotPassword = require("../../lib/forgotPassword.js");
+const security = require("../../lib/security");
+const forgotPassword = require("../../lib/forgotPassword.js");
 
 const db = require("../../db").sequelize;
 const models = db.models;
-const security = new Security();
-const forgotPassword = new ForgotPassword();
 
 module.exports = {
 

@@ -19,7 +19,7 @@
 "use strict";
 
 const place = require("../../lib/place")();
-const directions = require("../../lib/directions")();
+const directions = require("../../lib/directions");
 
 module.exports = {
 
