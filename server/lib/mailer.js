@@ -18,156 +18,152 @@
 
 "use strict";
 
-var path = require("path");
-var fs = require("fs");
-var Handlebars = require("handlebars");
-var HandlebarsIntl = require("handlebars-intl");
+const path = require("path");
+const fs = require("fs");
+const Handlebars = require("handlebars");
+const HandlebarsIntl = require("handlebars-intl");
 HandlebarsIntl.registerWith(Handlebars);
-var Promise = require("bluebird");
-var config = require("../../config/config.js");
+const Promise = require("bluebird");
+const config = require("../../config/config.js");
 
-var nodemailer = require("nodemailer");
+const nodemailer = require("nodemailer");
 
-module.exports = Mailer;
+// configure the transporer from system config
+const transporter = nodemailer.createTransport({
+    service: config.smtp.service,
+    auth: {
+        user: config.smtp.user,
+        pass: config.smtp.pass
+    }
+});
 
-function Mailer() {
-
-    // configure the transporer from system config
-    this.transporter = nodemailer.createTransport({
-        service: config.smtp.service,
-        auth: {
-            user: config.smtp.user,
-            pass: config.smtp.pass
-        }
-    });
-
-    // the template base path
-    this.templateBasePath = path.join(__dirname, "../views/email");
-
-    /**
-     * Load the contents of a named template. The template is resolved
-     * by appending the type as the extension and loading it from the
-     * base template path.
-     * @param {String} templateName base name of template
-     * @param {String} type template type extension (html, txt, etc.)
-     * @return {Promise<String>} promise of the contents as a string, or null if not found
-     */
-    this.getTemplateSource = function(templateName, type) {
-        var self = this;
-
-        var templatePath = path.join(self.templateBasePath, templateName + "." + type);
-
-        return new Promise(function(resolve, reject) {
-
-            fs.readFile(templatePath, { encoding: "utf8" }, function(err, data) {
-                if (err) {
-                    if (err.code == "ENOENT") {
-                        // simply return null if not found
-                        resolve(null);
-                    } else {
-                        reject(err);
-                    }
-                } else {
-                    resolve(data);
-                }
-            });
-        });
-    };
-
-    // intl data for rendering handlebar templates
-    this.intlData = {
-        locales: "en-US",
-        formats: {
-            date: {
-                short: {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric"
-                }
-            },
-            time: {
-                hhmm: {
-                    hour: "numeric",
-                    minute: "numeric"
-                }
-            },
-            relative: {
-                hours: {
-                    units: "hour",
-                    style: "numeric"
-                }
-            }
-        }
-    };
-}
+// the template base path
+const templateBasePath = path.join(__dirname, "../views/email");
 
 /**
- * Send an email using the named template and the template context data.
- * @param {Object} mailOptions
- * @param {String} templateName
- * @param {Object} context
- * @return {Promise<Object>}
+ * Load the contents of a named template. The template is resolved
+ * by appending the type as the extension and loading it from the
+ * base template path.
+ * @param {String} templateName base name of template
+ * @param {String} type template type extension (html, txt, etc.)
+ * @return {Promise<String>} promise of the contents as a string, or null if not found
  */
-Mailer.prototype.sendEmail = function(mailOptions, templateName, context) {
-    var self = this;
+const getTemplateSource = (templateName, type) => {
 
-    // return if not enabled
-    if (!config.smtp.enabled) {
-        return Promise.resolve({
-            accepted: mailOptions.to
+    var templatePath = path.join(templateBasePath, templateName + "." + type);
+
+    return new Promise(function(resolve, reject) {
+
+        fs.readFile(templatePath, { encoding: "utf8" }, function(err, data) {
+            if (err) {
+                if (err.code == "ENOENT") {
+                    // simply return null if not found
+                    resolve(null);
+                } else {
+                    reject(err);
+                }
+            } else {
+                resolve(data);
+            }
         });
+    });
+};
+
+// intl data for rendering handlebar templates
+const intlData = {
+    locales: "en-US",
+    formats: {
+        date: {
+            short: {
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+            }
+        },
+        time: {
+            hhmm: {
+                hour: "numeric",
+                minute: "numeric"
+            }
+        },
+        relative: {
+            hours: {
+                units: "hour",
+                style: "numeric"
+            }
+        }
     }
+};
 
-    // override recipient address(es) if config'd to send to a single address
-    if (config.smtp.singleAddress) {
-        mailOptions.to = config.smtp.singleAddress;
-    }
+module.exports = {
 
-    // add baseUrl to the context
-    context.baseUrl = config.app.baseUrl;
+    /**
+     * Send an email using the named template and the template context data.
+     * @param {Object} mailOptions
+     * @param {String} templateName
+     * @param {Object} context
+     * @return {Promise<Object>}
+     */
+    sendEmail: (mailOptions, templateName, context) => {
 
-    // load / compile / render the templates
-    var textTemplate;
-    var htmlTemplate;
-    return self.getTemplateSource(templateName, "txt").then(function(data) {
-        textTemplate = data;
-        return self.getTemplateSource(templateName, "html");
-    }).then(function(data) {
-        htmlTemplate = data;
-
-        // compile the text message from the template, context, and intl data
-        if (textTemplate) {
-            mailOptions.text = Handlebars.compile(textTemplate)(context, {
-                data: {
-                    intl: self.intlData
-                }
+        // return if not enabled
+        if (!config.smtp.enabled) {
+            return Promise.resolve({
+                accepted: mailOptions.to
             });
         }
 
-        // compile the html message from the template, context, and intl data
-        if (htmlTemplate) {
-            mailOptions.html = Handlebars.compile(htmlTemplate)(context, {
-                data: {
-                    intl: self.intlData
-                }
-            });
+        // override recipient address(es) if config'd to send to a single address
+        if (config.smtp.singleAddress) {
+            mailOptions.to = config.smtp.singleAddress;
         }
 
-        // reject if no templates were found
-        if (!mailOptions.html && mailOptions.text) {
-            return Promise.reject(new Error("No text or html templates found for " + templateName));
-        } else {
+        // add baseUrl to the context
+        context.baseUrl = config.app.baseUrl;
 
-            // send the email!
-            return new Promise(function(resolve, reject) {
-                self.transporter.sendMail(mailOptions, function(error, info) {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        resolve(info);
+        // load / compile / render the templates
+        var textTemplate;
+        var htmlTemplate;
+        return getTemplateSource(templateName, "txt").then(function(data) {
+            textTemplate = data;
+            return getTemplateSource(templateName, "html");
+        }).then(function(data) {
+            htmlTemplate = data;
+
+            // compile the text message from the template, context, and intl data
+            if (textTemplate) {
+                mailOptions.text = Handlebars.compile(textTemplate)(context, {
+                    data: {
+                        intl: intlData
                     }
                 });
-            });
-        }
-    });
+            }
+
+            // compile the html message from the template, context, and intl data
+            if (htmlTemplate) {
+                mailOptions.html = Handlebars.compile(htmlTemplate)(context, {
+                    data: {
+                        intl: intlData
+                    }
+                });
+            }
+
+            // reject if no templates were found
+            if (!mailOptions.html && mailOptions.text) {
+                return Promise.reject(new Error("No text or html templates found for " + templateName));
+            } else {
+
+                // send the email!
+                return new Promise(function(resolve, reject) {
+                    transporter.sendMail(mailOptions, function(error, info) {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(info);
+                        }
+                    });
+                });
+            }
+        });
+    }
 };

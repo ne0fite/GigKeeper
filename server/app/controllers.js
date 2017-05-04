@@ -16,29 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var publicPlugin = {
-    register: function (server, options, next) {
+"use strict";
 
-        server.route({
-            method: "GET",
-            path: "/{param*}",
-            config: {
-                auth: false
-            },
-            handler: {
-                directory: {
-                    path: "www"
-                }
-            }
-        });
-        
-        next();
-    }
+module.exports = {
+    contractor:     require("./controllers/contractor"),
+    gig:            require("./controllers/gig"),
+    map:            require("./controllers/map"),
+    registration:   require("./controllers/registration"),
+    security:       require("./controllers/security"),
+    settings:       require("./controllers/settings"),
+    tag:            require("./controllers/tag"),
+    user:           require("./controllers/user")
 };
-
-publicPlugin.register.attributes = {
-    name: "publicPlugin",
-    version: "0.0.1"
-};
-
-module.exports = publicPlugin;

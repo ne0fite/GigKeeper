@@ -85,7 +85,7 @@ angular.module('GigKeeper').controller('GigEditController', [
                         beforeSend: function(req) {
                             var apiToken = localStorageService.get('apiToken');
                             if (apiToken) {
-                                req.setRequestHeader('Authorization', apiToken);
+                                req.setRequestHeader('Authorization', 'Bearer ' + apiToken);
                             }
                         }
                     }

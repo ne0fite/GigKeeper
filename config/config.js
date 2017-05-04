@@ -32,8 +32,8 @@ if (fs.existsSync(__dirname + "/config.json")) {
 // create missing properties
 configJson.app = configJson.app || {};
 configJson.app.cookie = configJson.app.cookie || {};
-configJson.app.jwt = configJson.app.jwt || {};
 configJson.api = configJson.api || {};
+configJson.api.jwt = configJson.api.jwt || {};
 configJson.db = configJson.db || {};
 configJson.smtp = configJson.smtp || {};
 configJson.google = configJson.google || {};
@@ -46,16 +46,16 @@ var env = process.env.NODE_ENV || configJson.app.env || "development";
 // - dev defaults
 module.exports = {
     app: {
-        env: env,
-        baseUrl: process.env.BASE_URL || configJson.app.baseUrl || "http://localhost:8000",
-        host: process.env.SERVER_HOST || configJson.app.host || "localhost",
-        port: process.env.SERVER_PORT || configJson.app.port || 8000,
-        jwt: {
-            secret: process.env.JWT_SECRET || configJson.app.jwt.secret || "NeverShareYourSecret"
-        }
+        baseUrl: process.env.BASE_URL || configJson.app.baseUrl || "http://localhost:8000"
     },
     api: {
-        base: process.env.API_BASE || configJson.api.base || "http://localhost:8000"
+        env: env,
+        baseUrl: process.env.API_BASE || configJson.api.base || "http://localhost:8000",
+        host: process.env.SERVER_HOST || configJson.api.host || "localhost",
+        port: process.env.SERVER_PORT || configJson.api.port || 8000,
+        jwt: {
+            secret: process.env.JWT_SECRET || configJson.api.jwt.secret || "NeverShareYourSecret"
+        }
     },
     db: {
         host: dbconfig[env].host,
