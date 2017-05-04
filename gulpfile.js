@@ -194,8 +194,8 @@ gulp.task("api", function (callback) {
     var started = false;
 
     return nodemon({
-        script: "main.js",
-        watch: ["main.js", "server/**/*"]
+        script: "server/main.js",
+        watch: "server/**/*"
     })
     .on("start", function onStart() {
         if (!started) {
@@ -204,23 +204,21 @@ gulp.task("api", function (callback) {
             return callback();
         }
     })
-    .on("restart", function onRestart() {
-        setTimeout(function () {
-            browserSync.reload({
-                stream: false
-            });
-        }, 1000);
-    });
 });
 
-gulp.task("default", ["api"], function () {
+gulp.task("default", ["watch", "api"], function () {
     browserSync.init({
-        files: globs.staticAssets,
         injectChanges: true,
         open: false,
-        proxy: config.app.baseUrl,
-        port: config.app.port + 1,
-        reloadDelay: 500
+        server: dirs.html,
+        port: config.app.port,
+        reloadDelay: 250
+    });
+
+    gulp.watch(globs.staticAssets, function () {
+        browserSync.reload({
+            stream: false
+        });
     });
 });
 
