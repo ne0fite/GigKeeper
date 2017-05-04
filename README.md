@@ -70,7 +70,9 @@ gulp db:migrate --env production
 
 Start up the server with:
 
-```./start.sh```
+```gulp```
+
+Wait until you see the [BS] message that says it is serving files from www.
 
 ## Tests
 
