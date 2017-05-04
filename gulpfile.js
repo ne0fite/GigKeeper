@@ -6,7 +6,6 @@ var gulp = require("gulp"),
     sass = require("gulp-sass"),
     autoprefixer = require("gulp-autoprefixer"),
     sourcemaps = require("gulp-sourcemaps"),
-    gls = require("gulp-live-server"),
     imagemin = require("gulp-imagemin"),
     uglify = require("gulp-uglify"),
     changed = require("gulp-changed"),
@@ -26,7 +25,9 @@ var gulp = require("gulp"),
     fs = require("fs"),
     zip = require("gulp-zip"),
     clean = require("gulp-clean"),
-    gulpEbDeploy = require('gulp-elasticbeanstalk-deploy');
+    browserSync = require("browser-sync"),
+    nodemon = require("gulp-nodemon"),
+    gulpEbDeploy = require("gulp-elasticbeanstalk-deploy");
 
 var globs = {
         config: "config/config.json",
@@ -188,19 +189,41 @@ gulp.task("watch", ["build"], function() {
     gulp.watch(globs.img, ["images"]);
 });
 
-gulp.task("serve", ["watch"], function() {
-    var server = gls.static(dirs.html, 8001);
+gulp.task("build", ["config", "html", "sass", "scripts", "images"]);
 
-    server.start();
+gulp.task("api", function (callback) {
+    var started = false;
 
-    gulp.watch(globs.staticAssets, function(file) {
-        server.notify.apply(server, [file]);
+    return nodemon({
+        script: "main.js",
+        watch: ["main.js", "server/**/*"]
+    })
+    .on("start", function onStart() {
+        if (!started) {
+            started = true;
+
+            return callback();
+        }
+    })
+    .on("restart", function onRestart() {
+        setTimeout(function () {
+            browserSync.reload({
+                stream: false
+            });
+        }, 1000);
     });
 });
 
-gulp.task("build", ["config", "html", "sass", "scripts", "images"]);
-
-gulp.task("default", ["serve"]);
+gulp.task("default", ["api"], function () {
+    browserSync.init({
+        files: globs.staticAssets,
+        injectChanges: true,
+        open: false,
+        proxy: config.app.baseUrl,
+        port: config.app.port + 1,
+        reloadDelay: 500
+    });
+});
 
 gulp.task("dist:clean", function() {
     gulp.src("dist/*", { read: false })
