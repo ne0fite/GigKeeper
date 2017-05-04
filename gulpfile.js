@@ -30,14 +30,15 @@ var gulp = require("gulp"),
     gulpEbDeploy = require("gulp-elasticbeanstalk-deploy");
 
 var globs = {
-        config: "config/config.json",
-        staticAssets: "www/**/*",
-        indexHtml: "www_src/index.html",
+        config: ["config/config.json"],
+        api: ["server/**/*", "config/*"],
+        staticAssets: ["www/**/*"],
+        indexHtml: ["www_src/index.html"],
         html: ["www_src/index.html", "www_src/template/**/*.html"],
-        styles: "www_src/styles/**/*.scss",
-        stylesMain: "www_src/styles/main.scss",
+        styles: ["www_src/styles/**/*.scss"],
+        stylesMain: ["www_src/styles/main.scss"],
         scripts: ["www_src/app.js", "www_src/js/**/*.js"],
-        img: "www_src/images/**/*"
+        img: ["www_src/images/**/*"]
     },
     dirs = {
         html: "www",
@@ -195,7 +196,7 @@ gulp.task("api", function (callback) {
 
     return nodemon({
         script: "server/main.js",
-        watch: "server/**/*"
+        watch: globs.server
     })
     .on("start", function onStart() {
         if (!started) {
@@ -203,8 +204,8 @@ gulp.task("api", function (callback) {
 
             return callback();
         }
-    })
-});
+    });
+});443
 
 gulp.task("default", ["watch", "api"], function () {
     browserSync.init({

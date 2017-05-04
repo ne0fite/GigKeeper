@@ -22,6 +22,10 @@ The `config.json` file works well with local development. However, environment v
 </thead>
 <tbody>
 <tr><td>NODE_ENV</td><td>The node environment (development, stage, production)</td><td>development</td></tr>
+<tr><td>UI_PROTOCOL</td><td>UI web server protocol</td><td>http</td></tr>
+<tr><td>UI_HOST</td><td>UI web server host</td><td>localhost</td></tr>
+<tr><td>UI_PORT</td><td>UI web server port</td><td>8001</td></tr>
+<tr><td>SERVER_PROTOCOL</td><td>Web server protocol</td><td>http</td></tr>
 <tr><td>SERVER_HOST</td><td>Web server host</td><td>localhost</td></tr>
 <tr><td>SERVER_PORT</td><td>Web server port</td><td>8000</td></tr>
 <tr><td>JWT_SECRET</td><td>JSON Web Token secret key</td><td>NeverShareYourSecret</td></tr>

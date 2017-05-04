@@ -48,7 +48,7 @@ var env = process.env.NODE_ENV || configJson.app.env || "development";
  * @return {string}
  */
 function buildBaseUrl(envConfig) {
-    const portSuffix = envConfig.port == 80 ? "" : ":" + envConfig.port;
+    const portSuffix = [80, 443].indexOf(envConfig.port) != -1 ? "" : ":" + envConfig.port;
 
     return envConfig.baseUrl = envConfig.protocol + "://" + envConfig.host + portSuffix;
 }
@@ -59,14 +59,12 @@ function buildBaseUrl(envConfig) {
 // - dev defaults
 module.exports = {
     app: {
-        baseUrl: process.env.BASE_URL || configJson.app.baseUrl || "http://localhost:8001",
-        protocol: process.env.PROTOCOL || configJson.app.protocol || "http",
-        host: process.env.HOST || configJson.app.host || "localhost",
-        port: process.env.PORT || configJson.app.port || 8001
+        protocol: process.env.UI_PROTOCOL || configJson.app.protocol || "http",
+        host: process.env.UI_HOST || configJson.app.host || "localhost",
+        port: process.env.UI_PORT || configJson.app.port || 8001
     },
     api: {
         env: env,
-        baseUrl: process.env.API_BASE || configJson.api.baseUrl || "http://localhost:8000",
         protocol: process.env.SERVER_PROTOCOL || configJson.api.protocol || "http",
         host: process.env.SERVER_HOST || configJson.api.host || "localhost",
         port: process.env.SERVER_PORT || configJson.api.port || 8000,
