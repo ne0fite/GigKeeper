@@ -62,7 +62,7 @@ var options = minimist(process.argv.slice(2), {
  * @return {void}
  */
 function onError(err) {
-    console.log(err.toString());
+    console.log(err.toString()); // eslint-disable-line no-console
 }
 
 /**
@@ -116,9 +116,7 @@ gulp.task("config", function() {
         };
 
     appConfig.api = {
-        protocol: config.api.protocol,
-        host: config.api.host,
-        port: config.api.externalPort
+        baseUrl: config.api.baseUrl
     };
 
     var appConfigString = "var appConfig = " + JSON.stringify(appConfig) + ";";
@@ -206,7 +204,7 @@ gulp.task("api", function (callback) {
             return callback();
         }
     });
-});443
+});
 
 gulp.task("default", ["watch", "api"], function () {
     browserSync.init({
@@ -249,7 +247,7 @@ gulp.task("dist:build", ["build", "dist:clean"], function() {
         .pipe(gulp.dest("dist"));
 });
 
-gulp.task('deploy', ["build"], function() {
+gulp.task("deploy", ["build"], function() {
     return gulp.src([ ".ebextensions/**/*",
         ".bowerrc",
         "bower.json",
@@ -263,16 +261,16 @@ gulp.task('deploy', ["build"], function() {
         "!www/bower_components/**/*",
         "!config/config.json" ], { base: "./" })
     .pipe(gulpEbDeploy({
-        name: 'GigKeeper',
+        name: "GigKeeper",
         timestamp: true,
         waitForDeploy: true,
         amazon: {
-            region: 'us-west-2',
-            bucket: 'elasticbeanstalk-us-west-2-008453750068',
-            applicationName: 'GIgKeeper',
-            environmentName: 'gigkeeper-env'
+            region: "us-west-2",
+            bucket: "elasticbeanstalk-us-west-2-008453750068",
+            applicationName: "GIgKeeper",
+            environmentName: "gigkeeper-env"
         }
-    }))
+    }));
 });
 
 /*** Server tasks ***/

@@ -1,15 +1,12 @@
 {
+    "env": "development",
     "app": {
-        "protocol": "http",
-        "host": "localhost",
-        "port": 8001
+        "port": 8001,
+        "baseUrl": "http://localhost:8001"
     },
     "api": {
-        "env": "development",
-        "protocol": "http",
-        "host": "localhost",
         "port": 8000,
-        "externalPort": 8000,
+        "baseUrl": "http://localhost:8000",
         "jwt": {
             "secret": "<your_secret_string>"
         }

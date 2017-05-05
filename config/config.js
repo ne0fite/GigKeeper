@@ -40,37 +40,19 @@ configJson.google = configJson.google || {};
 
 var env = process.env.NODE_ENV || configJson.env || "development";
 
-/**
- * Build up a base URL for the environment.
- *
- * @param {string} protocol "http" or "https"
- * @param {string} host The server's hostname or IP
- * @param {number} port The server's external port number
- *
- * @return {string}
- */
-function buildBaseUrl(protocol, host, port) {
-    const portSuffix = [80, 443].indexOf(port) != -1 ? "" : ":" + port;
-
-    return protocol + "://" + host + portSuffix;
-}
-
 // export the config, prefering in order:
 // - environment variables
 // - config JSON
 // - dev defaults
-var config = module.exports = {
+module.exports = {
     env: env,
     app: {
-        protocol: process.env.UI_PROTOCOL || configJson.app.protocol || "http",
-        host: process.env.UI_HOST || configJson.app.host || "localhost",
-        port: process.env.UI_PORT || configJson.app.port || 8001
+        port: process.env.UI_PORT || configJson.app.port || 8001,
+        baseUrl: process.env.UI_BASE_URL || configJson.app.baseUrl || "http://localhost:8001"
     },
     api: {
-        protocol: process.env.SERVER_PROTOCOL || configJson.api.protocol || "http",
-        host: process.env.SERVER_HOST || configJson.api.host || "localhost",
         port: process.env.SERVER_PORT || configJson.api.port || 8000,
-        externalPort: process.env.SERVER_EXTERNAL_PORT || configJson.api.externalPort || 8000,
+        baseUrl: process.env.API_BASE_URL || configJson.api.baseurl || "http://localhost:8000",
         jwt: {
             secret: process.env.JWT_SECRET || configJson.api.jwt.secret || "NeverShareYourSecret"
         }
@@ -97,6 +79,3 @@ var config = module.exports = {
         apiKey: process.env.GOOGLE_MAPS_API_KEY || configJson.google.apiKey
     }
 };
-
-config.app.baseUrl = buildBaseUrl(config.app.protocol, config.app.host, config.app.port);
-config.api.baseUrl = buildBaseUrl(config.api.protocol, config.api.host, config.api.externalPort);

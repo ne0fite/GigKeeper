@@ -19,7 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').factory('UrlBuilder', [
-    function() {
+    '$window',
+    function($window) {
         return {
             /**
              * Build an absolute URL for the API.
@@ -33,19 +34,7 @@ angular.module('GigKeeper').factory('UrlBuilder', [
                     relativeUrl = '/' + relativeUrl;
                 }
 
-                return this.buildBaseUrl() + relativeUrl;
-            },
-
-            /**
-             * Build the API's base URL.
-             *
-             * @return {string}
-             */
-            buildBaseUrl: function () {
-                var apiConfig = window.appConfig.api;
-                var portSuffix = [80, 443].indexOf(apiConfig.port) != -1 ? '' : ':' + apiConfig.port;
-
-                return apiConfig.protocol + '://' + apiConfig.host + portSuffix;
+                return $window.appConfig.api.baseUrl + relativeUrl;
             }
         };
     }
