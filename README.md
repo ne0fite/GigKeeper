@@ -28,6 +28,7 @@ The `config.json` file works well with local development. However, environment v
 <tr><td>SERVER_PROTOCOL</td><td>Web server protocol</td><td>http</td></tr>
 <tr><td>SERVER_HOST</td><td>Web server host</td><td>localhost</td></tr>
 <tr><td>SERVER_PORT</td><td>Web server port</td><td>8000</td></tr>
+<tr><td>SERVER_EXTERNAL_PORT</td><td>Web server external port -- use when proxying node</td><td>8000</td></tr>
 <tr><td>JWT_SECRET</td><td>JSON Web Token secret key</td><td>NeverShareYourSecret</td></tr>
 <tr><td>DB_HOST</td><td>Database host name</td><td>localhost</td></tr>
 <tr><td>DB_PORT</td><td>Database host port</td><td>5432</td></tr>

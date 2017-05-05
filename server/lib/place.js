@@ -33,7 +33,7 @@ module.exports = function() {
 
     var place = null;
 
-    return {
+    const model = {
 
         /**
          * Store a place in the model.
@@ -103,4 +103,6 @@ module.exports = function() {
             return JSON.stringify(model.stripPlace(place));
         }
     };
+
+    return model;
 };

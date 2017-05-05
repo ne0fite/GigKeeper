@@ -62,7 +62,7 @@ var options = minimist(process.argv.slice(2), {
  * @return {void}
  */
 function onError(err) {
-    console.log(err.toString());
+    console.log(err.toString()); // eslint-disable-line no-console
 }
 
 /**
@@ -112,15 +112,14 @@ makeDirs();
 gulp.task("config", function() {
     var config = require("./config/config.js"),
         appConfig = {
-            env: config.app.env
-        },
-        appConfigString = "var appConfig = ";
+            env: config.env
+        };
 
     appConfig.api = {
-        base: config.api.baseUrl
+        baseUrl: config.api.baseUrl
     };
 
-    appConfigString += JSON.stringify(appConfig) + ";";
+    var appConfigString = "var appConfig = " + JSON.stringify(appConfig) + ";";
 
     fs.writeFileSync("www/js/appConfig.js", appConfigString);
 });
@@ -196,7 +195,7 @@ gulp.task("api", function (callback) {
 
     return nodemon({
         script: "server/main.js",
-        watch: globs.server
+        watch: globs.api
     })
     .on("start", function onStart() {
         if (!started) {
@@ -205,7 +204,7 @@ gulp.task("api", function (callback) {
             return callback();
         }
     });
-});443
+});
 
 gulp.task("default", ["watch", "api"], function () {
     browserSync.init({
@@ -248,7 +247,7 @@ gulp.task("dist:build", ["build", "dist:clean"], function() {
         .pipe(gulp.dest("dist"));
 });
 
-gulp.task('deploy', ["build"], function() {
+gulp.task("deploy", ["build"], function() {
     return gulp.src([ ".ebextensions/**/*",
         ".bowerrc",
         "bower.json",
@@ -262,16 +261,16 @@ gulp.task('deploy', ["build"], function() {
         "!www/bower_components/**/*",
         "!config/config.json" ], { base: "./" })
     .pipe(gulpEbDeploy({
-        name: 'GigKeeper',
+        name: "GigKeeper",
         timestamp: true,
         waitForDeploy: true,
         amazon: {
-            region: 'us-west-2',
-            bucket: 'elasticbeanstalk-us-west-2-008453750068',
-            applicationName: 'GIgKeeper',
-            environmentName: 'gigkeeper-env'
+            region: "us-west-2",
+            bucket: "elasticbeanstalk-us-west-2-008453750068",
+            applicationName: "GIgKeeper",
+            environmentName: "gigkeeper-env"
         }
-    }))
+    }));
 });
 
 /*** Server tasks ***/
