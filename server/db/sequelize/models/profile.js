@@ -18,10 +18,21 @@
 
 "use strict";
 
+const place = require("../../../lib/place")();
+
 module.exports = function(sequelize, DataTypes) {
     return sequelize.define("profile", {
         id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV1, primaryKey: true, allowNull: false },
-        homeBasePlace: { type: DataTypes.JSONB, allowNull: true },
+        homeBasePlace: { 
+            type: DataTypes.JSONB, 
+            allowNull: true,
+            set: function(val) {
+                if (val) {
+                    val = place.stripPlace(val);
+                }
+                this.setDataValue("homeBasePlace", val);
+            }
+        },
         defaultDuration: { type: DataTypes.INTEGER, allowNull: true },
         leadTime: { type: DataTypes.INTEGER, allowNull: true }
     }, {
