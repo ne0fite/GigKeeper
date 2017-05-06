@@ -18,16 +18,18 @@
 
 'use strict';
 
-angular.module('GigKeeper').controller('sendInvite', [
+angular.module('GigKeeper').controller('SendInviteController', [
     '$scope', '$state', 'Registration', 'invites',
     function($scope, $state, Registration, invites) {
 
-        $scope.form = {
+        var vm = this;
+
+        vm.form = {
             email: null,
             message: null
         };
 
-        $scope.gridOptions = {
+        vm.gridOptions = {
             enableFiltering: true,
             enableGridMenu: true,
             enableRowSelection: false,
@@ -70,7 +72,7 @@ angular.module('GigKeeper').controller('sendInvite', [
             data: invites
         };
 
-        $scope.submit = function(sendInviteForm) {
+        vm.submit = function(sendInviteForm) {
 
             if (sendInviteForm.$valid) {
 
@@ -78,8 +80,8 @@ angular.module('GigKeeper').controller('sendInvite', [
                 button.button('loading');
 
                 var payload = {
-                    email: $scope.form.email,
-                    message: $scope.form.message
+                    email: vm.form.email,
+                    message: vm.form.message
                 };
 
                 var request = Registration.data.sendInvite({}, payload).$promise;
@@ -87,23 +89,23 @@ angular.module('GigKeeper').controller('sendInvite', [
                 request.then(function(result) {
 
                     if (!result.error) {
-                        $scope.successMessage = 'Invitation code ' + result.code + ' sent to ' + result.email;
+                        vm.successMessage = 'Invitation code ' + result.code + ' sent to ' + result.email;
                     } else {
-                        $scope.errorMessage = result.message;
+                        vm.errorMessage = result.message;
                     }
                 }).then(function() {
                     return Registration.data.index().$promise;
                 }).then(function(invites) {
-                    $scope.gridOptions.data = invites;
+                    vm.gridOptions.data = invites;
                     button.button('reset');
                 }).catch(function(error) {
-                    $scope.errorMessage = error.message;
+                    vm.errorMessage = error.message;
                     button.button('reset');
                 });
 
                 //BlockingPromiseManager.add(request);
             } else {
-                $scope.errorMessage = 'Check form for errors';
+                vm.errorMessage = 'Check form for errors';
             }
         };
     }

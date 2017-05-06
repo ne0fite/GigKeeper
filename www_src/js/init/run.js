@@ -24,11 +24,7 @@ angular.module('GigKeeper').run([
 
         $rootScope.copyrightDate = new Date();
         
-        $rootScope.$sce = $sce;
-        $rootScope.BlockingPromiseManager = BlockingPromiseManager;
-
         $rootScope.user = null;
-        $rootScope.alerts = [];
 
         $rootScope.$on('$stateChangeStart', function(event, toState) {
 
@@ -59,11 +55,6 @@ angular.module('GigKeeper').run([
                 $rootScope.user = null;
                 localStorageService.remove('apiToken');
                 $state.go('home');
-            }).catch(function(error) {
-                $rootScope.alerts.push({
-                    msg: error.message,
-                    type: 'danger'
-                });
             });
 
             BlockingPromiseManager.add(request);

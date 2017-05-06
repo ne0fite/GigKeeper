@@ -18,25 +18,32 @@
 
 'use strict';
 
-angular.module('GigKeeper').controller('home', [
-    '$rootScope', '$scope', 'localStorageService', '$state', 'Security', 'UrlBuilder', 'BlockingPromiseManager',
-    function($rootScope, $scope, localStorageService, $state, Security, UrlBuilder, BlockingPromiseManager) {
+angular.module('GigKeeper').controller('HomeController', [
+    '$rootScope', 'localStorageService', '$state', 'Security', 'UrlBuilder', 'BlockingPromiseManager',
+    function($rootScope, localStorageService, $state, Security, UrlBuilder, BlockingPromiseManager) {
 
-        $scope.submitLoginForm = function(loginForm) {
-            $scope.errorMessage = null;
+        var vm = this;
+
+        vm.loginForm = {
+            email: null,
+            password: null
+        };
+
+        vm.submitLoginForm = function(loginForm) {
+            vm.errorMessage = null;
 
             if (loginForm.$valid) {
 
                 var postData = {
-                    email: $scope.email,
-                    password: $scope.password
+                    email: vm.loginForm.email,
+                    password: vm.loginForm.password
                 };
 
                 var request = Security.data.login(postData).$promise;
 
                 request.then(function(user) {
                     if (user.message) {
-                        $scope.errorMessage = user.message;
+                        vm.errorMessage = user.message;
                     } else {
                         localStorageService.set('apiToken', user.apiToken);
                         delete user.apiToken;
@@ -44,7 +51,7 @@ angular.module('GigKeeper').controller('home', [
                         $state.go('gigs');
                     }
                 }).catch(function(error) {
-                    $scope.errorMessage = error.message;
+                    vm.errorMessage = error.message;
                 });
 
                 BlockingPromiseManager.add(request);

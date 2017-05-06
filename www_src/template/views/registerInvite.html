@@ -16,20 +16,20 @@
 
                 <div class="panel-body">
 
-                    <form name="registerInviteForm" ng-submit="submit(registerInviteForm)" novalidate ng-if="invite.code">
+                    <form name="registerInviteForm" ng-submit="vm.submit(registerInviteForm)" novalidate ng-if="vm.invite.code">
 
                         <div class="row">
                             <div class="col-md-6">
 
                                 <div class="form-group" ng-class="{ 'has-error': registerInviteForm.$submitted && registerInviteForm.firstName.$invalid }">
                                     <label for="firstName">First Name</label> <span class="text-muted">(optional)</span>
-                                    <input type="text" id="firstName" name="firstName" class="form-control" ng-model="form.firstName" />
+                                    <input type="text" id="firstName" name="firstName" class="form-control" ng-model="vm.form.firstName" />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group" ng-class="{ 'has-error': registerInviteForm.$submitted && registerInviteForm.lastName.$invalid }">
                                     <label for="lastName">Last Name</label> <span class="text-muted">(optional)</span>
-                                    <input type="text" id="lastName" name="lastName" class="form-control" ng-model="form.lastName" />
+                                    <input type="text" id="lastName" name="lastName" class="form-control" ng-model="vm.form.lastName" />
                                 </div>
                             </div>
                         </div>
@@ -38,7 +38,7 @@
                             <div class="col-md-12">
                                 <div class="form-group" ng-class="{ 'has-error': registerInviteForm.$submitted && registerInviteForm.email.$invalid }">
                                     <label for="email">Email</label>
-                                    <input type="email" id="email" name="email" ng-model="form.email" class="form-control" ng-email ng-required="true" />
+                                    <input type="email" id="email" name="email" ng-model="vm.form.email" class="form-control" ng-email ng-required="true" />
                                     <div ng-messages="registerInviteForm.email.$error" role="alert" ng-if="registerInviteForm.$submitted">
                                         <p class="help-block" ng-message="required">Email is required</p>
                                         <p class="help-block" ng-message="email">Email is invalid</p>
@@ -51,7 +51,7 @@
                             <div class="col-md-12">
                                 <div class="form-group" ng-class="{ 'has-error': registerInviteForm.$submitted && registerInviteForm.phone.$invalid }">
                                     <label for="phone">Phone</label> <span class="text-muted">(optional)</span>
-                                    <input type="tel" id="phone" name="phone" class="form-control" ng-model="form.phone" />
+                                    <input type="tel" id="phone" name="phone" class="form-control" ng-model="vm.form.phone" />
                                 </div>
                             </div>
                         </div>
@@ -60,7 +60,7 @@
                             <div class="col-md-6">
                                 <div class="form-group" ng-class="{ 'has-error': registerInviteForm.$submitted && registerInviteForm.password.$invalid }">
                                     <label for="password">Password</label>
-                                    <input type="password" id="password" name="password" ng-model="form.password" class="form-control" ng-required="true" />
+                                    <input type="password" id="password" name="password" ng-model="vm.form.password" class="form-control" ng-required="true" />
                                     <div ng-messages="registerInviteForm.password.$error" role="alert" ng-if="registerInviteForm.$submitted">
                                         <p class="help-block" ng-message="required">Password is required</p>
                                     </div>
@@ -69,7 +69,7 @@
                             <div class="col-md-6">
                                 <div class="form-group" ng-class="{ 'has-error': registerInviteForm.$submitted && registerInviteForm.passwordConfirm.$invalid }">
                                     <label for="password_confirm">Confirm Password</label>
-                                    <input type="password" id="password_confirm" name="passwordConfirm" ng-model="form.passwordConfirm" class="form-control" ng-required="true" gk-compare-to="form.password" />
+                                    <input type="password" id="password_confirm" name="passwordConfirm" ng-model="vm.form.passwordConfirm" class="form-control" ng-required="true" gk-compare-to="vm.form.password" />
                                     <div ng-messages="registerInviteForm.passwordConfirm.$error" role="alert" ng-if="registerInviteForm.$submitted">
                                         <p class="help-block" ng-message="compareTo">Passwords do not match</p>
                                     </div>
@@ -85,7 +85,7 @@
                         </div>
                     </form>
 
-                    <div ng-if="!invite.code" class="alert alert-danger">Invalid Invite Code</div>
+                    <div ng-if="!vm.invite.code" class="alert alert-danger">Invalid Invite Code</div>
 
                 </div>
             </div>

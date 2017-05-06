@@ -6,10 +6,10 @@
         </h1>
     </div>
 
-    <form name="gigForm" ng-submit="submit(gigForm)" novalidate>
+    <form name="gigForm" ng-submit="vm.submit(gigForm)" novalidate>
 
-        <div class="alert alert-danger" ng-if="errorMessage">{{ errorMessage }}</div>
-        <div class="alert alert-success" ng-if="successMessage">{{ successMessage }}</div>
+        <div class="alert alert-danger" ng-if="vm.errorMessage">{{ vm.errorMessage }}</div>
+        <div class="alert alert-success" ng-if="vm.successMessage">{{ vm.successMessage }}</div>
 
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -23,8 +23,8 @@
                         <input type="text"
                                 name="name"
                                 kendo-combo-box
-                                options="descriptionsComboOptions"
-                                ng-model="form.name"
+                                options="vm.descriptionsComboOptions"
+                                ng-model="vm.form.name"
                                 id="gig_name"
                                 style="width: 100%;"
                                 required />
@@ -38,7 +38,7 @@
                     <div class="col-sm-6 form-group required" ng-class="{ 'has-error': gigForm.$submitted && gigForm.startDate.$invalid }">
                         <label for="startDate">Start</label>
                         <div>
-                            <datetimepicker id="startDate" name="startDate" ng-model="form.startDate" date-format="M/d/yyyy" ng-required="true">
+                            <datetimepicker id="startDate" name="startDate" ng-model="vm.form.startDate" date-format="M/d/yyyy" ng-required="true">
                             </datetimepicker>
                         </div>
                         <div ng-messages="gigForm.startDate.$error" role="alert" ng-if="gigForm.$submitted">
@@ -50,7 +50,7 @@
                     <div class="col-sm-6 form-group required" ng-class="{ 'has-error': gigForm.$submitted && gigForm.endDate.$invalid }">
                         <label for="endDate">End</label>
                         <div>
-                            <datetimepicker id="endDate" name="endDate" ng-model="form.endDate" date-format="M/d/yyyy" ng-required="true">
+                            <datetimepicker id="endDate" name="endDate" ng-model="vm.form.endDate" date-format="M/d/yyyy" ng-required="true">
                             </datetimepicker>
                         </div>
                         <div ng-messages="gigForm.endDate.$error" role="alert" ng-if="gigForm.$submitted">
@@ -62,14 +62,14 @@
 
                 <div class="row">
                     <div class="col-sm-12 form-group" ng-class="{ 'has-error': gigForm.$submitted && gigForm.contractorId.$invalid }">
-                        <label for="contractorId">Contractor</label>
+                        <label for="contractorId">Contractor</label> <a href="#" ng-click="addContractor($event)"><i class="fa fa-plus"></i> New</a>
                         <div>
                             <select id="contractorId"
                                     name="contractorId"
                                     class="form-control"
-                                    ng-model="form.contractorId">
+                                    ng-model="vm.form.contractorId">
                                 <option value="">None</option>
-                                <option ng-repeat="contractor in contractors track by contractor.id" ng-value="contractor.id">
+                                <option ng-repeat="contractor in vm.contractors track by contractor.id" ng-value="contractor.id">
                                     {{contractor.name}}
                                 </option>
                             </select>
@@ -97,7 +97,7 @@
                                     class="form-control"
                                     g-places-autocomplete
                                     data-force-selection="true"
-                                    ng-model="form.place"
+                                    ng-model="vm.form.place"
                                     autocomplete="off"
                                     ng-required="true" />
                         </div>
@@ -114,7 +114,7 @@
                                     name="originType[]"
                                     id="originType_home"
                                     value="home"
-                                    ng-model="form.originType">
+                                    ng-model="vm.form.originType">
                                 <label for="originType_home"
                                     ng-class="{'text-primary': form.originType == 'home', 'text-muted': form.originType != 'home'}">
                                     Home
@@ -125,7 +125,7 @@
                                     name="originType[]"
                                     id="originType_gig"
                                     value="gig"
-                                    ng-model="form.originType">
+                                    ng-model="vm.form.originType">
                                 <label for="originType_gig"
                                     ng-class="{'text-primary': form.originType == 'gig', 'text-muted': form.originType != 'gig'}">
                                     Another Gig
@@ -136,7 +136,7 @@
                                     name="originType[]"
                                     id="originType_other"
                                     value="other"
-                                    ng-model="form.originType">
+                                    ng-model="vm.form.originType">
                                 <label for="originType_other"
                                     ng-class="{'text-primary': form.originType == 'other', 'text-muted': form.originType != 'other'}">
                                     Someplace Else
@@ -144,22 +144,22 @@
                             </div>
                         </div>
                         <div>
-                            <select ng-show="form.originType == 'gig'"
+                            <select ng-show="vm.form.originType == 'gig'"
                                     name="originGig"
                                     id="originGig"
                                     style="width: 100%;"
                                     kendo-drop-down-list="originGigSelect"
-                                    options="gigDropdownOptions"
-                                    k-ng-model="form.originGig">
+                                    options="vm.gigDropdownOptions"
+                                    k-ng-model="vm.form.originGig">
                             </select>
-                            <input ng-show="form.originType == 'other'"
+                            <input ng-show="vm.form.originType == 'other'"
                                    type="text"
                                    id="originPlace"
                                    name="originPlace"
                                    class="form-control"
                                    g-places-autocomplete
                                    data-force-selection="true"
-                                   ng-model="form.originPlace"
+                                   ng-model="vm.form.originPlace"
                                    autocomplete="off" />
                         </div>
                     </div>
@@ -174,8 +174,8 @@
                                     <input name="distance"
                                             id="distance"
                                             kendo-numeric-text-box
-                                            options="distanceOptions"
-                                            ng-model="form.distance" />
+                                            options="vm.distanceOptions"
+                                            ng-model="vm.form.distance" />
                                 </div>
                             </div>
                             <div class="col-xs-6 form-group">
@@ -184,17 +184,17 @@
                                     <input name="duration"
                                             id="duration"
                                             kendo-numeric-text-box
-                                            options="durationOptions"
-                                            ng-model="form.duration" />
+                                            options="vm.durationOptions"
+                                            ng-model="vm.form.duration" />
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 form-group" ng-if="form.place && user.profile.homeBasePlace">
+                    <div class="col-sm-6 form-group" ng-if="vm.form.place && user.profile.homeBasePlace">
                         <button type="button"
                             class="btn btn-primary btn-estimate bottomalign"
                             id="estimate_button"
-                            ng-click="estimateDistance($event)"
+                            ng-click="vm.estimateDistance($event)"
                             data-loading-text="<i class='fa fa-spinner fa-spin'></i> Estimating...">
                             <i class="fa fa-car"></i> Estimate
                         </button>
@@ -215,15 +215,15 @@
                         <select id="tags"
                                 name="tags"
                                 kendo-multi-select
-                                options="tagDropdownOptions"
-                                k-ng-model="form.tags"></select>
+                                options="vm.tagDropdownOptions"
+                                k-ng-model="vm.form.tags"></select>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-sm-12 form-group">
                         <label for="notes">Notes</label>
-                        <textarea id="notes" name="notes" class="form-control" ng-model="form.notes"></textarea>
+                        <textarea id="notes" name="notes" class="form-control" ng-model="vm.form.notes"></textarea>
                     </div>
                 </div>
             </div>
@@ -240,7 +240,7 @@
                 <button class="btn btn-warning"
                         id="cancel_button"
                         type="button"
-                        ng-click="cancel()">
+                        ng-click="vm.cancel()">
                         <i class="fa fa-times"></i> Cancel
                 </button>
             </div>

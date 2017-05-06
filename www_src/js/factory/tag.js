@@ -95,7 +95,7 @@ angular.module('GigKeeper').factory('Tag', [
                     ariaLabelledBy: 'modal-title',
                     ariaDescribedBy: 'modal-body',
                     templateUrl: '/template/dialogs/tagEdit.html',
-                    controller: 'TagEditController',
+                    controller: 'TagEditController as vm',
                     resolve: {
                         tag: function() {
                             return tag;

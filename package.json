@@ -61,6 +61,7 @@
   "devDependencies": {
     "browser-sync": "^2.18.8",
     "code": "^4.0.0",
+    "eslint-plugin-angular": "^2.4.0",
     "gulp": "^3.9.1",
     "gulp-angular-htmlify": "^2.3.0",
     "gulp-autoprefixer": "^3.1.1",

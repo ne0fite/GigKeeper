@@ -18,13 +18,15 @@
 
 'use strict';
 
-angular.module('GigKeeper').controller('registerInvite', [
-    '$rootScope', '$scope', 'localStorageService', '$state', 'Registration', 'invite', 'BlockingPromiseManager',
-    function($rootScope, $scope, localStorageService, $state, Registration, invite, BlockingPromiseManager) {
+angular.module('GigKeeper').controller('RegisterInviteController', [
+    '$rootScope', 'localStorageService', '$state', 'Registration', 'invite', 'BlockingPromiseManager',
+    function($rootScope, localStorageService, $state, Registration, invite, BlockingPromiseManager) {
 
-        $scope.invite = invite;
+        var vm = this;
 
-        $scope.form = {
+        vm.invite = invite;
+
+        vm.form = {
             email: invite.email,
             firstName: null,
             lastName: null,
@@ -33,7 +35,7 @@ angular.module('GigKeeper').controller('registerInvite', [
             passwordConfirm: null
         };
 
-        $scope.submit = function(registerInviteForm) {
+        vm.submit = function(registerInviteForm) {
 
             if (registerInviteForm.$valid) {
 
@@ -41,12 +43,12 @@ angular.module('GigKeeper').controller('registerInvite', [
                 button.button('loading');
 
                 var payload = {
-                    email: $scope.form.email,
-                    firstName: $scope.form.firstName,
-                    lastName: $scope.form.lastName,
-                    phone: $scope.form.phone,
-                    password: $scope.form.password,
-                    passwordConfirm: $scope.form.passwordConfirm
+                    email: vm.form.email,
+                    firstName: vm.form.firstName,
+                    lastName: vm.form.lastName,
+                    phone: vm.form.phone,
+                    password: vm.form.password,
+                    passwordConfirm: vm.form.passwordConfirm
                 };
 
                 var request = Registration.data.registerInvite({ code: invite.code }, payload).$promise;
@@ -60,18 +62,18 @@ angular.module('GigKeeper').controller('registerInvite', [
                         $rootScope.user = result;
                         $state.go('gigs');
                     } else {
-                        $scope.errorMessage = result.message;
+                        vm.errorMessage = result.message;
                     }
                     
                     button.button('reset');
                 }).catch(function(error) {
-                    $scope.errorMessage = error.message;
+                    vm.errorMessage = error.message;
                     button.button('reset');
                 });
 
                 BlockingPromiseManager.add(request);
             } else {
-                $scope.errorMessage = 'Check form for errors';
+                vm.errorMessage = 'Check form for errors';
             }
         };
     }

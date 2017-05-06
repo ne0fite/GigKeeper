@@ -18,42 +18,44 @@
 
 'use strict';
 
-angular.module('GigKeeper').controller('profile', [
-    '$scope', '$http', 'UrlBuilder', 'BlockingPromiseManager', 'Profile', 'profile',
-    function($scope, $http, UrlBuilder, BlockingPromiseManager, Profile, profile) {
+angular.module('GigKeeper').controller('ProfileController', [
+    'UrlBuilder', 'BlockingPromiseManager', 'Profile', 'profile',
+    function(UrlBuilder, BlockingPromiseManager, Profile, profile) {
 
-        $scope.form = {
+        var vm = this;
+
+        vm.form = {
             firstName: profile.firstName,
             lastName: profile.lastName,
             email: profile.email,
             phone: profile.phone
         };
 
-        $scope.submit = function(profileForm) {
-            $scope.errorMessage = null;
-            $scope.successMessage = null;
+        vm.submit = function(profileForm) {
+            vm.errorMessage = null;
+            vm.successMessage = null;
 
             if (!profileForm.$invalid) {
 
                 var payload = {
-                    firstName: $scope.form.firstName,
-                    lastName: $scope.form.lastName,
-                    email: $scope.form.email,
-                    phone: $scope.form.phone,
-                    password: $scope.form.password || null,
-                    passwordConfirm: $scope.form.passwordConfirm || null
+                    firstName: vm.form.firstName,
+                    lastName: vm.form.lastName,
+                    email: vm.form.email,
+                    phone: vm.form.phone,
+                    password: vm.form.password || null,
+                    passwordConfirm: vm.form.passwordConfirm || null
                 };
 
                 Profile.data.update({}, payload).$promise.then(function() {
-                    $scope.successMessage = 'Saved!';
+                    vm.successMessage = 'Saved!';
                 }).catch(function(err) {
-                    $scope.errorMessage = err.message;
+                    vm.errorMessage = err.message;
                 }).finally(function() {
-                    $scope.form.password = null;
-                    $scope.form.passwordConfirm = null;
+                    vm.form.password = null;
+                    vm.form.passwordConfirm = null;
                 });
             } else {
-                $scope.errorMessage = 'Check form for errors';
+                vm.errorMessage = 'Check form for errors';
             }
         };
     }

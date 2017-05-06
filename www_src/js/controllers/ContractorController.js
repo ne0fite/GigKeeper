@@ -18,13 +18,15 @@
 
 'use strict';
 
-angular.module('GigKeeper').controller('contractors', [
-    '$scope', '$window', '$uibModal', 'dialogs', 'Contractor', 'BlockingPromiseManager',
-    function($scope, $window, $uibModal, dialogs, Contractor, BlockingPromiseManager) {
+angular.module('GigKeeper').controller('ContractorController', [
+    '$window', '$uibModal', 'dialogs', 'Contractor', 'BlockingPromiseManager',
+    function($window, $uibModal, dialogs, Contractor, BlockingPromiseManager) {
 
-        $scope.selected = null;
+        var vm = this;
 
-        $scope.gridOptions = {
+        vm.selected = null;
+
+        vm.gridOptions = {
             enableRowSelection: true,
             enableSelectAll: false,
             multiSelect: false,
@@ -50,26 +52,19 @@ angular.module('GigKeeper').controller('contractors', [
             }],
             data: [],
             onRegisterApi: function(gridApi) {
-                gridApi.selection.on.rowSelectionChanged($scope, function(row) {
+                gridApi.selection.on.rowSelectionChanged(null, function(row) {
                     if (row.isSelected) {
-                        $scope.selected = row;
+                        vm.selected = row;
                     } else {
-                        $scope.selected = null;
+                        vm.selected = null;
                     }
                 });
             }
         };
 
-        $scope.selected = null;
-
         function load() {
             var request = Contractor.data.index().$promise.then(function(contractors) {
-                $scope.gridOptions.data = contractors;
-            }).catch(function(err) {
-                $scope.alerts.push({
-                    msg: err.message,
-                    type: 'danger'
-                });
+                vm.gridOptions.data = contractors;
             });
 
             BlockingPromiseManager.add(request);
@@ -77,7 +72,7 @@ angular.module('GigKeeper').controller('contractors', [
 
         load();
 
-        $scope.add = function() {
+        vm.add = function() {
             editDialog({});
         };
 
@@ -88,30 +83,25 @@ angular.module('GigKeeper').controller('contractors', [
          *
          * @return {void}
          */
-        $scope.editSelected = function($event) {
+        vm.editSelected = function($event) {
             if($event) {
                 if($event.target.closest('[ui-grid-row]').length === 0) {
                     return;
                 }
             }
 
-            editDialog($scope.selected.entity);
+            editDialog(vm.selected.entity);
         };
 
-        $scope.deleteSelected = function() {
+        vm.deleteSelected = function() {
             dialogs.confirm({
                 okText: 'Delete',
                 title: 'Confirm Delete',
-                message: 'Are you sure you want to delete ' + $scope.selected.entity.name + '?'
+                message: 'Are you sure you want to delete ' + vm.selected.entity.name + '?'
             }).then(function() {
-                var request = Contractor.data.delete({ id: $scope.selected.entity.id }).$promise.then(function() {
-                    $scope.selected = null;
+                var request = Contractor.data.delete({ id: vm.selected.entity.id }).$promise.then(function() {
+                    vm.selected = null;
                     load();
-                }).catch(function(error) {
-                    $scope.alerts.push({
-                        msg: error.message,
-                        type: 'danger'
-                    });
                 });
 
                 BlockingPromiseManager.add(request);
@@ -121,19 +111,7 @@ angular.module('GigKeeper').controller('contractors', [
         };
 
         function editDialog(contractor) {
-            var modalInstance = $uibModal.open({
-                ariaLabelledBy: 'modal-title',
-                ariaDescribedBy: 'modal-body',
-                templateUrl: '/template/dialogs/contractorEdit.html',
-                controller: 'ContractorEditController',
-                resolve: {
-                    contractor: function() {
-                        return contractor;
-                    }
-                }
-            });
-
-            modalInstance.result.then(function() {
+            Contractor.editDialog(contractor).then(function() {
                 load();
             }, function() {
 
@@ -145,7 +123,7 @@ angular.module('GigKeeper').controller('contractors', [
          *
          * @return {void}
          */
-        $scope.export = function () {
+        vm.export = function () {
             Contractor.data.export().$promise.then(function (result) {
                 $window.saveAs(result.blob, result.filename);
             });

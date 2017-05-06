@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').factory('Contractor', [
-    '$resource', 'localStorageService', 'UrlBuilder',
-    function($resource, localStorageService, UrlBuilder) {
+    '$resource', 'localStorageService', 'UrlBuilder', '$uibModal',
+    function($resource, localStorageService, UrlBuilder, $uibModal) {
         return {
             data: $resource(UrlBuilder.build('/api/v1/contractor'), {}, {
                 index: {
@@ -116,6 +116,29 @@ angular.module('GigKeeper').factory('Contractor', [
                     dataValueField: 'id',
                     valuePrimitive: true
                 };
+            },
+
+            /**
+             * Open the contractor editor modal.
+             * 
+             * @param  {object} contractor The contractor to edit
+             * 
+             * @return {object} The modal's promise
+             */
+            editDialog: function (contractor) {
+                var modalInstance = $uibModal.open({
+                    ariaLabelledBy: 'modal-title',
+                    ariaDescribedBy: 'modal-body',
+                    templateUrl: '/template/dialogs/contractorEdit.html',
+                    controller: 'ContractorEditController as vm',
+                    resolve: {
+                        contractor: function() {
+                            return contractor;
+                        }
+                    }
+                });
+
+                return modalInstance.result;
             }
         };
     }

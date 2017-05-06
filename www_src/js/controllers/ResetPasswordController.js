@@ -18,32 +18,31 @@
 
 'use strict';
 
-angular.module('GigKeeper').controller('resetPassword', [
-    '$scope', '$rootScope', 'localStorageService', '$state', '$stateParams', 'Security',
-    function($scope, $rootScope, localStorageService, $state, $stateParams, Security) {
+angular.module('GigKeeper').controller('ResetPasswordController', [
+    '$rootScope', 'localStorageService', '$state', '$stateParams', 'Security', 'Alerts',
+    function($rootScope, localStorageService, $state, $stateParams, Security, Alerts) {
 
-        $scope.form = {
+        var vm = this;
+
+        vm.form = {
             token: $stateParams.token,
             password: null,
             passwordConfirm: null
         };
 
-        $scope.submit = function(resetPasswordForm) {
+        vm.submit = function(resetPasswordForm) {
 
             if (resetPasswordForm.$valid) {
 
-                $scope.errorMessage = null;
-                $scope.successMessage = null;
+                vm.errorMessage = null;
+                vm.successMessage = null;
 
                 var button = angular.element('#submit_button');
                 button.button('loading');
 
-                Security.data.resetPassword($scope.form).$promise.then(function(user) {
+                Security.data.resetPassword(vm.form).$promise.then(function(user) {
 
-                    $scope.alerts.push({
-                        msg: 'Your password has been reset.',
-                        type: 'success'
-                    });
+                    Alerts.add('Your password has been reset.', Alerts.constants.success);
                     button.button('reset');
 
                     localStorageService.set('apiToken', user.apiToken);
@@ -51,11 +50,11 @@ angular.module('GigKeeper').controller('resetPassword', [
                     $rootScope.user = user;
                     $state.go('gigs');
                 }).catch(function(error) {
-                    $scope.errorMessage = error.message;
+                    vm.errorMessage = error.message;
                     button.button('reset');
                 });
             } else {
-                $scope.errorMessage = 'Check form for errors';
+                vm.errorMessage = 'Check form for errors';
             }
         };
     }

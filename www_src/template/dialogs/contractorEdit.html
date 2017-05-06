@@ -1,5 +1,6 @@
 <script type="text/ng-template"  id="/template/dialogs/contractorEdit.html">
-    <form name="contractorForm" ng-submit="submit(contractorForm)" novalidate>
+    <h2>{{ vm.form.name }}</h2>
+    <form name="contractorForm" ng-submit="vm.submit(contractorForm)" novalidate>
         <div class="modal-header">
             <h3 class="modal-title" id="modal-title">
                 <i class="fa fa-pencil pad-right"></i>
@@ -8,11 +9,11 @@
         </div>
         <div class="modal-body" id="modal-body">
 
-            <div class="alert alert-danger" ng-if="errorMessage">{{ errorMessage }}</div>
+            <div class="alert alert-danger" ng-if="errorMessage">{{ vm.errorMessage }}</div>
 
             <div class="form-group" ng-class="{ 'has-error': contractorForm.$submitted && contractorForm.name.$invalid }">
                 <label for="contractor_name">Name</label>
-                <input type="text" name="name" ng-model="form.name" id="contractor_name" class="form-control" required />
+                <input type="text" name="name" ng-model="vm.form.name" id="contractor_name" class="form-control" required />
                 <div ng-messages="contractorForm.name.$error" role="alert" ng-if="contractorForm.$submitted">
                     <p class="help-block" ng-message="required">Name is required</p>
                 </div>
@@ -20,36 +21,36 @@
 
             <div class="form-group" ng-class="{ 'has-error': contractorForm.$submitted && contractorForm.contact.$invalid }">
                 <label for="contractor_contact">Contact</label>
-                <input type="text" name="contact" ng-model="form.contact" id="contractor_contact" class="form-control" />
+                <input type="text" name="contact" ng-model="vm.form.contact" id="contractor_contact" class="form-control" />
             </div>
             <div class="form-group" ng-class="{ 'has-error': contractorForm.$submitted && contractorForm.address1.$invalid }">
                 <label for="contractor_address1">Address 1</label>
-                <input type="text" name="address1" ng-model="form.address1" id="contractor_address1" class="form-control" />
+                <input type="text" name="address1" ng-model="vm.form.address1" id="contractor_address1" class="form-control" />
             </div>
             <div class="form-group" ng-class="{ 'has-error': contractorForm.$submitted && contractorForm.address2.$invalid }">
                 <label for="contractor_address2">Address 2</label>
-                <input type="text" name="address2" ng-model="form.address2" id="contractor_address2" class="form-control" />
+                <input type="text" name="address2" ng-model="vm.form.address2" id="contractor_address2" class="form-control" />
             </div>
             <div class="form-group" ng-class="{ 'has-error': contractorForm.$submitted && contractorForm.city.$invalid }">
                 <label for="contractor_city">City</label>
-                <input type="text" name="city" ng-model="form.city" id="contractor_city" class="form-control" />
+                <input type="text" name="city" ng-model="vm.form.city" id="contractor_city" class="form-control" />
             </div>
             <div class="form-group" ng-class="{ 'has-error': contractorForm.$submitted && contractorForm.region.$invalid }">
                 <label for="contractor_region">State</label>
-                <input type="text" name="region" ng-model="form.region" id="contractor_region" class="form-control" />
+                <input type="text" name="region" ng-model="vm.form.region" id="contractor_region" class="form-control" />
             </div>
             <div class="form-group" ng-class="{ 'has-error': contractorForm.$submitted && contractorForm.postalCode.$invalid }">
                 <label for="contractor_postalCode">Zip</label>
-                <input type="text" name="postalCode" ng-model="form.postalCode" id="contractor_postalCode" class="form-control" />
+                <input type="text" name="postalCode" ng-model="vm.form.postalCode" id="contractor_postalCode" class="form-control" />
             </div>
             <div class="form-group" ng-class="{ 'has-error': contractorForm.$submitted && contractorForm.phone.$invalid }">
                 <label for="contractor_phone">Phone</label>
-                <input type="text" name="phone" ng-model="form.phone" id="contractor_phone" class="form-control" />
+                <input type="text" name="phone" ng-model="vm.form.phone" id="contractor_phone" class="form-control" />
             </div>
 
             <div class="form-group" ng-class="{ 'has-error': contractorForm.$submitted && contractorForm.email.$invalid }">
                 <label for="contractor_email">Email</label>
-                <input type="email" name="email" ng-model="form.email" id="contractor_email" class="form-control" />
+                <input type="email" name="email" ng-model="vm.form.email" id="contractor_email" class="form-control" />
                 <div ng-messages="contractorForm.email.$error" role="alert" ng-if="contractorForm.$submitted">
                     <p class="help-block" ng-message="email">Email is invalid</p>
                 </div>
@@ -57,7 +58,7 @@
 
             <div class="form-group" ng-class="{ 'has-error': contractorForm.$submitted && contractorForm.web.$invalid }">
                 <label for="contractor_web">Web</label>
-                <input type="url" name="web" ng-model="form.web" id="contractor_web" class="form-control" />
+                <input type="url" name="web" ng-model="vm.form.web" id="contractor_web" class="form-control" />
                 <div ng-messages="contractorForm.web.$error" role="alert" ng-if="contractorForm.$submitted">
                     <p class="help-block" ng-message="url">Web site URL is invalid</p>
                 </div>
@@ -68,7 +69,7 @@
             <button class="btn btn-primary" id="save_button" type="submit" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving...">
                 <i class="fa fa-check"></i> Save
             </button>
-            <button class="btn btn-warning" id="cancel_button" type="button" ng-click="cancel()">
+            <button class="btn btn-warning" id="cancel_button" type="button" ng-click="vm.cancel()">
                 <i class="fa fa-times"></i> Cancel
             </button>
         </div>

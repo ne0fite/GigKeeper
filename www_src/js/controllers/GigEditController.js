@@ -19,15 +19,17 @@
 'use strict';
 
 angular.module('GigKeeper').controller('GigEditController', [
-    '$rootScope', '$scope', 'localStorageService', '$uibModal', '$filter', '$title', '$stateParams', '$state', '$window', 'contractors', 'gig',
-    'Tag', 'Gig', 'UrlBuilder', 'BlockingPromiseManager', 'GoogleMaps', 'dialogs',
+    '$rootScope', 'localStorageService', '$uibModal', '$filter', '$title', '$stateParams', '$state', '$window', 'contractors', 'gig',
+    'Contractor', 'Tag', 'Gig', 'UrlBuilder', 'BlockingPromiseManager', 'GoogleMaps', 'dialogs',
     function(
-        $rootScope, $scope, localStorageService, $uibModal, $filter, $title, $stateParams, $state, $window, contractors, gig,
-        Tag, Gig, UrlBuilder, BlockingPromiseManager, GoogleMaps, dialogs
+        $rootScope, localStorageService, $uibModal, $filter, $title, $stateParams, $state, $window, contractors, gig,
+        Contractor, Tag, Gig, UrlBuilder, BlockingPromiseManager, GoogleMaps, dialogs
     ) {
-        $scope.title = $title;
+        var vm = this;
 
-        $scope.tagDropdownOptions = Tag.getDropdownOptions();
+        vm.title = $title;
+
+        vm.tagDropdownOptions = Tag.getDropdownOptions();
 
         var template = function(gig) {
 
@@ -36,7 +38,7 @@ angular.module('GigKeeper').controller('GigEditController', [
                 '</span></div>' + '<div class="small">' + gig.place.formatted_address + '</div>';
         };
 
-        $scope.gigDropdownOptions = {
+        vm.gigDropdownOptions = {
             dataSource: Gig.getDataSource(),
             autoBind: true,
             dataTextField: 'name',
@@ -54,12 +56,12 @@ angular.module('GigKeeper').controller('GigEditController', [
          * @return {void}
          */
         function selectRoute(route) {
-            $scope.form.distance = $filter('metersToMiles')(GoogleMaps.calculateRouteDistance(route));
-            $scope.form.duration = GoogleMaps.calculateRouteDuration(route) / 60; //convert seconds to minutes
+            vm.form.distance = $filter('metersToMiles')(GoogleMaps.calculateRouteDistance(route));
+            vm.form.duration = GoogleMaps.calculateRouteDuration(route) / 60; //convert seconds to minutes
         }
 
         gig.tags = gig.tags ? gig.tags : [];
-        $scope.form = {
+        vm.form = {
             name: gig.name,
             originType: gig.originType || 'home',
             originPlace: angular.fromJson(gig.originPlace),
@@ -74,9 +76,9 @@ angular.module('GigKeeper').controller('GigEditController', [
             notes: gig.notes
         };
 
-        $scope.contractors = contractors;
+        vm.contractors = contractors;
 
-        $scope.descriptionsComboOptions = {
+        vm.descriptionsComboOptions = {
             autoBind: false,
             dataSource: new kendo.data.DataSource({
                 transport: {
@@ -95,13 +97,13 @@ angular.module('GigKeeper').controller('GigEditController', [
             dataValueField: 'name'
         };
 
-        $scope.distanceOptions = {
+        vm.distanceOptions = {
             decimals: 1,
             min: 0,
             format: 'n1'
         };
 
-        $scope.durationOptions = {
+        vm.durationOptions = {
             decimals: 0,
             min: 0,
             format: 'n0'
@@ -110,40 +112,40 @@ angular.module('GigKeeper').controller('GigEditController', [
         // don't start watching stuff until the user profile is loaded
         BlockingPromiseManager.then(function () {
 
-            $scope.$watch('form.startDate', function(newValue, oldValue) {
+            vm.$watch('form.startDate', function(newValue, oldValue) {
                 var defaultDuration = $rootScope.user.profile.defaultDuration;
 
                 if (newValue != oldValue && newValue) {
-                    if ($scope.form.endDate < $scope.form.startDate) {
-                        $scope.form.endDate = $scope.form.startDate;
+                    if (vm.form.endDate < vm.form.startDate) {
+                        vm.form.endDate = vm.form.startDate;
                     }
                     if ($rootScope.user.profile.defaultDuration > 0) {
-                        $scope.form.endDate = new Date(newValue.getTime() + defaultDuration * 60 * 1000);
+                        vm.form.endDate = new Date(newValue.getTime() + defaultDuration * 60 * 1000);
                     }
                 }
 
-                if(!$scope.form.originPlace) {
-                    $scope.resetOriginPlace();
+                if(!vm.form.originPlace) {
+                    vm.resetOriginPlace();
                 }
             });
 
-            $scope.$watch('form.endDate', function(newValue, oldValue) {
+            vm.$watch('form.endDate', function(newValue, oldValue) {
                 if (newValue != oldValue && newValue) {
-                    if ($scope.form.endDate < $scope.form.startDate) {
-                        $scope.form.startDate = $scope.form.endDate;
+                    if (vm.form.endDate < vm.form.startDate) {
+                        vm.form.startDate = vm.form.endDate;
                     }
                 }
             });
 
-            $scope.$watch('form.originType', function(newValue, oldValue) {
+            vm.$watch('form.originType', function(newValue, oldValue) {
                 if (newValue != oldValue && newValue) {
                     switch (newValue) {
                     case 'home':
-                        $scope.form.originPlace = $rootScope.user.profile.homeBasePlace;
+                        vm.form.originPlace = $rootScope.user.profile.homeBasePlace;
                         break;
                     case 'gig':
-                        if ($scope.form.originGig) {
-                            $scope.form.originPlace = $scope.form.originGig.place;
+                        if (vm.form.originGig) {
+                            vm.form.originPlace = vm.form.originGig.place;
                         }
                         break;
                     case 'other':
@@ -152,18 +154,18 @@ angular.module('GigKeeper').controller('GigEditController', [
                 }
             });
 
-            $scope.$watch('form.originGig', function(newValue, oldValue) {
+            vm.$watch('form.originGig', function(newValue, oldValue) {
                 if (newValue != oldValue && newValue) {
-                    if ($scope.form.originType == 'gig') {
-                        $scope.form.originPlace = newValue.place;
+                    if (vm.form.originType == 'gig') {
+                        vm.form.originPlace = newValue.place;
                     }
                 }
             });
 
-            $scope.$watch('form.place', function(newValue, oldValue) {
+            vm.$watch('form.place', function(newValue, oldValue) {
                 if (newValue != oldValue && newValue) {
-                    $scope.form.distance = null;
-                    $scope.form.duration = null;
+                    vm.form.distance = null;
+                    vm.form.duration = null;
                 }
             });
         });
@@ -173,8 +175,8 @@ angular.module('GigKeeper').controller('GigEditController', [
          *
          * @return {void}
          */
-        $scope.resetOriginPlace = function () {
-            $scope.form.originPlace = $rootScope.user.profile.homeBasePlace;
+        vm.resetOriginPlace = function () {
+            vm.form.originPlace = $rootScope.user.profile.homeBasePlace;
         };
 
         /**
@@ -184,15 +186,15 @@ angular.module('GigKeeper').controller('GigEditController', [
          *
          * @return {void}
          */
-        $scope.estimateDistance = function ($event) {
+        vm.estimateDistance = function ($event) {
             $event.preventDefault();
 
             var button = angular.element('#estimate_button');
             button.button('loading');
 
             var request = GoogleMaps.data.directionsTo({
-                fromPlaceId: $scope.form.originPlace.place_id,
-                toPlaceId: $scope.form.place.place_id
+                fromPlaceId: vm.form.originPlace.place_id,
+                toPlaceId: vm.form.place.place_id
             }).$promise
                 .then(function(response) {
                     selectRouteDialog(response);
@@ -204,11 +206,11 @@ angular.module('GigKeeper').controller('GigEditController', [
             BlockingPromiseManager.add(request);
         };
 
-        $scope.next = function() {
+        vm.next = function() {
 
         };
 
-        $scope.prev = function() {
+        vm.prev = function() {
 
         };
 
@@ -219,7 +221,7 @@ angular.module('GigKeeper').controller('GigEditController', [
          *
          * @return {void}
          */
-        $scope.submit = function(gigForm) {
+        vm.submit = function(gigForm) {
 
             if (!gigForm.$invalid) {
 
@@ -227,18 +229,18 @@ angular.module('GigKeeper').controller('GigEditController', [
                 button.button('loading');
 
                 var payload = {
-                    name: $scope.form.name,
-                    originType: $scope.form.originType,
-                    originPlace: $scope.form.originPlace,
-                    originGigId: $scope.form.originGig ? $scope.form.originGig.id : null,
-                    place: $scope.form.place,
-                    distance: $scope.form.distance,
-                    duration: $scope.form.duration,
-                    startDate: $scope.form.startDate,
-                    endDate: $scope.form.endDate,
-                    contractorId: $scope.form.contractorId,
-                    tags: $scope.form.tags,
-                    notes: $scope.form.notes
+                    name: vm.form.name,
+                    originType: vm.form.originType,
+                    originPlace: vm.form.originPlace,
+                    originGigId: vm.form.originGig ? vm.form.originGig.id : null,
+                    place: vm.form.place,
+                    distance: vm.form.distance,
+                    duration: vm.form.duration,
+                    startDate: vm.form.startDate,
+                    endDate: vm.form.endDate,
+                    contractorId: vm.form.contractorId,
+                    tags: vm.form.tags,
+                    notes: vm.form.notes
                 };
 
                 var promise;
@@ -251,13 +253,13 @@ angular.module('GigKeeper').controller('GigEditController', [
                 promise.then(function() {
                     $state.go('gigs');
                 }).catch(function(error) {
-                    $scope.errorMessage = error.message;
+                    vm.errorMessage = error.message;
                     button.button('reset');
                 });
 
                 BlockingPromiseManager.add(promise);
             } else {
-                $scope.errorMessage = 'Check form for errors';
+                vm.errorMessage = 'Check form for errors';
             }
         };
 
@@ -266,8 +268,8 @@ angular.module('GigKeeper').controller('GigEditController', [
          *
          * @return {void}
          */
-        $scope.cancel = function() {
-            if($scope.gigForm.$dirty) {
+        vm.cancel = function() {
+            if(vm.gigForm.$dirty) {
                 dialogs.confirm({
                     message: 'Are you sure? Your changes will be lost.'
                 }).then(function () {
@@ -280,28 +282,49 @@ angular.module('GigKeeper').controller('GigEditController', [
         };
 
         /**
+         * Open the contractor editor dialog, and refresh the list on success.
+         *
+         * @param  {object} $event The Angular event object
+         *
+         * @return {void}
+         */
+        vm.addContractor = function($event) {
+            $event.preventDefault();
+
+            Contractor.editDialog({}).then(function (result) {
+                //clean the result to prevent an error
+                // delete result.$promise;
+                // delete result.$resolved;
+
+                vm.contractors.push(result);
+                vm.form.contractorId = result.id;
+            }, function() {
+
+            });
+        };
+
+        /**
          * Open the tag editor dialog, and refresh the list on success.
          *
          * @param  {object} $event The Angular event object
          *
          * @return {void}
          */
-        $scope.addTag = function($event) {
+        vm.addTag = function($event) {
             var promise = Tag.editDialog();
 
             $event.preventDefault();
 
-            promise.then(
-                function (result) {
-                    //clean the result to prevent an error
-                    delete result.$promise;
-                    delete result.$resolved;
+            promise.then(function (result) {
+                //clean the result to prevent an error
+                delete result.$promise;
+                delete result.$resolved;
 
-                    $scope.tagDropdownOptions.dataSource.add(result);
-                    $scope.form.tags.push(result);
-                },
-                function () {}
-            );
+                vm.tagDropdownOptions.dataSource.add(result);
+                vm.form.tags.push(result);
+            }, function() {
+                
+            });
         };
 
         /**
@@ -317,7 +340,7 @@ angular.module('GigKeeper').controller('GigEditController', [
                 ariaDescribedBy: 'modal-body',
                 templateUrl: '/template/dialogs/selectRoute.html',
                 size: 'xl',
-                controller: 'SelectRouteController',
+                controller: 'SelectRouteController as vm',
                 resolve: {
                     DirectionsResult: function() {
                         return DirectionsResult;

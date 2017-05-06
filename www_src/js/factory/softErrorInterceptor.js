@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').factory('SoftErrorInterceptor', [
-    '$rootScope', '$q',
-    function($rootScope, $q) {
+    '$q', 'Alerts',
+    function($q, Alerts) {
         return {
             response: function(response) {
                 return response;
@@ -42,10 +42,7 @@ angular.module('GigKeeper').factory('SoftErrorInterceptor', [
                     message = response;
                 }
 
-                $rootScope.alerts.push({
-                    type: 'danger',
-                    msg: message
-                });
+                Alerts.add(message, Alerts.constants.error);
 
                 return $q.reject(response);
             }
