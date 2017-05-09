@@ -18,9 +18,10 @@
 
 'use strict';
 
-angular.module('GigKeeper').factory('ConfigProvider', [
-    'Config',
-    function(Config) {
-        return Config;
+angular.module('GigKeeper').controller('MainNavController', [
+    '$scope', 'Session',
+    function($scope, Session) {
+        var vm = this;
+        vm.session = Session;
     }
 ]);

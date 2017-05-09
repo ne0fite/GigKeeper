@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('ResetPasswordController', [
-    '$rootScope', 'localStorageService', '$state', '$stateParams', 'Security', 'Alerts',
-    function($rootScope, localStorageService, $state, $stateParams, Security, Alerts) {
+    'localStorageService', '$state', '$stateParams', 'Security', 'Alerts', 'Session',
+    function(localStorageService, $state, $stateParams, Security, Alerts, Session) {
 
         var vm = this;
 
@@ -40,14 +40,13 @@ angular.module('GigKeeper').controller('ResetPasswordController', [
                 var button = angular.element('#submit_button');
                 button.button('loading');
 
-                Security.data.resetPassword(vm.form).$promise.then(function(user) {
+                Security.data.resetPassword(vm.form).$promise.then(function(response) {
 
                     Alerts.add('Your password has been reset.', Alerts.constants.success);
                     button.button('reset');
 
-                    localStorageService.set('apiToken', user.apiToken);
-                    delete user.apiToken;
-                    $rootScope.user = user;
+                    Session.updateSession(response);
+
                     $state.go('gigs');
                 }).catch(function(error) {
                     vm.errorMessage = error.message;

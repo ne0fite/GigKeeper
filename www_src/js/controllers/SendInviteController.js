@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('SendInviteController', [
-    '$scope', '$state', 'Registration', 'invites',
-    function($scope, $state, Registration, invites) {
+    '$scope', '$state', 'Registration', 'Session', 'invites',
+    function($scope, $state, Registration, Session, invites) {
 
         var vm = this;
 
@@ -52,7 +52,7 @@ angular.module('GigKeeper').controller('SendInviteController', [
                 field: 'user',
                 type: 'string',
                 visible: false,
-                cellFilter: 'userNameDisplay:"' + $scope.user.id + '"'
+                cellFilter: 'userNameDisplay:"' + Session.user.id + '"'
             }, {
                 name: 'Message',
                 field: 'message',

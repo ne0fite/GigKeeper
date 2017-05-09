@@ -19,11 +19,11 @@
 'use strict';
 
 angular.module('GigKeeper').controller('GigEditController', [
-    '$rootScope', 'localStorageService', '$uibModal', '$filter', '$title', '$stateParams', '$state', '$window', 'contractors', 'gig',
-    'Contractor', 'Tag', 'Gig', 'UrlBuilder', 'BlockingPromiseManager', 'GoogleMaps', 'dialogs',
+    'localStorageService', '$uibModal', '$filter', '$title', '$state', '$window', 'contractors', 'gig',
+    'Contractor', 'Tag', 'Gig', 'UrlBuilder', 'BlockingPromiseManager', 'GoogleMaps', 'dialogs', 'Session',
     function(
-        $rootScope, localStorageService, $uibModal, $filter, $title, $stateParams, $state, $window, contractors, gig,
-        Contractor, Tag, Gig, UrlBuilder, BlockingPromiseManager, GoogleMaps, dialogs
+        localStorageService, $uibModal, $filter, $title, $state, $window, contractors, gig,
+        Contractor, Tag, Gig, UrlBuilder, BlockingPromiseManager, GoogleMaps, dialogs, Session
     ) {
         var vm = this;
 
@@ -113,13 +113,13 @@ angular.module('GigKeeper').controller('GigEditController', [
         BlockingPromiseManager.then(function () {
 
             vm.$watch('form.startDate', function(newValue, oldValue) {
-                var defaultDuration = $rootScope.user.profile.defaultDuration;
+                var defaultDuration = Session.user.profile.defaultDuration;
 
                 if (newValue != oldValue && newValue) {
                     if (vm.form.endDate < vm.form.startDate) {
                         vm.form.endDate = vm.form.startDate;
                     }
-                    if ($rootScope.user.profile.defaultDuration > 0) {
+                    if (Session.user.profile.defaultDuration > 0) {
                         vm.form.endDate = new Date(newValue.getTime() + defaultDuration * 60 * 1000);
                     }
                 }
@@ -141,7 +141,7 @@ angular.module('GigKeeper').controller('GigEditController', [
                 if (newValue != oldValue && newValue) {
                     switch (newValue) {
                     case 'home':
-                        vm.form.originPlace = $rootScope.user.profile.homeBasePlace;
+                        vm.form.originPlace = Session.user.profile.homeBasePlace;
                         break;
                     case 'gig':
                         if (vm.form.originGig) {
@@ -176,7 +176,7 @@ angular.module('GigKeeper').controller('GigEditController', [
          * @return {void}
          */
         vm.resetOriginPlace = function () {
-            vm.form.originPlace = $rootScope.user.profile.homeBasePlace;
+            vm.form.originPlace = Session.user.profile.homeBasePlace;
         };
 
         /**
@@ -268,8 +268,8 @@ angular.module('GigKeeper').controller('GigEditController', [
          *
          * @return {void}
          */
-        vm.cancel = function() {
-            if(vm.gigForm.$dirty) {
+        vm.cancel = function(gigForm) {
+            if (gigForm.$dirty) {
                 dialogs.confirm({
                     message: 'Are you sure? Your changes will be lost.'
                 }).then(function () {

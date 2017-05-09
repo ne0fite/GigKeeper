@@ -19,10 +19,12 @@
 'use strict';
 
 angular.module('GigKeeper').controller('HomeController', [
-    '$rootScope', 'localStorageService', '$state', 'Security', 'UrlBuilder', 'BlockingPromiseManager',
-    function($rootScope, localStorageService, $state, Security, UrlBuilder, BlockingPromiseManager) {
+    'localStorageService', '$state', 'Session',
+    function(localStorageService, $state, Session) {
 
         var vm = this;
+
+        vm.session = Session;
 
         vm.loginForm = {
             email: null,
@@ -34,27 +36,13 @@ angular.module('GigKeeper').controller('HomeController', [
 
             if (loginForm.$valid) {
 
-                var postData = {
-                    email: vm.loginForm.email,
-                    password: vm.loginForm.password
-                };
-
-                var request = Security.data.login(postData).$promise;
-
-                request.then(function(user) {
-                    if (user.message) {
-                        vm.errorMessage = user.message;
+                Session.login(vm.loginForm.email, vm.loginForm.password).then(function(error) {
+                    if (error) {
+                        vm.errorMessage = error.message;
                     } else {
-                        localStorageService.set('apiToken', user.apiToken);
-                        delete user.apiToken;
-                        $rootScope.user = user;
                         $state.go('gigs');
                     }
-                }).catch(function(error) {
-                    vm.errorMessage = error.message;
                 });
-
-                BlockingPromiseManager.add(request);
             }
         };
     }

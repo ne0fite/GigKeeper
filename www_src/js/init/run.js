@@ -19,45 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').run([
-    '$rootScope', 'localStorageService', '$state', '$sce', 'Security', 'UrlBuilder', 'BlockingPromiseManager',
-    function($rootScope, localStorageService, $state, $sce, Security, UrlBuilder, BlockingPromiseManager) {
-
-        $rootScope.copyrightDate = new Date();
-        
-        $rootScope.user = null;
-
-        $rootScope.$on('$stateChangeStart', function(event, toState) {
-
-            if (!toState.public) {
-
-                var request = Security.data.profile().$promise;
-
-                request.then(function(user) {
-                    if (user.active) {
-                        $rootScope.user = user;
-                    } else {
-                        $rootScope.user = null;
-                        event.preventDefault();
-                        $state.go('home');
-                    }
-                }).catch(function(error) { // eslint-disable-line no-unused-vars
-                    event.preventDefault();
-                    $state.go('home');
-                });
-
-                BlockingPromiseManager.add(request);
-            }
-        });
-
-        $rootScope.logout = function() {
-            var request = Security.data.logout().$promise;
-            request.then(function(response) { // eslint-disable-line no-unused-vars
-                $rootScope.user = null;
-                localStorageService.remove('apiToken');
-                $state.go('home');
-            });
-
-            BlockingPromiseManager.add(request);
-        };
+    'Session',
+    function(Session) {
+        Session.start();
     }
 ]);

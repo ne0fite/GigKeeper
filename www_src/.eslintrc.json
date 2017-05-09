@@ -27,8 +27,7 @@
         ],
         "no-mixed-spaces-and-tabs": [
             "warn"
-        ],
-        "angular/no-run-logic": 0
+        ]
     },
     "plugins": [
         "angular"

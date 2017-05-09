@@ -22,7 +22,6 @@ angular.module('GigKeeper').factory('Config', [
     '$window',
     function($window) {
         var config = $window.appConfig;
-        config.copyrightDate = new Date();
         return config;
     }
 ]);
