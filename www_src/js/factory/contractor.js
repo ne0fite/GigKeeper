@@ -25,8 +25,7 @@ angular.module('GigKeeper').factory('Contractor', [
             data: $resource(UrlBuilder.build('/api/v1/contractor'), {}, {
                 index: {
                     action: 'index',
-                    method: 'GET',
-                    isArray: true
+                    method: 'GET'
                 },
                 create: {
                     action: 'create',

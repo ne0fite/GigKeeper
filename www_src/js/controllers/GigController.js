@@ -36,6 +36,8 @@ angular.module('GigKeeper').controller('GigController', [
             multiSelect: false,
             paginationPageSize: 10,
             paginationPageSizes: [10, 25, 50, 100],
+            useExternalPagination: true,
+            useExternalSorting: true,
             showColumnFooter: true,
             showGridFooter: true,
             noUnselect: true,
@@ -83,7 +85,7 @@ angular.module('GigKeeper').controller('GigController', [
                 type: 'string',
                 filter: {
                     type: uiGridConstants.filter.SELECT,
-                    selectOptions: contractors.map(function(contractor) {
+                    selectOptions: contractors.data.map(function(contractor) {
                         return {
                             value: contractor.name,
                             label: contractor.name
@@ -93,6 +95,7 @@ angular.module('GigKeeper').controller('GigController', [
             }],
             data: [],
             onRegisterApi: function(gridApi) {
+
                 gridApi.selection.on.rowSelectionChanged(null, function(row) {
                     if (row.isSelected) {
                         vm.selected = row;
@@ -100,14 +103,40 @@ angular.module('GigKeeper').controller('GigController', [
                         vm.selected = null;
                     }
                 });
+
+                gridApi.core.on.sortChanged(null, function(grid, sortColumns) {
+                    if (sortColumns.length === 0) {
+                        paginationOptions.sort = null;
+                    } else {
+                        paginationOptions.sort = sortColumns.map(function(sortColumn) {
+                            return {
+                                field: sortColumn.field,
+                                dir: sortColumn.sort.direction
+                            };
+                        });
+                    }
+                    load();
+                });
+
+                gridApi.pagination.on.paginationChanged(null, function(newPage, pageSize) {
+                    paginationOptions.offset = pageSize * (newPage - 1);
+                    paginationOptions.limit = pageSize;
+                    load();
+                });
             }
         };
 
-        vm.selected = null;
+        var paginationOptions = {
+            offset: 0,
+            limit: 10,
+            sort: null
+        };
 
         function load() {
-            var request = Gig.data.index().$promise.then(function(gigs) {
-                vm.gridOptions.data = gigs;
+            var query = Object.assign({}, paginationOptions);
+            var request = Gig.data.index(query).$promise.then(function(result) {
+                vm.gridOptions.totalItems = result.totalRows;
+                vm.gridOptions.data = result.data;
             });
 
             BlockingPromiseManager.add(request);
@@ -127,13 +156,13 @@ angular.module('GigKeeper').controller('GigController', [
          * @return {void}
          */
         vm.editSelected = function($event) {
-            if($event) {
-                if($event.target.closest('[ui-grid-row]').length === 0) {
+            if ($event) {
+                if ($event.target.closest('[ui-grid-row]').length === 0) {
                     return;
                 }
             }
 
-            $state.go('editGig', {id:vm.selected.entity.id});
+            $state.go('editGig', { id: vm.selected.entity.id });
         };
 
         vm.deleteSelected = function() {
@@ -158,8 +187,8 @@ angular.module('GigKeeper').controller('GigController', [
          *
          * @return {void}
          */
-        vm.export = function () {
-            Gig.data.export().$promise.then(function (result) {
+        vm.export = function() {
+            Gig.data.export().$promise.then(function(result) {
                 $window.saveAs(result.blob, result.filename);
             });
         };

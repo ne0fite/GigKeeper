@@ -30,6 +30,10 @@ angular.module('GigKeeper').controller('ContractorController', [
             enableRowSelection: true,
             enableSelectAll: false,
             multiSelect: false,
+            paginationPageSize: 10,
+            paginationPageSizes: [10, 25, 50, 100],
+            useExternalPagination: true,
+            useExternalSorting: true,
             enableRowHeaderSelection: false,
             enableSorting: true,
             noUnselect: true,
@@ -52,6 +56,7 @@ angular.module('GigKeeper').controller('ContractorController', [
             }],
             data: [],
             onRegisterApi: function(gridApi) {
+
                 gridApi.selection.on.rowSelectionChanged(null, function(row) {
                     if (row.isSelected) {
                         vm.selected = row;
@@ -59,12 +64,40 @@ angular.module('GigKeeper').controller('ContractorController', [
                         vm.selected = null;
                     }
                 });
+
+                gridApi.core.on.sortChanged(null, function(grid, sortColumns) {
+                    if (sortColumns.length === 0) {
+                        paginationOptions.sort = null;
+                    } else {
+                        paginationOptions.sort = sortColumns.map(function(sortColumn) {
+                            return {
+                                field: sortColumn.field,
+                                dir: sortColumn.sort.direction
+                            };
+                        });
+                    }
+                    load();
+                });
+
+                gridApi.pagination.on.paginationChanged(null, function(newPage, pageSize) {
+                    paginationOptions.offset = pageSize * (newPage - 1);
+                    paginationOptions.limit = pageSize;
+                    load();
+                });                
             }
         };
 
+        var paginationOptions = {
+            offset: 0,
+            limit: 10,
+            sort: null
+        };
+
         function load() {
-            var request = Contractor.data.index().$promise.then(function(contractors) {
-                vm.gridOptions.data = contractors;
+            var query = Object.assign({}, paginationOptions);
+            var request = Contractor.data.index(query).$promise.then(function(result) {
+                vm.gridOptions.totalItems = result.totalRows;
+                vm.gridOptions.data = result.data;
             });
 
             BlockingPromiseManager.add(request);

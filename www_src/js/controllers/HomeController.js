@@ -37,7 +37,7 @@ angular.module('GigKeeper').controller('HomeController', [
 
                 Session.login(vm.loginForm.email, vm.loginForm.password).then(function(error) {
                     if (error) {
-                        Alerts.add(error.message, 'error');
+                        Alerts.add(error.message, Alerts.constants.error);
                     } else {
                         $state.go('gigs');
                     }

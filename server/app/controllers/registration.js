@@ -18,6 +18,8 @@
 
 "use strict";
 
+const Promise = require("bluebird");
+
 const registration = require("../../lib/registration.js");
 const security = require("../../lib/security.js");
 
@@ -37,12 +39,38 @@ module.exports = {
                     where: {
                         profileId: ctx.state.user.pid
                     }
-                }],
-                order: [ [ "createdAt", "asc" ] ]
+                }]
             };
 
-            return models.invite.findAll(queryOptions).then(function(invites) {
-                ctx.body = invites;
+            if (ctx.request.query.sort && ctx.request.query.sort.length > 0) {
+                var sortDefs = Array.isArray(ctx.request.query.sort) ? ctx.request.query.sort : [ ctx.request.query.sort ];
+                queryOptions.order = sortDefs.map(function(sortJson) {
+                    var sortDef = JSON.parse(sortJson);
+                    return [
+                        sortDef.field,
+                        sortDef.dir
+                    ];
+                });
+            } else {
+                queryOptions.order = [
+                    ["createdAt", "desc"]
+                ];
+            }
+
+            var pagedQueryOptions = Object.assign({
+                limit: ctx.request.query.limit,
+                offset: ctx.request.query.offset
+            }, queryOptions);
+
+            var countQuery = models.invite.count(pagedQueryOptions);
+            var findAllQuery = models.invite.findAll(queryOptions);
+            return Promise.all([ countQuery, findAllQuery ]).spread(function(countResults, findAllResults) {
+                ctx.status = 200;
+                ctx.body = {
+                    totalRows: countResults,
+                    data: findAllResults
+                };
+
             }).catch(function(error) {
                 ctx.status = 500;
                 ctx.body = {

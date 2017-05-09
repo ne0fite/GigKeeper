@@ -32,6 +32,7 @@ angular.module('GigKeeper', [
     'ui.grid',
     'ui.grid.edit',
     'ui.grid.selection',
+    'ui.grid.pagination',
     'BlockingPromiseManager',
     'ngMap'
 ]);

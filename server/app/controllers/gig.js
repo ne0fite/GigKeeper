@@ -28,6 +28,7 @@ const models = db.models;
 module.exports = {
 
     index: async (ctx) => {
+
         var queryOptions = {
             where: {
                 profileId: ctx.state.user.pid
@@ -36,19 +37,41 @@ module.exports = {
                 model: models.contractor,
                 required: false
             }, {
-                model: models.gig,
-                as: "originGig"
-            }, {
                 model: models.tag
-            }],
-            order: [
-                ["startDate", "desc"]
-            ]
+            }]
         };
 
-        return models.gig.findAll(queryOptions).then(function(gigs) {
+        if (ctx.request.query.sort && ctx.request.query.sort.length > 0) {
+            var sortDefs = Array.isArray(ctx.request.query.sort) ? ctx.request.query.sort : [ ctx.request.query.sort ];
+            queryOptions.order = sortDefs.map(function(sortJson) {
+                var sortDef = JSON.parse(sortJson);
+                if (sortDef.field.startsWith("place.")) {
+                    sortDef.field = db.sequelize.json(sortDef.field);
+                }
+                return [
+                    sortDef.field,
+                    sortDef.dir
+                ];
+            });
+        } else {
+            queryOptions.order = [
+                ["startDate", "desc"]
+            ];
+        }
+
+        var pagedQueryOptions = Object.assign({
+            limit: ctx.request.query.limit,
+            offset: ctx.request.query.offset
+        }, queryOptions);
+
+        var countQuery = models.gig.count(pagedQueryOptions);
+        var findAllQuery = models.gig.findAll(queryOptions);
+        return Promise.all([ countQuery, findAllQuery ]).spread(function(countResults, findAllResults) {
             ctx.status = 200;
-            ctx.body = gigs;
+            ctx.body = {
+                totalRows: countResults,
+                data: findAllResults
+            };
         }).catch(function(error) {
             ctx.status = 500;
             ctx.body = {

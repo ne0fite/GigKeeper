@@ -18,6 +18,7 @@
 
 "use strict";
 
+const Promise = require("bluebird");
 const sheeter = require("../../lib/sheeter");
 
 const db = require("../../db").sequelize;
@@ -26,15 +27,41 @@ const models = db.models;
 module.exports = {
 
     index: async (ctx) => {
+
         var queryOptions = {
             where: {
                 profileId: ctx.state.user.pid
-            },
-            order: [ "name" ]
+            }
         };
 
-        return models.contractor.findAll(queryOptions).then(function(contractors) {
-            ctx.body = contractors;
+        if (ctx.request.query.sort && ctx.request.query.sort.length > 0) {
+            var sortDefs = Array.isArray(ctx.request.query.sort) ? ctx.request.query.sort : [ ctx.request.query.sort ];
+            queryOptions.order = sortDefs.map(function(sortJson) {
+                var sortDef = JSON.parse(sortJson);
+                return [
+                    sortDef.field,
+                    sortDef.dir
+                ];
+            });
+        } else {
+            queryOptions.order = [
+                ["name", "asc"]
+            ];
+        }
+
+        var pagedQueryOptions = Object.assign({
+            limit: ctx.request.query.limit,
+            offset: ctx.request.query.offset
+        }, queryOptions);
+
+        var countQuery = models.contractor.count(pagedQueryOptions);
+        var findAllQuery = models.contractor.findAll(queryOptions);
+        return Promise.all([ countQuery, findAllQuery ]).spread(function(countResults, findAllResults) {
+            ctx.status = 200;
+            ctx.body = {
+                totalRows: countResults,
+                data: findAllResults
+            };
         }).catch(function(error) {
             ctx.status = 500;
             ctx.body = {

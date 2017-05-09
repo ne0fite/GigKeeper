@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('SendInviteController', [
-    'Registration', 'Session', 'invites', 'Alerts',
-    function(Registration, Session, invites, Alerts) {
+    'Registration', 'Session', 'Alerts', 'BlockingPromiseManager',
+    function(Registration, Session, Alerts, BlockingPromiseManager) {
 
         var vm = this;
 
@@ -35,6 +35,9 @@ angular.module('GigKeeper').controller('SendInviteController', [
             enableRowSelection: false,
             enableSelectAll: false,
             multiSelect: false,
+            paginationPageSize: 10,
+            paginationPageSizes: [10, 25, 50, 100],
+            useExternalPagination: true,
             enableRowHeaderSelection: false,
             enableSorting: true,
             noUnselect: true,
@@ -69,8 +72,48 @@ angular.module('GigKeeper').controller('SendInviteController', [
                 type: 'date',
                 cellFilter: 'date:"MM/dd/yyyy hh:mm a"'
             }],
-            data: invites
+            data: [],
+            onRegisterApi: function(gridApi) {
+
+                gridApi.core.on.sortChanged(null, function(grid, sortColumns) {
+                    if (sortColumns.length === 0) {
+                        paginationOptions.sort = null;
+                    } else {
+                        paginationOptions.sort = sortColumns.map(function(sortColumn) {
+                            return {
+                                field: sortColumn.field,
+                                dir: sortColumn.sort.direction
+                            };
+                        });
+                    }
+                    load();
+                });
+
+                gridApi.pagination.on.paginationChanged(null, function(newPage, pageSize) {
+                    paginationOptions.offset = pageSize * (newPage - 1);
+                    paginationOptions.limit = pageSize;
+                    load();
+                });                
+            }
         };
+
+        var paginationOptions = {
+            offset: 0,
+            limit: 10,
+            sort: null
+        };
+
+        function load() {
+            var query = Object.assign({}, paginationOptions);
+            var request = Registration.data.index(query).$promise.then(function(result) {
+                vm.gridOptions.totalItems = result.totalRows;
+                vm.gridOptions.data = result.data;
+            });
+
+            BlockingPromiseManager.add(request);
+        }
+
+        load();
 
         vm.submit = function(sendInviteForm) {
 

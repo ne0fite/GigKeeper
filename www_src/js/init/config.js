@@ -118,12 +118,6 @@ angular.module('GigKeeper').config([
             controller: 'SendInviteController as vm',
             templateUrl: '/template/views/sendInvite.html',
             resolve: {
-                invites: [
-                    'Registration',
-                    function(Registration) {
-                        return Registration.data.index().$promise;
-                    }
-                ],
                 $title: function() {
                     return 'Send Invite';
                 }
