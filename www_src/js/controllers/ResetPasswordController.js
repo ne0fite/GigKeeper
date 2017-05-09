@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('ResetPasswordController', [
-    'localStorageService', '$state', '$stateParams', 'Security', 'Alerts', 'Session',
-    function(localStorageService, $state, $stateParams, Security, Alerts, Session) {
+    '$state', '$stateParams', 'Security', 'Alerts', 'Session',
+    function($state, $stateParams, Security, Alerts, Session) {
 
         var vm = this;
 
@@ -34,9 +34,6 @@ angular.module('GigKeeper').controller('ResetPasswordController', [
 
             if (resetPasswordForm.$valid) {
 
-                vm.errorMessage = null;
-                vm.successMessage = null;
-
                 var button = angular.element('#submit_button');
                 button.button('loading');
 
@@ -49,11 +46,11 @@ angular.module('GigKeeper').controller('ResetPasswordController', [
 
                     $state.go('gigs');
                 }).catch(function(error) {
-                    vm.errorMessage = error.message;
+                    Alerts.add(error.message, 'error');
                     button.button('reset');
                 });
             } else {
-                vm.errorMessage = 'Check form for errors';
+                Alerts.add('Check form for errors', 'error');
             }
         };
     }

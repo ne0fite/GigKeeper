@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('ContractorEditController', [
-    '$uibModalInstance', 'Contractor', 'contractor', 'BlockingPromiseManager',
-    function($uibModalInstance, Contractor, contractor, BlockingPromiseManager) {
+    '$uibModalInstance', 'Contractor', 'contractor', 'BlockingPromiseManager', 'Alerts',
+    function($uibModalInstance, Contractor, contractor, BlockingPromiseManager, Alerts) {
 
         var vm = this;
 
@@ -69,13 +69,13 @@ angular.module('GigKeeper').controller('ContractorEditController', [
                     $uibModalInstance.close(result);
                     button.button('reset');
                 }).catch(function(error) {
-                    vm.errorMessage = error.message;
+                    Alerts.add(error.message, 'error');
                     button.button('reset');
                 });
 
                 BlockingPromiseManager.add(promise);
             } else {
-                vm.errorMessage = 'Check form for errors';
+                Alerts.add('Check form for errors', 'error');
             }
         };
 

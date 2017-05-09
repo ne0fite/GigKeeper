@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('HomeController', [
-    'localStorageService', '$state', 'Session',
-    function(localStorageService, $state, Session) {
+    '$state', 'Session', 'Alerts',
+    function($state, Session, Alerts) {
 
         var vm = this;
 
@@ -32,13 +32,12 @@ angular.module('GigKeeper').controller('HomeController', [
         };
 
         vm.submitLoginForm = function(loginForm) {
-            vm.errorMessage = null;
 
             if (loginForm.$valid) {
 
                 Session.login(vm.loginForm.email, vm.loginForm.password).then(function(error) {
                     if (error) {
-                        vm.errorMessage = error.message;
+                        Alerts.add(error.message, 'error');
                     } else {
                         $state.go('gigs');
                     }

@@ -7,9 +7,6 @@
 
     <form name="sendInviteForm" ng-submit="vm.submit(sendInviteForm)" novalidate>
 
-        <div class="alert alert-success" ng-if="vm.successMessage">{{ vm.successMessage }}</div>
-        <div class="alert alert-danger" ng-if="vm.errorMessage">{{ vm.errorMessage }}</div>
-
         <div class="form-group" ng-class="{ 'has-error': sendInviteForm.$submitted && sendInviteForm.email.$invalid }">
             <label for="email">Email</label>
             <input type="email" 

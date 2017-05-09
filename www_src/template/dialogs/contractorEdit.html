@@ -9,8 +9,6 @@
         </div>
         <div class="modal-body" id="modal-body">
 
-            <div class="alert alert-danger" ng-if="errorMessage">{{ vm.errorMessage }}</div>
-
             <div class="form-group" ng-class="{ 'has-error': contractorForm.$submitted && contractorForm.name.$invalid }">
                 <label for="contractor_name">Name</label>
                 <input type="text" name="name" ng-model="vm.form.name" id="contractor_name" class="form-control" required />

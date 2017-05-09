@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('SendInviteController', [
-    '$state', 'Registration', 'Session', 'invites',
-    function($state, Registration, Session, invites) {
+    'Registration', 'Session', 'invites', 'Alerts',
+    function(Registration, Session, invites, Alerts) {
 
         var vm = this;
 
@@ -89,9 +89,9 @@ angular.module('GigKeeper').controller('SendInviteController', [
                 request.then(function(result) {
 
                     if (!result.error) {
-                        vm.successMessage = 'Invitation code ' + result.code + ' sent to ' + result.email;
+                        Alerts.add('Invitation code ' + result.code + ' sent to ' + result.email, 'success');
                     } else {
-                        vm.errorMessage = result.message;
+                        Alerts.add(result.message, 'error');
                     }
                 }).then(function() {
                     return Registration.data.index().$promise;
@@ -99,13 +99,13 @@ angular.module('GigKeeper').controller('SendInviteController', [
                     vm.gridOptions.data = invites;
                     button.button('reset');
                 }).catch(function(error) {
-                    vm.errorMessage = error.message;
+                    Alerts.add(error.message, 'error');
                     button.button('reset');
                 });
 
                 //BlockingPromiseManager.add(request);
             } else {
-                vm.errorMessage = 'Check form for errors';
+                Alerts.add('Check form for errors', 'error');
             }
         };
     }

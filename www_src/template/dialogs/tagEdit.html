@@ -8,8 +8,6 @@
         </div>
         <div class="modal-body" id="modal-body">
 
-            <div class="alert alert-danger" ng-if="vm.errorMessage">{{ vm.errorMessage }}</div>
-
             <div class="form-group" ng-class="{ 'has-error': tagForm.$submitted && tagForm.name.$invalid }">
                 <label for="tag_name">Name</label>
                 <input type="text" name="name" ng-model="vm.form.name" id="tag_name" class="form-control" ng-required="true" />

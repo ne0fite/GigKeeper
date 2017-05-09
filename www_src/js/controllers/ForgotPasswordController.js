@@ -32,9 +32,6 @@ angular.module('GigKeeper').controller('ForgotPasswordController', [
 
             if (forgotPasswordForm.$valid) {
 
-                vm.errorMessage = null;
-                vm.successMessage = null;
-
                 var button = angular.element('#submit_button');
                 button.button('loading');
 
@@ -44,11 +41,11 @@ angular.module('GigKeeper').controller('ForgotPasswordController', [
 
                     $state.go('home');
                 }).catch(function(error) {
-                    vm.errorMessage = error.message;
+                    Alerts.add(error.message, 'error');
                     button.button('reset');
                 });
             } else {
-                vm.errorMessage = 'Check form for errors';
+                Alerts.add('Check form for errors');
             }
         };
     }

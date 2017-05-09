@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('SelectRouteController', [
-    '$window', '$uibModalInstance', 'NgMap', 'GoogleMaps', 'DirectionsResult',
-    function($window, $uibModalInstance, NgMap, GoogleMaps, DirectionsResult) {
+    '$window', '$uibModalInstance', 'GoogleMaps', 'DirectionsResult',
+    function($window, $uibModalInstance, GoogleMaps, DirectionsResult) {
 
         var vm = this;
 

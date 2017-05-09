@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('ContractorController', [
-    '$window', '$uibModal', 'dialogs', 'Contractor', 'BlockingPromiseManager',
-    function($window, $uibModal, dialogs, Contractor, BlockingPromiseManager) {
+    '$window', 'dialogs', 'Contractor', 'BlockingPromiseManager',
+    function($window, dialogs, Contractor, BlockingPromiseManager) {
 
         var vm = this;
 

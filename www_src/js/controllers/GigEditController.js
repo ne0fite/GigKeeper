@@ -20,10 +20,10 @@
 
 angular.module('GigKeeper').controller('GigEditController', [
     'localStorageService', '$uibModal', '$filter', '$title', '$state', '$window', 'contractors', 'gig',
-    'Contractor', 'Tag', 'Gig', 'UrlBuilder', 'BlockingPromiseManager', 'GoogleMaps', 'dialogs', 'Session',
+    'Contractor', 'Tag', 'Gig', 'UrlBuilder', 'BlockingPromiseManager', 'GoogleMaps', 'dialogs', 'Session', 'Alerts',
     function(
         localStorageService, $uibModal, $filter, $title, $state, $window, contractors, gig,
-        Contractor, Tag, Gig, UrlBuilder, BlockingPromiseManager, GoogleMaps, dialogs, Session
+        Contractor, Tag, Gig, UrlBuilder, BlockingPromiseManager, GoogleMaps, dialogs, Session, Alerts
     ) {
         var vm = this;
 
@@ -253,13 +253,13 @@ angular.module('GigKeeper').controller('GigEditController', [
                 promise.then(function() {
                     $state.go('gigs');
                 }).catch(function(error) {
-                    vm.errorMessage = error.message;
+                    Alerts.add(error.message, 'error');
                     button.button('reset');
                 });
 
                 BlockingPromiseManager.add(promise);
             } else {
-                vm.errorMessage = 'Check form for errors';
+                Alerts.add('Check form for errors', 'error');
             }
         };
 

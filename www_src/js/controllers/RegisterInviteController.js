@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('RegisterInviteController', [
-    'localStorageService', '$state', 'Registration', 'invite', 'BlockingPromiseManager', 'Session',
-    function(localStorageService, $state, Registration, invite, BlockingPromiseManager, Session) {
+    '$state', 'Registration', 'invite', 'BlockingPromiseManager', 'Session', 'Alerts',
+    function($state, Registration, invite, BlockingPromiseManager, Session, Alerts) {
 
         var vm = this;
 
@@ -60,18 +60,18 @@ angular.module('GigKeeper').controller('RegisterInviteController', [
                         Session.updateSession(response);
                         $state.go('gigs');
                     } else {
-                        vm.errorMessage = response.message;
+                        Alerts.add(response.message, 'error');
                     }
                     
                     button.button('reset');
                 }).catch(function(error) {
-                    vm.errorMessage = error.message;
+                    Alerts.add(error.message, 'error');
                     button.button('reset');
                 });
 
                 BlockingPromiseManager.add(request);
             } else {
-                vm.errorMessage = 'Check form for errors';
+                Alerts.add('Check form for errors', 'error');
             }
         };
     }

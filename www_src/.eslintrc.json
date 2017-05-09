@@ -27,6 +27,9 @@
         ],
         "no-mixed-spaces-and-tabs": [
             "warn"
+        ],
+        "angular/di-unused": [
+            "warn"
         ]
     },
     "plugins": [

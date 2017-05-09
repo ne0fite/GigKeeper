@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('ProfileController', [
-    'UrlBuilder', 'BlockingPromiseManager', 'Profile', 'profile',
-    function(UrlBuilder, BlockingPromiseManager, Profile, profile) {
+    'Profile', 'profile', 'Alerts',
+    function(Profile, profile, Alerts) {
 
         var vm = this;
 
@@ -32,8 +32,6 @@ angular.module('GigKeeper').controller('ProfileController', [
         };
 
         vm.submit = function(profileForm) {
-            vm.errorMessage = null;
-            vm.successMessage = null;
 
             if (!profileForm.$invalid) {
 
@@ -47,15 +45,15 @@ angular.module('GigKeeper').controller('ProfileController', [
                 };
 
                 Profile.data.update({}, payload).$promise.then(function() {
-                    vm.successMessage = 'Saved!';
+                    Alerts.add('Your profile has been saved', 'success');
                 }).catch(function(err) {
-                    vm.errorMessage = err.message;
+                    Alerts.add(err.message, 'error');
                 }).finally(function() {
                     vm.form.password = null;
                     vm.form.passwordConfirm = null;
                 });
             } else {
-                vm.errorMessage = 'Check form for errors';
+                Alerts.add('Check form for errors', Alerts);
             }
         };
     }

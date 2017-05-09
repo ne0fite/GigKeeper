@@ -53,13 +53,13 @@ angular.module('GigKeeper').controller('SettingsController', [
                     button.button('reset');
                     Alerts.add('Your settings were saved.', Alerts.constants.success);
                 }).catch(function(error) {
-                    vm.errorMessage = error.message;
+                    Alerts.add(error.message, 'error');
                     button.button('reset');
                 });
 
                 BlockingPromiseManager.add(request);
             } else {
-                vm.errorMessage = 'Check form for errors';
+                Alerts.add('Check form for errors', 'error');
             }
         };
     }
