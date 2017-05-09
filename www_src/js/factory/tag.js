@@ -69,7 +69,10 @@ angular.module('GigKeeper').factory('Tag', [
                         }
                     },
                     schema: {
-                        model: this.getModel()
+                        model: this.getModel(),
+                        data: function(result) {
+                            return result.data;
+                        }
                     }
                 });
             },

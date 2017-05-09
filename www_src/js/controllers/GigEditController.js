@@ -76,7 +76,7 @@ angular.module('GigKeeper').controller('GigEditController', [
             notes: gig.notes
         };
 
-        vm.contractors = contractors;
+        vm.contractors = contractors.data;
 
         vm.descriptionsComboOptions = {
             autoBind: false,

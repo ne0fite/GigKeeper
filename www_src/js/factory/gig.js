@@ -101,7 +101,10 @@ angular.module('GigKeeper').factory('Gig', [
                         }
                     },
                     schema: {
-                        model: this.getModel()
+                        model: this.getModel(),
+                        data: function(result) {
+                            return result.data;
+                        }
                     }
                 });
             },
