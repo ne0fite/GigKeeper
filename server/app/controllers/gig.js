@@ -64,8 +64,8 @@ module.exports = {
             offset: ctx.request.query.offset
         }, queryOptions);
 
-        var countQuery = models.gig.count(pagedQueryOptions);
-        var findAllQuery = models.gig.findAll(queryOptions);
+        var countQuery = models.gig.count(queryOptions);
+        var findAllQuery = models.gig.findAll(pagedQueryOptions);
         return Promise.all([ countQuery, findAllQuery ]).spread(function(countResults, findAllResults) {
             ctx.status = 200;
             ctx.body = {
