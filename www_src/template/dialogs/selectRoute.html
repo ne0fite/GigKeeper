@@ -7,16 +7,16 @@
     </div>
     <div class="modal-body" id="modal-body">
         <div class="row route-options">
-            <div class="col-xs-12 col-lg-4" ng-repeat="route in preparedRoutes">
+            <div class="col-xs-12 col-lg-4" ng-repeat="route in vm.preparedRoutes">
                 <div class="panel panel-primary route">
                     <div class="panel-heading">
                         <i class="fa fa-map-marker pad-right"></i>
                         {{route.summary}}
                     </div>
                     <map id="select-route-map-{{$index}}" zoom-to-inlude-markers="true" map-initialized="mapInitialized(map)">
-                        <directions origin="{{preparedRoutes[$index].origin}}"
-                                destination="{{preparedRoutes[$index].destination}}"
-                                waypoints="{{preparedRoutes[$index].waypoints}}"></directions>
+                        <directions origin="{{ vm.preparedRoutes[$index].origin }}"
+                                destination="{{ vm.preparedRoutes[$index].destination }}"
+                                waypoints="{{ vm.preparedRoutes[$index].waypoints }}"></directions>
                     </map>
                     <div class="panel-footer">
                         <div class="route-details">
@@ -55,7 +55,7 @@
                             </div>
                             <div class="clearfix"></div>
 
-                            <button class="btn btn-primary route-selection" ng-click="ok($index)">
+                            <button class="btn btn-primary route-selection" ng-click="vm.ok($index)">
                                 <i class="fa fa-check"></i>
                                 Choose
                             </button>
@@ -66,7 +66,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-warning" id="cancel_button" type="button" ng-click="cancel()">
+        <button class="btn btn-warning" id="cancel_button" type="button" ng-click="vm.cancel()">
             <i class="fa fa-times"></i> Cancel
         </button>
     </div>

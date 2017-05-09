@@ -18,13 +18,15 @@
 
 'use strict';
 
-angular.module('GigKeeper').controller('tags', [
-    '$scope', 'dialogs', 'Tag', 'BlockingPromiseManager',
-    function($scope, dialogs, Tag, BlockingPromiseManager) {
+angular.module('GigKeeper').controller('TagController', [
+    'dialogs', 'Tag', 'BlockingPromiseManager',
+    function(dialogs, Tag, BlockingPromiseManager) {
 
-        $scope.selected = null;
+        var vm = this;
 
-        $scope.gridOptions = {
+        vm.selected = null;
+
+        vm.gridOptions = {
             enableRowSelection: true,
             enableSelectAll: false,
             multiSelect: false,
@@ -41,26 +43,21 @@ angular.module('GigKeeper').controller('tags', [
             }],
             data: [],
             onRegisterApi: function(gridApi) {
-                gridApi.selection.on.rowSelectionChanged($scope, function(row) {
+                gridApi.selection.on.rowSelectionChanged(null, function(row) {
                     if (row.isSelected) {
-                        $scope.selected = row;
+                        vm.selected = row;
                     } else {
-                        $scope.selected = null;
+                        vm.selected = null;
                     }
                 });
             }
         };
 
-        $scope.selected = null;
+        vm.selected = null;
 
         function load() {
             var request = Tag.data.index().$promise.then(function(tags) {
-                $scope.gridOptions.data = tags;
-            }).catch(function(err) {
-                $scope.alerts.push({
-                    msg: err.message,
-                    type: 'danger'
-                });
+                vm.gridOptions.data = tags;
             });
 
             BlockingPromiseManager.add(request);
@@ -68,7 +65,7 @@ angular.module('GigKeeper').controller('tags', [
 
         load();
 
-        $scope.add = function() {
+        vm.add = function() {
             editDialog({});
         };
 
@@ -79,30 +76,25 @@ angular.module('GigKeeper').controller('tags', [
          * 
          * @return {void}
          */
-        $scope.editSelected = function($event) {
+        vm.editSelected = function($event) {
             if($event) {
                 if($event.target.closest('[ui-grid-row]').length === 0) {
                     return;
                 }
             }
 
-            editDialog($scope.selected.entity);
+            editDialog(vm.selected.entity);
         };
 
-        $scope.deleteSelected = function() {
+        vm.deleteSelected = function() {
             dialogs.confirm({
                 okText: 'Delete',
                 title: 'Confirm Delete',
-                message: 'Are you sure you want to delete ' + $scope.selected.entity.name + '?'
+                message: 'Are you sure you want to delete ' + vm.selected.entity.name + '?'
             }).then(function() {
-                var request = Tag.data.delete({ id: $scope.selected.entity.id }).$promise.then(function() {
-                    $scope.selected = null;
+                var request = Tag.data.delete({ id: vm.selected.entity.id }).$promise.then(function() {
+                    vm.selected = null;
                     load();
-                }).catch(function(error) {
-                    $scope.alerts.push({
-                        msg: error.message,
-                        type: 'danger'
-                    });
                 });
 
                 BlockingPromiseManager.add(request);

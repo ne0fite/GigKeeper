@@ -6,7 +6,7 @@
         </h1>
     </div>
 
-    <form name="settingsForm" ng-submit="submit(settingsForm)" novalidate>
+    <form name="settingsForm" ng-submit="vm.submit(settingsForm)" novalidate>
 
         <div class="row">
             <div class="col-md-6">
@@ -24,7 +24,7 @@
                                     name="defaultDuration" 
                                     kendo-numeric-text-box
                                     options="durationOptions"
-                                    ng-model="form.defaultDuration" />
+                                    ng-model="vm.form.defaultDuration" />
                             </div>
                             <p class="help-block">The end date will automatically be set
                                 to the start date plus the default duration in minutes.</p>
@@ -38,7 +38,7 @@
                                     name="leadTime" 
                                     kendo-numeric-text-box
                                     options="durationOptions"
-                                    ng-model="form.leadTime" />
+                                    ng-model="vm.form.leadTime" />
                             </div>
                             <p class="help-block">How many minutes prior to the gig start time do you wish to arrive?
                                 This will be used in calculating a suggested departure time.
@@ -60,7 +60,7 @@
                                    class="form-control"
                                    g-places-autocomplete 
                                    data-force-selection="true"
-                                   ng-model="form.homeBasePlace"
+                                   ng-model="vm.form.homeBasePlace"
                                    autocomplete="off" />
                             <p class="help-block">This is your default home base. By default,
                                 all distance / travel time estimations are made from this location.</p>

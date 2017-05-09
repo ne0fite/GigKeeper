@@ -18,38 +18,37 @@
 
 'use strict';
 
-angular.module('GigKeeper').controller('forgotPassword', [
-    '$scope', '$state', '$stateParams', 'Security',
-    function($scope, $state, $stateParams, Security) {
+angular.module('GigKeeper').controller('ForgotPasswordController', [
+    '$state', '$stateParams', 'Security', 'Alerts',
+    function($state, $stateParams, Security, Alerts) {
 
-        $scope.form = {
+        var vm = this;
+
+        vm.form = {
             email: typeof $stateParams.email == 'undefined' ? null : $stateParams.email
         };
 
-        $scope.submit = function(forgotPasswordForm) {
+        vm.submit = function(forgotPasswordForm) {
 
             if (forgotPasswordForm.$valid) {
 
-                $scope.errorMessage = null;
-                $scope.successMessage = null;
+                vm.errorMessage = null;
+                vm.successMessage = null;
 
                 var button = angular.element('#submit_button');
                 button.button('loading');
 
-                Security.data.requestPasswordReset({ email: $scope.form.email }).$promise.then(function() {
-                    $scope.alerts.push({
-                        msg: 'Password reset link sent. Please check your email.',
-                        type: 'success'
-                    });
+                Security.data.requestPasswordReset({ email: vm.form.email }).$promise.then(function() {
+                    Alerts.add('Password reset link sent. Please check your email.', Alerts.constants.success);
                     button.button('reset');
 
                     $state.go('home');
                 }).catch(function(error) {
-                    $scope.errorMessage = error.message;
+                    vm.errorMessage = error.message;
                     button.button('reset');
                 });
             } else {
-                $scope.errorMessage = 'Check form for errors';
+                vm.errorMessage = 'Check form for errors';
             }
         };
     }

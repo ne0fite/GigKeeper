@@ -1,5 +1,5 @@
 <script type="text/ng-template"  id="/template/dialogs/tagEdit.html">
-    <form name="tagForm" ng-submit="submit(tagForm)" novalidate>
+    <form name="tagForm" ng-submit="vm.submit(tagForm)" novalidate>
         <div class="modal-header">
             <h3 class="modal-title" id="modal-title">
                 <i class="fa fa-pencil pad-right"></i>
@@ -8,11 +8,11 @@
         </div>
         <div class="modal-body" id="modal-body">
 
-            <div class="alert alert-danger" ng-if="errorMessage">{{ errorMessage }}</div>
+            <div class="alert alert-danger" ng-if="vm.errorMessage">{{ vm.errorMessage }}</div>
 
             <div class="form-group" ng-class="{ 'has-error': tagForm.$submitted && tagForm.name.$invalid }">
                 <label for="tag_name">Name</label>
-                <input type="text" name="name" ng-model="form.name" id="tag_name" class="form-control" ng-required="true" />
+                <input type="text" name="name" ng-model="vm.form.name" id="tag_name" class="form-control" ng-required="true" />
                 <div ng-messages="tagForm.name.$error" role="alert" ng-if="tagForm.$submitted">
                     <p class="help-block" ng-message="required">Name is required</p>
                 </div>
@@ -21,7 +21,7 @@
             <div class="form-group">
                 <label for="tag_description">Description</label>
                 <textarea name="description" 
-                          ng-model="form.description" 
+                          ng-model="vm.form.description" 
                           id="tag_description" 
                           class="form-control">
                 </textarea>
@@ -31,7 +31,7 @@
             <button class="btn btn-primary" id="save_button" type="submit" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving...">
                 <i class="fa fa-check"></i> Save
             </button>
-            <button class="btn btn-warning" id="cancel_button" type="button" ng-click="cancel()">
+            <button class="btn btn-warning" id="cancel_button" type="button" ng-click="vm.cancel()">
                 <i class="fa fa-times"></i> Cancel
             </button>
         </div>

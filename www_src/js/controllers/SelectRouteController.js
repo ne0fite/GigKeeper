@@ -19,8 +19,11 @@
 'use strict';
 
 angular.module('GigKeeper').controller('SelectRouteController', [
-    '$scope', '$uibModalInstance', 'NgMap', 'GoogleMaps', 'DirectionsResult',
-    function($scope, $uibModalInstance, NgMap, GoogleMaps, DirectionsResult) {
+    '$window', '$uibModalInstance', 'NgMap', 'GoogleMaps', 'DirectionsResult',
+    function($window, $uibModalInstance, NgMap, GoogleMaps, DirectionsResult) {
+
+        var vm = this;
+
         /**
          * Prepare routes for use with NgMap.
          * 
@@ -100,14 +103,14 @@ angular.module('GigKeeper').controller('SelectRouteController', [
             });
         }
 
-        $scope.preparedRoutes = prepareRoutes(DirectionsResult);
+        vm.preparedRoutes = prepareRoutes(DirectionsResult);
 
         /**
          * Finalize user's selection, and close the modal.
          * 
          * @return {void}
          */
-        $scope.ok = function (selection) {
+        vm.ok = function (selection) {
             $uibModalInstance.close(DirectionsResult.routes[selection]);
         };
 
@@ -116,7 +119,7 @@ angular.module('GigKeeper').controller('SelectRouteController', [
          * 
          * @return {void}
          */
-        $scope.cancel = function() {
+        vm.cancel = function() {
             $uibModalInstance.dismiss('cancel');
         };
 
@@ -127,9 +130,9 @@ angular.module('GigKeeper').controller('SelectRouteController', [
          * 
          * @return {void}
          */
-        $scope.mapInitialized = function (map) {
-            window.google.maps.event.trigger(map, 'resize');
-            map.setCenter($scope.preparedRoutes[0].center);
+        vm.mapInitialized = function (map) {
+            $window.google.maps.event.trigger(map, 'resize');
+            map.setCenter(vm.preparedRoutes[0].center);
         };
     }
 ]);

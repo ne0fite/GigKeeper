@@ -18,9 +18,10 @@
 
 'use strict';
 
-angular.module('GigKeeper').run([
-    'Session',
-    function(Session) {
-        Session.start();
+angular.module('GigKeeper').controller('MainNavController', [
+    '$scope', 'Session',
+    function($scope, Session) {
+        var vm = this;
+        vm.session = Session;
     }
 ]);

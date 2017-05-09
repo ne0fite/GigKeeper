@@ -19,10 +19,12 @@
 'use strict';
 
 angular.module('GigKeeper').controller('ContractorEditController', [
-    '$scope', '$uibModalInstance', 'Contractor', 'contractor',
-    function($scope, $uibModalInstance, Contractor, contractor) {
+    '$uibModalInstance', 'Contractor', 'contractor', 'BlockingPromiseManager',
+    function($uibModalInstance, Contractor, contractor, BlockingPromiseManager) {
 
-        $scope.form = {
+        var vm = this;
+
+        vm.form = {
             id: contractor.id,
             name: contractor.name,
             contact: contractor.contact,
@@ -36,7 +38,7 @@ angular.module('GigKeeper').controller('ContractorEditController', [
             web: contractor.web
         };
 
-        $scope.submit = function(contractorForm) {
+        vm.submit = function(contractorForm) {
 
             if (!contractorForm.$invalid) {
 
@@ -44,16 +46,16 @@ angular.module('GigKeeper').controller('ContractorEditController', [
                 button.button('loading');
 
                 var payload = {
-                    name: $scope.form.name,
-                    contact: $scope.form.contact,
-                    address1: $scope.form.address1,
-                    address2: $scope.form.address2,
-                    city: $scope.form.city,
-                    region: $scope.form.region,
-                    postalCode: $scope.form.postalCode,
-                    phone: $scope.form.phone,
-                    email: $scope.form.email,
-                    web: $scope.form.web
+                    name: vm.form.name,
+                    contact: vm.form.contact,
+                    address1: vm.form.address1,
+                    address2: vm.form.address2,
+                    city: vm.form.city,
+                    region: vm.form.region,
+                    postalCode: vm.form.postalCode,
+                    phone: vm.form.phone,
+                    email: vm.form.email,
+                    web: vm.form.web
                 };
 
                 var promise;
@@ -63,19 +65,21 @@ angular.module('GigKeeper').controller('ContractorEditController', [
                     promise = Contractor.data.create({}, payload).$promise;
                 }
 
-                promise.then(function() {
-                    $uibModalInstance.close();
+                promise.then(function(result) {
+                    $uibModalInstance.close(result);
                     button.button('reset');
                 }).catch(function(error) {
-                    $scope.errorMessage = error.message;
+                    vm.errorMessage = error.message;
                     button.button('reset');
                 });
+
+                BlockingPromiseManager.add(promise);
             } else {
-                $scope.errorMessage = 'Check form for errors';
+                vm.errorMessage = 'Check form for errors';
             }
         };
 
-        $scope.cancel = function() {
+        vm.cancel = function() {
             $uibModalInstance.dismiss('cancel');
         };
     }

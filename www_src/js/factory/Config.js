@@ -18,9 +18,10 @@
 
 'use strict';
 
-angular.module('GigKeeper').run([
-    'Session',
-    function(Session) {
-        Session.start();
+angular.module('GigKeeper').factory('Config', [
+    '$window',
+    function($window) {
+        var config = $window.appConfig;
+        return config;
     }
 ]);

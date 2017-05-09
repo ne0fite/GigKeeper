@@ -18,9 +18,13 @@
 
 'use strict';
 
-angular.module('GigKeeper').run([
-    'Session',
-    function(Session) {
-        Session.start();
+angular.module('GigKeeper').controller('AlertController', [
+    'Alerts',
+    function(Alerts) {
+        var vm = this;
+        vm.alerts = Alerts.alerts;
+        vm.closeAlert = function (index) {
+            Alerts.close(index);
+        };
     }
 ]);

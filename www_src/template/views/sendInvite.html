@@ -5,17 +5,17 @@
         </h1>
     </div>
 
-    <form name="sendInviteForm" ng-submit="submit(sendInviteForm)" novalidate>
+    <form name="sendInviteForm" ng-submit="vm.submit(sendInviteForm)" novalidate>
 
-        <div class="alert alert-success" ng-if="successMessage">{{ successMessage }}</div>
-        <div class="alert alert-danger" ng-if="errorMessage">{{ errorMessage }}</div>
+        <div class="alert alert-success" ng-if="vm.successMessage">{{ vm.successMessage }}</div>
+        <div class="alert alert-danger" ng-if="vm.errorMessage">{{ vm.errorMessage }}</div>
 
         <div class="form-group" ng-class="{ 'has-error': sendInviteForm.$submitted && sendInviteForm.email.$invalid }">
             <label for="email">Email</label>
             <input type="email" 
                     id="email" 
                     name="email" 
-                    ng-model="form.email" 
+                    ng-model="vm.form.email" 
                     class="form-control" 
                     ng-email
                     ng-required="true" />
@@ -30,7 +30,7 @@
             <textarea type="message" 
                     id="message" 
                     name="message" 
-                    ng-model="form.message" 
+                    ng-model="vm.form.message" 
                     class="form-control">
             </textarea>
         </div>
@@ -42,6 +42,6 @@
 
     <h2>My Sent Invitations</h2>
 
-    <div ui-grid="gridOptions"></div>
+    <div ui-grid="vm.gridOptions"></div>
 
 </script>

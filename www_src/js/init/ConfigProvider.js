@@ -18,11 +18,9 @@
 
 'use strict';
 
-angular.module('GigKeeper').controller('alert', [
-    '$scope',
-    function($scope) {
-        $scope.closeAlert = function (index) {
-            $scope.alerts.splice(index, 1);
-        };
+angular.module('GigKeeper').factory('ConfigProvider', [
+    'Config',
+    function(Config) {
+        return Config;
     }
 ]);

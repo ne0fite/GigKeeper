@@ -6,22 +6,22 @@
 
     <div class="row">
         <main class="col-md-12">
-            <div class="row" ng-show="!user">
+            <div class="row" ng-show="!vm.session.user">
                 <div class="col-md-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title">Login</h3>
                         </div>
                         <div class="panel-body">
-                            <form name="loginForm" ng-submit="submitLoginForm(loginForm)" novalidate>
+                            <form name="loginForm" ng-submit="vm.submitLoginForm(loginForm)" novalidate>
 
-                                <div class="alert alert-danger" ng-if="errorMessage">{{ errorMessage }}</div>
+                                <div class="alert alert-danger" ng-if="vm.errorMessage">{{ vm.errorMessage }}</div>
 
                                 <div class="form-group" ng-class="{ 'has-error': loginForm.$submitted && loginForm.email.$invalid }">
                                     <label>Email</label>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-at"></i></span>
-                                        <input class="form-control" type="email" name="email" ng-model="email" required />
+                                        <input class="form-control" type="email" name="email" ng-model="vm.loginForm.email" required />
                                     </div>
                                     <div ng-messages="loginForm.email.$error" role="alert" ng-if="loginForm.$submitted">
                                         <p class="help-block" ng-message="required">Email is required</p>
@@ -33,7 +33,7 @@
                                     <label>Password</label>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                        <input class="form-control" type="password" name="password" ng-model="password" required />
+                                        <input class="form-control" type="password" name="password" ng-model="vm.loginForm.password" required />
                                     </div>
                                     <div ng-messages="loginForm.password.$error" role="alert" ng-if="loginForm.$submitted">
                                         <p class="help-block" ng-message="required">Password is required</p>

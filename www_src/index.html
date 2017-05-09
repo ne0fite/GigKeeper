@@ -36,18 +36,18 @@
     <footer class="footer">
         <div class="container">
             <ul class="list-unstyled list-inline">
-                <li class="text-muted">GigKeeper &copy; <span ng-cloak>{{  copyrightDate | date:'yyyy' }}</span> Phoenix Bright Software, LLC</li>
+                <li class="text-muted">GigKeeper &copy; 2017 Phoenix Bright Software, LLC</li>
                 <li class="text-muted"><a ui-sref="terms">Terms &amp; Conditions</a></li>
                 <li class="text-muted"><a ui-sref="privacyPolicy">Privacy Policy</a></li>
             </ul>
         </div>
     </footer>
 
-    <div class="alerts container" ng-controller="alert" ng-if="alerts.length" ng-cloak>
+    <div class="alerts container" ng-controller="AlertController as vm" ng-cloak>
         <div class="row"
-                ng-repeat="alert in alerts"
+                ng-repeat="alert in vm.alerts"
                 ng-class="'alert-' + (alert.type || 'warning')"
-                close="closeAlert($index)"
+                close="vm.closeAlert($index)"
                 dismiss-on-timeout="3000"
                 uib-alert>
             <div class="col-xs-11">

@@ -7,22 +7,22 @@
     </div>
 
     <div class="action-buttons">
-        <button class="btn btn-default pull-left" ng-click="add()"><i class="fa fa-plus"></i> Add New</button>
-        <button class="btn btn-default pull-left" ng-click="editSelected()" ng-disabled="!selected">
+        <button class="btn btn-default pull-left" ng-click="vm.add()"><i class="fa fa-plus"></i> Add New</button>
+        <button class="btn btn-default pull-left" ng-click="vm.editSelected()" ng-disabled="!vm.selected">
             <i class="fa fa-edit"></i>
             Edit
             </button>
-        <button class="btn btn-danger pull-right" ng-click="deleteSelected()" ng-disabled="!selected">
+        <button class="btn btn-danger pull-right" ng-click="deleteSelected()" ng-disabled="!vm.selected">
             <i class="fa fa-trash"></i>
             Delete
         </button>
         <div class="clearfix"></div>
     </div>
 
-    <div ui-grid="gridOptions" ui-grid-selection ng-dblclick="editSelected($event)"></div>
+    <div ui-grid="vm.gridOptions" ui-grid-selection ng-dblclick="vm.editSelected($event)"></div>
 
     <div class="action-buttons">
-        <button class="btn btn-primary pull-right" ng-click="export()" ng-if="gridOptions.data.length">
+        <button class="btn btn-primary pull-right" ng-click="vm.export()" ng-if="gridOptions.data.length">
             <i class="fa fa-download"></i>
             Download
         </button>

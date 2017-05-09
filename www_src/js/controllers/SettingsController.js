@@ -18,53 +18,48 @@
 
 'use strict';
 
-angular.module('GigKeeper').controller('settings', [
-    '$scope', 'Settings', 'settings', 'BlockingPromiseManager',
-    function($scope, Settings, settings, BlockingPromiseManager) {
+angular.module('GigKeeper').controller('SettingsController', [
+    'Settings', 'settings', 'BlockingPromiseManager', 'Alerts',
+    function(Settings, settings, BlockingPromiseManager, Alerts) {
 
-        $scope.durationOptions = {
+        var vm = this;
+
+        vm.durationOptions = {
             decimals: 0,
             format: '0 minutes',
             min: 0,
             defaultValue: 0
         };
 
-        $scope.form = {
+        vm.form = {
             defaultDuration: settings.defaultDuration || 0,
             leadTime: settings.leadTime || 0,
             homeBasePlace: settings.homeBasePlace
         };
 
-        $scope.submit = function(settingsForm) {
+        vm.submit = function(settingsForm) {
             if (!settingsForm.$invalid) {
 
                 var button = angular.element('#save_button');
                 button.button('loading');
 
                 var payload = {
-                    defaultDuration: $scope.form.defaultDuration,
-                    leadTime: $scope.form.leadTime,
-                    homeBasePlace: $scope.form.homeBasePlace
+                    defaultDuration: vm.form.defaultDuration,
+                    leadTime: vm.form.leadTime,
+                    homeBasePlace: vm.form.homeBasePlace
                 };
 
                 var request = Settings.data.update({}, payload).$promise.then(function() {
-                    $scope.user.profile.defaultDuration = payload.defaultDuration;
-                    $scope.user.leadTime = payload.leadTime;
-                    $scope.user.homeBasePlace = payload.homeBasePlace;
-
                     button.button('reset');
-                    $scope.alerts.push({
-                        msg: 'Your settings were saved.',
-                        type: 'success'
-                    });
+                    Alerts.add('Your settings were saved.', Alerts.constants.success);
                 }).catch(function(error) {
-                    $scope.errorMessage = error.message;
+                    vm.errorMessage = error.message;
                     button.button('reset');
                 });
 
                 BlockingPromiseManager.add(request);
             } else {
-                $scope.errorMessage = 'Check form for errors';
+                vm.errorMessage = 'Check form for errors';
             }
         };
     }

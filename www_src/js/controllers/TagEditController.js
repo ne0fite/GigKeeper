@@ -22,14 +22,16 @@ angular.module('GigKeeper').controller('TagEditController', [
     '$scope', '$uibModalInstance', 'Tag', 'tag', 'BlockingPromiseManager',
     function($scope, $uibModalInstance, Tag, tag, BlockingPromiseManager) {
 
+        var vm = this;
+        
         tag = tag ? tag : {};
-        $scope.form = angular.extend({
+        vm.form = angular.extend({
             id: 0,
             name: '',
             description: ''
         }, tag);
 
-        $scope.submit = function(tagForm) {
+        vm.submit = function(tagForm) {
 
             if (!tagForm.$invalid) {
 
@@ -37,8 +39,8 @@ angular.module('GigKeeper').controller('TagEditController', [
                 button.button('loading');
 
                 var payload = {
-                    name: $scope.form.name,
-                    description: $scope.form.description
+                    name: vm.form.name,
+                    description: vm.form.description
                 };
 
                 var promise;
@@ -52,17 +54,17 @@ angular.module('GigKeeper').controller('TagEditController', [
                     $uibModalInstance.close(result);
                     button.button('reset');
                 }).catch(function(error) {
-                    $scope.errorMessage = error.message;
+                    vm.errorMessage = error.message;
                     button.button('reset');
                 });
 
                 BlockingPromiseManager.add(promise);
             } else {
-                $scope.errorMessage = 'Check form for errors';
+                vm.errorMessage = 'Check form for errors';
             }
         };
 
-        $scope.cancel = function() {
+        vm.cancel = function() {
             $uibModalInstance.dismiss('cancel');
         };
     }

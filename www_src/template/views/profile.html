@@ -8,10 +8,10 @@
                 </h1>
             </div>
 
-            <div class="alert alert-danger" ng-if="errorMessage">{{ errorMessage }}</div>
-            <div class="alert alert-success" ng-if="successMessage">{{ successMessage }}</div>
+            <div class="alert alert-danger" ng-if="vm.errorMessage">{{ vm.errorMessage }}</div>
+            <div class="alert alert-success" ng-if="vm.successMessage">{{ vm.successMessage }}</div>
             
-            <form name="profileForm" ng-submit="submit(profileForm)">
+            <form name="profileForm" ng-submit="vm.submit(profileForm)">
                 <div class="row">
 
                     <div class="col-md-6">
@@ -25,13 +25,13 @@
                                     <div class="col-md-6">
                                         <div class="form-group" ng-class="{ 'has-error': profileForm.$submitted && profileForm.firstName.$invalid }">
                                             <label for="firstName">First Name</label>
-                                            <input type="text" id="firstName" name="firstName" class="form-control" ng-model="form.firstName" />
+                                            <input type="text" id="firstName" name="firstName" class="form-control" ng-model="vm.form.firstName" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group" ng-class="{ 'has-error': profileForm.$submitted && profileForm.lastName.$invalid }">
                                             <label for="lastName">Last Name</label>
-                                            <input type="text" id="lastName" name="lastName" class="form-control" ng-model="form.lastName" />
+                                            <input type="text" id="lastName" name="lastName" class="form-control" ng-model="vm.form.lastName" />
                                         </div>
                                     </div>
                                 </div>
@@ -43,7 +43,7 @@
                                             <input type="email" 
                                                 id="profile_email" 
                                                 name="email" 
-                                                ng-model="form.email" 
+                                                ng-model="vm.form.email" 
                                                 class="form-control" 
                                                 ng-email
                                                 required />
@@ -59,7 +59,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group" ng-class="{ 'has-error': profileForm.$submitted && profileForm.phone.$invalid }">
                                             <label for="phone">Phone</label>
-                                            <input type="tel" id="phone" name="phone" class="form-control" ng-model="form.phone" />
+                                            <input type="tel" id="phone" name="phone" class="form-control" ng-model="vm.form.phone" />
                                         </div>
                                     </div>
                                 </div>
@@ -71,7 +71,7 @@
                                             <input type="password" 
                                                 id="profile_password" 
                                                 name="password" 
-                                                ng-model="form.password"
+                                                ng-model="vm.form.password"
                                                 class="form-control" />
                                         </div>
                                     </div>
@@ -81,10 +81,10 @@
                                             <input type="password" 
                                                 id="profile_password_confirm" 
                                                 name="passwordConfirm" 
-                                                ng-model="form.passwordConfirm" 
+                                                ng-model="vm.form.passwordConfirm" 
                                                 class="form-control" 
                                                 ng-required
-                                                gk-compare-to="form.password" />
+                                                gk-compare-to="vm.form.password" />
                                             <div ng-messages="profileForm.passwordConfirm.$error" role="alert" ng-if="profileForm.$submitted">
                                                 <p class="help-block" ng-message="compareTo">Passwords do not match</p>
                                             </div>

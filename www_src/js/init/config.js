@@ -19,17 +19,21 @@
 'use strict';
 
 angular.module('GigKeeper').config([
-    '$compileProvider', '$stateProvider', '$urlRouterProvider', '$titleProvider', '$httpProvider', 'localStorageServiceProvider',
-    function($compileProvider, $stateProvider, $urlRouterProvider, $titleProvider, $httpProvider, localStorageServiceProvider) {
+    '$compileProvider', '$stateProvider', '$urlRouterProvider', '$titleProvider', '$httpProvider', 'localStorageServiceProvider', 'ConfigProvider',
+    function($compileProvider, $stateProvider, $urlRouterProvider, $titleProvider, $httpProvider, localStorageServiceProvider, ConfigProvider) {
 
-        var appConfig = window.appConfig;
-
-        if (appConfig.env != 'development') {
+        //
+        // Compiler Setup
+        //
+        if (ConfigProvider.env != 'development') {
             $compileProvider.debugInfoEnabled(false);
         }
         $compileProvider.commentDirectivesEnabled(false);
         $compileProvider.cssClassDirectivesEnabled(false);
         
+        //
+        // Route Setup
+        //
         $urlRouterProvider.otherwise('/');
 
         localStorageServiceProvider
@@ -39,7 +43,7 @@ angular.module('GigKeeper').config([
         $stateProvider.state({
             name: 'home',
             url: '/',
-            controller: 'home',
+            controller: 'HomeController as vm',
             templateUrl: '/template/views/home.html',
             public: true,
             resolve: {
@@ -61,7 +65,7 @@ angular.module('GigKeeper').config([
             public: true,
             name: 'forgotPassword',
             url: '/forgot-password',
-            controller: 'forgotPassword',
+            controller: 'ForgotPasswordController as vm',
             templateUrl: '/template/views/forgotPassword.html',
             resolve: {
                 $title: function() {
@@ -72,7 +76,7 @@ angular.module('GigKeeper').config([
             public: true,
             name: 'forgotPasswordWithEmail',
             url: '/forgot-password/{email}',
-            controller: 'forgotPassword',
+            controller: 'ForgotPasswordController as vm',
             templateUrl: '/template/views/forgotPassword.html',
             resolve: {
                 $title: function() {
@@ -83,7 +87,7 @@ angular.module('GigKeeper').config([
             public: true,
             name: 'resetPassword',
             url: '/reset-password/{token}',
-            controller: 'resetPassword',
+            controller: 'ResetPasswordController as vm',
             templateUrl: '/template/views/resetPassword.html',
             resolve: {
                 $title: function() {
@@ -94,7 +98,7 @@ angular.module('GigKeeper').config([
             public: true,
             name: 'register-invite',
             url: '/register/invite/:code',
-            controller: 'registerInvite',
+            controller: 'RegisterInviteController as vm',
             templateUrl: '/template/views/registerInvite.html',
             resolve: {
                 invite: [
@@ -111,7 +115,7 @@ angular.module('GigKeeper').config([
         }).state({
             name: 'send-invite',
             url: '/profile/invite',
-            controller: 'sendInvite',
+            controller: 'SendInviteController as vm',
             templateUrl: '/template/views/sendInvite.html',
             resolve: {
                 invites: [
@@ -127,7 +131,7 @@ angular.module('GigKeeper').config([
         }).state({
             name: 'gigs',
             url: '/gigs',
-            controller: 'gigs',
+            controller: 'GigController as vm',
             templateUrl: '/template/views/gigs.html',
             resolve: {
                 contractors: [
@@ -143,7 +147,7 @@ angular.module('GigKeeper').config([
         }).state({
             name: 'addGig',
             url: '/gigs/add',
-            controller: 'GigEditController',
+            controller: 'GigEditController as vm',
             templateUrl: '/template/views/gigEdit.html',
             resolve: {
                 gig: [
@@ -164,7 +168,7 @@ angular.module('GigKeeper').config([
         }).state({
             name: 'editGig',
             url: '/gigs/{id}',
-            controller: 'GigEditController',
+            controller: 'GigEditController as vm',
             templateUrl: '/template/views/gigEdit.html',
             resolve: {
                 gig: [
@@ -188,7 +192,7 @@ angular.module('GigKeeper').config([
         }).state({
             name: 'contractors',
             url: '/contractors',
-            controller: 'contractors',
+            controller: 'ContractorController as vm',
             templateUrl: '/template/views/contractors.html',
             resolve: {
                 $title: function() {
@@ -198,7 +202,7 @@ angular.module('GigKeeper').config([
         }).state({
             name: 'tags',
             url: '/tags',
-            controller: 'tags',
+            controller: 'TagController as vm',
             templateUrl: '/template/views/tags.html',
             resolve: {
                 $title: function() {
@@ -208,7 +212,7 @@ angular.module('GigKeeper').config([
         }).state({
             name: 'settings',
             url: '/settings',
-            controller: 'settings',
+            controller: 'SettingsController as vm',
             templateUrl: '/template/views/settings.html',
             resolve: {
                 settings: [
@@ -224,7 +228,7 @@ angular.module('GigKeeper').config([
         }).state({
             name: 'profile',
             url: '/profile',
-            controller: 'profile',
+            controller: 'ProfileController as vm',
             templateUrl: '/template/views/profile.html',
             resolve: {
                 profile: [
@@ -239,6 +243,9 @@ angular.module('GigKeeper').config([
             }
         });
 
+        //
+        // Page Title Setup
+        //
         $titleProvider.documentTitle([
             '$rootScope',
             function($rootScope) {
@@ -250,6 +257,9 @@ angular.module('GigKeeper').config([
             }
         ]);
 
+        //
+        // Interceptors
+        //
         $httpProvider.interceptors.push('AuthenticationInterceptor');
         $httpProvider.interceptors.push('SoftErrorInterceptor');
     }
