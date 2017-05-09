@@ -18,13 +18,33 @@
 
 "use strict";
 
+const place = require("../../../lib/place")();
+
 module.exports = function(sequelize, DataTypes) {
     return sequelize.define("gig", {
         id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV1, primaryKey: true, allowNull: false },
         name: { type: DataTypes.STRING, allowNull: false },
         originType: { type: DataTypes.ENUM("home", "gig", "other"), allowNull: false, defaultValue: "home" },
-        originPlace: { type: DataTypes.JSONB, allowNull: true },
-        place: { type: DataTypes.JSONB, allowNull: true },
+        originPlace: { 
+            type: DataTypes.JSONB, 
+            allowNull: true,
+            set: function(val) {
+                if (val) {
+                    val = place.stripPlace(val);
+                }
+                this.setDataValue("originPlace", val);
+            }
+        },
+        place: { 
+            type: DataTypes.JSONB, 
+            allowNull: true,
+            set: function(val) {
+                if (val) {
+                    val = place.stripPlace(val);
+                }
+                this.setDataValue("place", val);
+            } 
+        },
         distance: { type: DataTypes.DECIMAL(8, 2), allowNull: true },
         duration: { type: DataTypes.DECIMAL(8, 2), allowNull: true },
         startDate: { type: DataTypes.DATE, allowNull: false },
