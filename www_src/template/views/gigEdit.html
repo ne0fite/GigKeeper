@@ -62,7 +62,7 @@
 
                 <div class="row">
                     <div class="col-sm-12 form-group" ng-class="{ 'has-error': gigForm.$submitted && gigForm.contractorId.$invalid }">
-                        <label for="contractorId">Contractor</label> <a href="#" ng-click="addContractor($event)"><i class="fa fa-plus"></i> New</a>
+                        <label for="contractorId">Contractor</label> <a href="#" ng-click="vm.addContractor($event)"><i class="fa fa-plus"></i> New</a>
                         <div>
                             <select id="contractorId"
                                     name="contractorId"
@@ -211,7 +211,7 @@
                 <div class="row">
                     <div class="col-sm-12 form-group">
                         <label for="tags">Tags</label>
-                        <a href="#" ng-click="addTag($event)"><i class="fa fa-plus"></i> New</a>
+                        <a href="#" ng-click="vm.addTag($event)"><i class="fa fa-plus"></i> New</a>
                         <select id="tags"
                                 name="tags"
                                 kendo-multi-select
