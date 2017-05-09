@@ -48,7 +48,7 @@ angular.module('GigKeeper').controller('GigController', [
                 field: 'place.name',
                 type: 'string'
             }, {
-                name: 'Distance',
+                name: 'Distance / Travel Time',
                 field: 'distance',
                 type: 'string',
                 cellFilter: 'number:1',

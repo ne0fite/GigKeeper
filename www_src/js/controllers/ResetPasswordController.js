@@ -46,11 +46,11 @@ angular.module('GigKeeper').controller('ResetPasswordController', [
 
                     $state.go('gigs');
                 }).catch(function(error) {
-                    Alerts.add(error.message, 'error');
+                    Alerts.add(error.message, Alerts.constants.error);
                     button.button('reset');
                 });
             } else {
-                Alerts.add('Check form for errors', 'error');
+                Alerts.add('Check form for errors', Alerts.constants.error);
             }
         };
     }

@@ -54,13 +54,13 @@ angular.module('GigKeeper').controller('TagEditController', [
                     $uibModalInstance.close(result);
                     button.button('reset');
                 }).catch(function(error) {
-                    Alerts.add(error.message, 'error');
+                    Alerts.add(error.message, Alerts.constants.error);
                     button.button('reset');
                 });
 
                 BlockingPromiseManager.add(promise);
             } else {
-                Alerts.add('Check form for errors', 'error');
+                Alerts.add('Check form for errors', Alerts.constants.error);
             }
         };
 

@@ -89,9 +89,9 @@ angular.module('GigKeeper').controller('SendInviteController', [
                 request.then(function(result) {
 
                     if (!result.error) {
-                        Alerts.add('Invitation code ' + result.code + ' sent to ' + result.email, 'success');
+                        Alerts.add('Invitation code ' + result.code + ' sent to ' + result.email, Alerts.constants.success);
                     } else {
-                        Alerts.add(result.message, 'error');
+                        Alerts.add(result.message, Alerts.constants.error);
                     }
                 }).then(function() {
                     return Registration.data.index().$promise;
@@ -99,13 +99,13 @@ angular.module('GigKeeper').controller('SendInviteController', [
                     vm.gridOptions.data = invites;
                     button.button('reset');
                 }).catch(function(error) {
-                    Alerts.add(error.message, 'error');
+                    Alerts.add(error.message, Alerts.constants.error);
                     button.button('reset');
                 });
 
                 //BlockingPromiseManager.add(request);
             } else {
-                Alerts.add('Check form for errors', 'error');
+                Alerts.add('Check form for errors', Alerts.constants.error);
             }
         };
     }

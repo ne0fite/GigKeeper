@@ -41,7 +41,7 @@ angular.module('GigKeeper').controller('ForgotPasswordController', [
 
                     $state.go('home');
                 }).catch(function(error) {
-                    Alerts.add(error.message, 'error');
+                    Alerts.add(error.message, Alerts.constants.error);
                     button.button('reset');
                 });
             } else {

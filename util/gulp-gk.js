@@ -18,32 +18,12 @@
 
 "use strict";
 
-var sqlizr = require("sqlizr");
-var Sequelize = require("sequelize");
 var Promise = require("bluebird");
 var fs = Promise.promisifyAll(require("fs"));
 var path = require("path");
 var config = require("../config/config.js");
 
-function initDb() {
-
-    var sequelizeOptions = {
-        dialect: config.db.dialect,
-        host: config.db.host,
-        port: config.db.port,
-        benchmark: true
-    };
-
-    var sequelize = new Sequelize(config.db.name, config.db.user, config.db.pass, sequelizeOptions);
-
-    var modelPath = __dirname + "/../server/models/*.js";
-    var db = sqlizr(sequelize, modelPath);
-
-    return {
-        models: db,
-        sequelize: sequelize
-    };
-}
+const db = require("../server/db").sequelize;
 
 var seedTables = [
     "profile",
@@ -74,8 +54,6 @@ module.exports = {
         }
 
         console.log("Creating new profile for ", email);
-
-        var db = initDb();
 
         return db.models.user.findOne({
             where: {
@@ -151,8 +129,6 @@ module.exports = {
 
     dumpData: function(table) {
 
-        var db = initDb();
-
         var tables;
         if (table) {
             tables = [ table ];
@@ -178,8 +154,6 @@ module.exports = {
 
     seedData: function() {
 
-        var db = initDb();
-
         var rawTableList = seedTables.map(function(tableName) {
             return "\"" + tableName + "s\"";
         }).join(", ");
@@ -192,7 +166,7 @@ module.exports = {
                 var tableFile = path.join(__dirname, "/../server/data", table + ".json");
                 console.log("seeding table", tableFile);
                 return fs.readFileAsync(tableFile, { encoding: "utf8" }).then(function(data) {
-                    console.log(data);
+                    console.log(table);
                     return db.models[table].bulkCreate(JSON.parse(data));
                 });
             });

@@ -45,9 +45,9 @@ angular.module('GigKeeper').controller('ProfileController', [
                 };
 
                 Profile.data.update({}, payload).$promise.then(function() {
-                    Alerts.add('Your profile has been saved', 'success');
+                    Alerts.add('Your profile has been saved', Alerts.constants.success);
                 }).catch(function(err) {
-                    Alerts.add(err.message, 'error');
+                    Alerts.add(err.message, Alerts.constants.error);
                 }).finally(function() {
                     vm.form.password = null;
                     vm.form.passwordConfirm = null;
