@@ -52,7 +52,7 @@ module.exports = {
     },
     api: {
         port: process.env.SERVER_PORT || configJson.api.port || 8000,
-        baseUrl: process.env.API_BASE_URL || configJson.api.baseurl || "http://localhost:8000",
+        baseUrl: process.env.API_BASE_URL || configJson.api.baseUrl || "http://localhost:8000",
         jwt: {
             secret: process.env.JWT_SECRET || configJson.api.jwt.secret || "NeverShareYourSecret"
         }
