@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('TagEditController', [
-    '$scope', '$uibModalInstance', 'Tag', 'tag', 'BlockingPromiseManager',
-    function($scope, $uibModalInstance, Tag, tag, BlockingPromiseManager) {
+    '$uibModalInstance', 'Tag', 'tag', 'BlockingPromiseManager',
+    function($uibModalInstance, Tag, tag, BlockingPromiseManager) {
 
         var vm = this;
         

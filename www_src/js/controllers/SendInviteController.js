@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('SendInviteController', [
-    '$scope', '$state', 'Registration', 'Session', 'invites',
-    function($scope, $state, Registration, Session, invites) {
+    '$state', 'Registration', 'Session', 'invites',
+    function($state, Registration, Session, invites) {
 
         var vm = this;
 

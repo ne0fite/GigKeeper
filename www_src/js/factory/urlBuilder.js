@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').factory('UrlBuilder', [
-    '$window',
-    function($window) {
+    'Config',
+    function(Config) {
         return {
             /**
              * Build an absolute URL for the API.
@@ -34,7 +34,7 @@ angular.module('GigKeeper').factory('UrlBuilder', [
                     relativeUrl = '/' + relativeUrl;
                 }
 
-                return $window.appConfig.api.baseUrl + relativeUrl;
+                return Config.api.baseUrl + relativeUrl;
             }
         };
     }

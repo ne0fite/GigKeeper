@@ -19,8 +19,8 @@
 'use strict';
 
 angular.module('GigKeeper').controller('MainNavController', [
-    '$scope', 'Session',
-    function($scope, Session) {
+    'Session',
+    function(Session) {
         var vm = this;
         vm.session = Session;
     }
