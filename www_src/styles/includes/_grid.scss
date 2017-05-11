@@ -1,3 +1,13 @@
+// .gk-grid {
+        
+//     &.ui-grid, 
+//     .ui-grid-viewport,
+//     .ui-grid-canvas {
+//         height: auto !important;
+//         min-height: 70px !important;
+//     }
+// }
+
 .ui-grid-row {
     &.ui-grid-row-selected {
         > [ui-grid-row] {

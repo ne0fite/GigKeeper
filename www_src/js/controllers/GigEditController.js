@@ -29,6 +29,8 @@ angular.module('GigKeeper').controller('GigEditController', [
 
         vm.title = $title;
 
+        vm.session = Session;
+
         vm.tagDropdownOptions = Tag.getDropdownOptions();
 
         var template = function(gig) {
@@ -64,7 +66,7 @@ angular.module('GigKeeper').controller('GigEditController', [
         vm.form = {
             name: gig.name,
             originType: gig.originType || 'home',
-            originPlace: angular.fromJson(gig.originPlace),
+            originPlace: gig.originPlace || Session.user.profile.homeBasePlace,
             originGig: gig.originGig || null,
             place: angular.fromJson(gig.place),
             distance: gig.distance,
@@ -110,7 +112,7 @@ angular.module('GigKeeper').controller('GigEditController', [
         };
 
         // don't start watching stuff until the user profile is loaded
-        BlockingPromiseManager.then(function () {
+        BlockingPromiseManager.then(function() {
 
             vm.$watch('form.startDate', function(newValue, oldValue) {
                 var defaultDuration = Session.user.profile.defaultDuration;
@@ -122,10 +124,6 @@ angular.module('GigKeeper').controller('GigEditController', [
                     if (Session.user.profile.defaultDuration > 0) {
                         vm.form.endDate = new Date(newValue.getTime() + defaultDuration * 60 * 1000);
                     }
-                }
-
-                if(!vm.form.originPlace) {
-                    vm.resetOriginPlace();
                 }
             });
 
@@ -151,6 +149,10 @@ angular.module('GigKeeper').controller('GigEditController', [
                     case 'other':
                         break;
                     }
+
+                    if (!vm.form.originPlace) {
+                        vm.resetOriginPlace();
+                    }
                 }
             });
 
@@ -175,7 +177,7 @@ angular.module('GigKeeper').controller('GigEditController', [
          *
          * @return {void}
          */
-        vm.resetOriginPlace = function () {
+        vm.resetOriginPlace = function() {
             vm.form.originPlace = Session.user.profile.homeBasePlace;
         };
 
@@ -186,7 +188,7 @@ angular.module('GigKeeper').controller('GigEditController', [
          *
          * @return {void}
          */
-        vm.estimateDistance = function ($event) {
+        vm.estimateDistance = function($event) {
             $event.preventDefault();
 
             var button = angular.element('#estimate_button');
@@ -195,13 +197,12 @@ angular.module('GigKeeper').controller('GigEditController', [
             var request = GoogleMaps.data.directionsTo({
                 fromPlaceId: vm.form.originPlace.place_id,
                 toPlaceId: vm.form.place.place_id
-            }).$promise
-                .then(function(response) {
-                    selectRouteDialog(response);
-                    button.button('reset');
-                }).catch(function(error) { // eslint-disable-line no-unused-vars
-                    button.button('reset');
-                });
+            }).$promise.then(function(response) {
+                selectRouteDialog(response);
+                button.button('reset');
+            }).catch(function(error) { // eslint-disable-line no-unused-vars
+                button.button('reset');
+            });
 
             BlockingPromiseManager.add(request);
         };
@@ -272,11 +273,10 @@ angular.module('GigKeeper').controller('GigEditController', [
             if (gigForm.$dirty) {
                 dialogs.confirm({
                     message: 'Are you sure? Your changes will be lost.'
-                }).then(function () {
+                }).then(function() {
                     $state.go('gigs');
                 });
-            }
-            else {
+            } else {
                 $state.go('gigs');
             }
         };
@@ -291,7 +291,7 @@ angular.module('GigKeeper').controller('GigEditController', [
         vm.addContractor = function($event) {
             $event.preventDefault();
 
-            Contractor.editDialog({}).then(function (result) {
+            Contractor.editDialog({}).then(function(result) {
                 //clean the result to prevent an error
                 // delete result.$promise;
                 // delete result.$resolved;
@@ -315,7 +315,7 @@ angular.module('GigKeeper').controller('GigEditController', [
 
             $event.preventDefault();
 
-            promise.then(function (result) {
+            promise.then(function(result) {
                 //clean the result to prevent an error
                 delete result.$promise;
                 delete result.$resolved;
@@ -323,7 +323,7 @@ angular.module('GigKeeper').controller('GigEditController', [
                 vm.tagDropdownOptions.dataSource.add(result);
                 vm.form.tags.push(result);
             }, function() {
-                
+
             });
         };
 

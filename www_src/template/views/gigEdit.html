@@ -2,7 +2,7 @@
     <div class="page-header">
         <h1>
             <i class="fa fa-pencil pad-right"></i>
-            {{ title }}
+            {{ vm.title }}
         </h1>
     </div>
 
@@ -187,7 +187,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 form-group" ng-if="vm.form.place && user.profile.homeBasePlace">
+                    <div class="col-sm-6 form-group" ng-if="vm.form.place && vm.session.user.profile.homeBasePlace">
                         <button type="button"
                             class="btn btn-primary btn-estimate bottomalign"
                             id="estimate_button"
