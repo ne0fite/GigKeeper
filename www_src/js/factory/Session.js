@@ -1,17 +1,17 @@
 /**
  * @license
  * Copyright (C) 2017 Phoenix Bright Software, LLC
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -76,9 +76,7 @@ angular.module('GigKeeper').factory('Session', [
             check: function() {
                 var request = Security.data.profile().$promise;
 
-                BlockingPromiseManager.add(request);
-
-                return request.then(function(user) {
+                request.then(function(user) {
                     if (user.active) {
                         Session.user = user;
                         return true;
@@ -87,6 +85,10 @@ angular.module('GigKeeper').factory('Session', [
                         return false;
                     }
                 });
+
+                BlockingPromiseManager.add(request);
+
+                return request;
             },
 
             /**
@@ -118,9 +120,7 @@ angular.module('GigKeeper').factory('Session', [
 
                 var request = Security.data.login(postData).$promise;
 
-                BlockingPromiseManager.add(request);
-
-                return request.then(function(response) {
+                request.then(function(response) {
                     if (response.message) {
                         return new Error(response.message);
                     } else {
@@ -128,10 +128,14 @@ angular.module('GigKeeper').factory('Session', [
                         return null;
                     }
                 });
+
+                BlockingPromiseManager.add(request);
+
+                return request;
             },
 
             /**
-             * Log the user out of the API and clear the session user and 
+             * Log the user out of the API and clear the session user and
              * API token from local storage.
              * @return {Promise}
              */
@@ -139,12 +143,14 @@ angular.module('GigKeeper').factory('Session', [
 
                 var request = Security.data.logout().$promise;
 
-                BlockingPromiseManager.add(request);
-
-                return request.then(function(response) { // eslint-disable-line no-unused-vars
+                request.then(function(response) { // eslint-disable-line no-unused-vars
                     Session.user = null;
                     localStorageService.remove('apiToken');
                 });
+
+                BlockingPromiseManager.add(request);
+
+                return request;
             }
         };
 
