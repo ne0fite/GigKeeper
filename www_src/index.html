@@ -43,7 +43,7 @@
         </div>
     </footer>
 
-    <div class="alerts container" ng-controller="AlertController as vm" ng-cloak>
+    <div class="alerts container" ng-controller="AlertController as vm" ng-if="vm.alerts.length" ng-cloak>
         <div class="row"
                 ng-repeat="alert in vm.alerts"
                 ng-class="'alert-' + (alert.type || 'warning')"
