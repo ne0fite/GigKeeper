@@ -113,7 +113,7 @@
                                     value="home"
                                     ng-model="vm.form.originType">
                                 <label for="originType_home"
-                                    ng-class="{'text-primary': form.originType == 'home', 'text-muted': form.originType != 'home'}">
+                                    ng-class="{'text-primary': vm.form.originType == 'home', 'text-muted': vm.form.originType != 'home'}">
                                     Home
                                 </label>
                             </div>
@@ -124,7 +124,7 @@
                                     value="gig"
                                     ng-model="vm.form.originType">
                                 <label for="originType_gig"
-                                    ng-class="{'text-primary': form.originType == 'gig', 'text-muted': form.originType != 'gig'}">
+                                    ng-class="{'text-primary': vm.form.originType == 'gig', 'text-muted': vm.form.originType != 'gig'}">
                                     Another Gig
                                 </label>
                             </div>
@@ -135,7 +135,7 @@
                                     value="other"
                                     ng-model="vm.form.originType">
                                 <label for="originType_other"
-                                    ng-class="{'text-primary': form.originType == 'other', 'text-muted': form.originType != 'other'}">
+                                    ng-class="{'text-primary': vm.form.originType == 'other', 'text-muted': vm.form.originType != 'other'}">
                                     Someplace Else
                                 </label>
                             </div>
